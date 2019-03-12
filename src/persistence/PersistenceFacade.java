@@ -40,7 +40,7 @@ public class PersistenceFacade {
 		return computerDAO.get(id);
 	}
 	
-	public Company getCompany(int id) {
+	public Company getCompany(long id) {
 		return companyDAO.get(id);
 	}
 	
