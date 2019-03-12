@@ -43,4 +43,8 @@ public class PersistenceFacade {
 	public Company getCompany(int id) {
 		return companyDAO.get(id);
 	}
+	
+	public Boolean deleteComputer(int id) {
+		return computerDAO.delete(id);
+	}
 }

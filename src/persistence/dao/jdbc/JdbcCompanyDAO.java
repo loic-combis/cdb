@@ -34,8 +34,7 @@ public class JdbcCompanyDAO implements CompanyDAO {
 		try {
 			Statement state = conn.createStatement();
 			ResultSet result = state.executeQuery(String.format(FIND_BY_ID,id));
-			result.next();			
-			Company company = queryResultToObject(result);
+			Company company = result.next() ? queryResultToObject(result) : null;
 			result.close();
 			state.close();
 			return company;
