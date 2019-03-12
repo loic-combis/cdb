@@ -47,4 +47,8 @@ public class PersistenceFacade {
 	public Boolean deleteComputer(int id) {
 		return computerDAO.delete(id);
 	}
+	
+	public Computer createComputer(Computer c) {
+		return computerDAO.create(c);
+	}
 }

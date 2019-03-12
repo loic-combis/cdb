@@ -6,9 +6,9 @@ public class Application {
 
 	public static void main(String[] args) {
 		
-		Computer computer = PersistenceFacade.getInstance().getComputer(2);
-		if(computer != null) {
-			System.out.println(computer.toString());
-		}	
+		Computer testComputer = new Computer("Ubuntu qui fait mal aux yeux");
+		System.out.println(testComputer);
+		testComputer = PersistenceFacade.getInstance().createComputer(testComputer);
+		System.out.println(testComputer);
 	}
 }

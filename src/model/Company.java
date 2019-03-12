@@ -2,14 +2,14 @@ package model;
 
 public class Company {
 
-	private int id;
+	private long id;
 	private String name;
 	
 	public Company(String name) {
 		this.setName(name);
 	}
 	
-	public Company(int id, String name) {
+	public Company(long id, String name) {
 		this.id = id;
 		this.setName(name);
 	}
@@ -22,7 +22,7 @@ public class Company {
 		this.name = name;
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 	

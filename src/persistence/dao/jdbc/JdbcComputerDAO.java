@@ -15,7 +15,7 @@ public class JdbcComputerDAO implements ComputerDAO {
 	private static final String LIST_ALL_REQUEST = "SELECT * FROM computer JOIN company ON computer.company_id = company.id";
 	private static final String FIND_BY_ID = "SELECT * FROM computer JOIN company ON computer.company_id = company.id WHERE computer.id = %d";
 	private static final String DELETE_ONE = "DELETE FROM computer WHERE id = %d";
-	
+	private static final String CREATE = "INSERT INTO computer(name, introduced, discontinued, company_id) VALUES('%s', ?, ?, %d)";
 	private JdbcComputerDAO(Connection conn) {
 		this.conn = conn;
 	}
@@ -40,6 +40,32 @@ public class JdbcComputerDAO implements ComputerDAO {
 		}
 		catch (SQLException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	@Override
+	public Computer create(Computer c) {
+		// TODO Auto-generated method stub
+		Long companyId = (c.getCompany() != null ? c.getCompany().getId() : null);
+		java.sql.Timestamp introductionDate = c.getIntroductionDate() != null ? new java.sql.Timestamp(c.getIntroductionDate().getTime()) : null;
+		java.sql.Timestamp discontinuationDate = c.getDiscontinuationDate() != null ? new java.sql.Timestamp(c.getDiscontinuationDate().getTime()) : null;
+		try {
+			PreparedStatement state = conn.prepareStatement(String.format(CREATE, c.getName(), companyId), Statement.RETURN_GENERATED_KEYS);
+			state.setTimestamp(1, introductionDate);
+			state.setTimestamp(2, discontinuationDate);
+			int affectedRows = state.executeUpdate();
+			if(affectedRows == 0) {
+				return null;
+			}
+			ResultSet generatedKeys = state.getGeneratedKeys();
+			generatedKeys.next();
+			c.setId(generatedKeys.getLong(1));
+			
+			return c;
+		}
+		catch(SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -104,5 +130,4 @@ public class JdbcComputerDAO implements ComputerDAO {
 		Company company = new Company(companyId, companyName);
 		return new Computer(computerId,computerName, introductionDate,discontinuationDate, company);
 	}
-
 }

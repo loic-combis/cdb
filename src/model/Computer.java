@@ -3,7 +3,7 @@ package model;
 import java.util.*;
 
 public class Computer {
-	private int id;
+	private long id;
 	private String name;
 	private Date introductionDate;
 	private Date discontinuationDate;
@@ -12,14 +12,15 @@ public class Computer {
 	public Computer(String name) {
 		this.setName(name);
 	}
-	public Computer(int id, String name, Date introduction, Date discontinuation, Company company) {
+	
+	public Computer(long id, String name, Date introduction, Date discontinuation, Company company) {
 		this.id = id;
 		this.setName(name);
 		this.setIntroductionDate(introduction);
 		this.setDiscontinuationDate(discontinuation);
 		this.setCompany(company);
 	}
-
+	
 	public String getName() {
 		return name;
 	}
@@ -52,8 +53,12 @@ public class Computer {
 		this.company = company;
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
+	}
+	
+	public void setId(long id) {
+		this.id = id;
 	}
 	
 	public String toString() {
