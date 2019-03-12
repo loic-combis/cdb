@@ -2,6 +2,7 @@ package persistence.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 import persistence.dao.jdbc.JdbcCompanyDAO;
 import persistence.dao.jdbc.JdbcComputerDAO;
@@ -22,10 +23,18 @@ public class DAOFactory {
 		try {
 			Class.forName("com.mysql.jdbc.Driver").getConstructor().newInstance(); 
 			this.conn = DriverManager.getConnection(dbURL, dbUser, dbPassword);
-			System.out.println("Connected to database");
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			if(this.conn != null) {
+				try {
+					this.conn.close();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+					System.exit(1);
+				}
+			}
 			e.printStackTrace();
 			System.exit(1);
 		}

@@ -1,9 +1,9 @@
 package persistence.dao;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public interface DAO<T> {
 	
-	public  ArrayList<T> list();
+	public  LinkedList<T> list();
 	public  T get(int id);
 }

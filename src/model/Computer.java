@@ -55,4 +55,16 @@ public class Computer {
 	public int getId() {
 		return id;
 	}
+	
+	public String toString() {
+		
+		StringBuilder sb = new StringBuilder(100);
+		sb	.append(id).append("\t|\t")
+			.append(name).append("\t|\t")
+			.append(introductionDate != null ? introductionDate.toString() : "null").append("\t|\t")
+			.append(discontinuationDate != null ? discontinuationDate.toString(): "null").append("\t|\t")
+			.append(company != null ? company.getName() : "null");
+		return sb.toString();
+		
+	}
 }

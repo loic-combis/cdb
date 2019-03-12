@@ -1,5 +1,6 @@
-import java.util.ArrayList;
+import java.util.LinkedList;
 
+import model.Company;
 import model.Computer;
 import persistence.PersistenceFacade;
 
@@ -7,10 +8,9 @@ public class Application {
 
 	public static void main(String[] args) {
 		
-		ArrayList<Computer> computers = new ArrayList<Computer>();
-		computers = PersistenceFacade.getInstance().listComputers();
-		for(Computer c : computers) {
-			System.out.println(c.getName());
-		}
+		Computer computer = PersistenceFacade.getInstance().getComputer(1);
+		Company company = PersistenceFacade.getInstance().getCompany(1);
+		System.out.println(computer.toString());
+		System.out.println(company.toString());
 	}
 }
