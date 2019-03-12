@@ -9,11 +9,11 @@ public class Computer {
 	private Date discontinuationDate;
 	private Company company;
 	
-	public Computer(String name) {
+	public Computer(String name) throws Exception {
 		this.setName(name);
 	}
 	
-	public Computer(long id, String name, Date introduction, Date discontinuation, Company company) {
+	public Computer(long id, String name, Date introduction, Date discontinuation, Company company) throws Exception {
 		this.id = id;
 		this.setName(name);
 		this.setIntroductionDate(introduction);
@@ -25,7 +25,10 @@ public class Computer {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(String name) throws Exception {
+		if(name == null || name.equals("")) {
+			throw new Exception("Computer name cannot be empty");
+		}
 		this.name = name;
 	}
 
@@ -33,16 +36,20 @@ public class Computer {
 		return introductionDate;
 	}
 
-	public void setIntroductionDate(Date introductionDate) {
-		this.introductionDate = introductionDate;
+	public void setIntroductionDate(Date introduction) {
+		if(this.getDiscontinuationDate() == null || introduction == null || (this.getDiscontinuationDate().getTime() - introduction.getTime()) > 0){
+			this.introductionDate = introduction;
+		}
 	}
 
 	public Date getDiscontinuationDate() {
 		return discontinuationDate;
 	}
 
-	public void setDiscontinuationDate(Date discontinuedDate) {
-		this.discontinuationDate = discontinuedDate;
+	public void setDiscontinuationDate(Date discontinued) {
+		if(this.getIntroductionDate() == null || discontinued == null || (this.getIntroductionDate().getTime() - discontinued.getTime()) < 0){
+			this.discontinuationDate = discontinued;
+		}
 	}
 
 	public Company getCompany() {

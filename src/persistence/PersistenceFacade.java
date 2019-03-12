@@ -36,7 +36,7 @@ public class PersistenceFacade {
 		return companyDAO.list();
 	}
 	
-	public Computer getComputer(int id) {
+	public Computer getComputer(long id) {
 		return computerDAO.get(id);
 	}
 	
@@ -44,11 +44,15 @@ public class PersistenceFacade {
 		return companyDAO.get(id);
 	}
 	
-	public Boolean deleteComputer(int id) {
+	public Boolean deleteComputer(long id) {
 		return computerDAO.delete(id);
 	}
 	
-	public Computer createComputer(Computer c) {
+	public Computer create(Computer c) {
 		return computerDAO.create(c);
+	}
+	
+	public Boolean update(Computer c) {
+		return computerDAO.update(c);
 	}
 }

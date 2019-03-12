@@ -5,5 +5,5 @@ import java.util.LinkedList;
 public interface DAO<T> {
 	
 	public  LinkedList<T> list();
-	public  T get(int id);
+	public  T get(long id);
 }

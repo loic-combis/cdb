@@ -8,12 +8,14 @@ import java.util.LinkedList;
 
 import model.Company;
 import persistence.dao.CompanyDAO;
+import persistence.mapper.CompanyMapper;
 
 public class JdbcCompanyDAO implements CompanyDAO {
 
 	
 	private static JdbcCompanyDAO instance;
 	private Connection conn;
+	private CompanyMapper mapper = new CompanyMapper();
 	
 	private static final String LIST_ALL_REQUEST = "SELECT * FROM company";
 	private static final String FIND_BY_ID = "SELECT * FROM company WHERE id = %d";
@@ -29,12 +31,12 @@ public class JdbcCompanyDAO implements CompanyDAO {
 	}
 	
 	@Override
-	public Company get(int id) {
+	public Company get(long id) {
 		// TODO Auto-generated method stub
 		try {
 			Statement state = conn.createStatement();
 			ResultSet result = state.executeQuery(String.format(FIND_BY_ID,id));
-			Company company = result.next() ? queryResultToObject(result) : null;
+			Company company = result.next() ? mapper.queryResultToObject(result) : null;
 			result.close();
 			state.close();
 			return company;
@@ -54,7 +56,7 @@ public class JdbcCompanyDAO implements CompanyDAO {
 			Statement state = conn.createStatement();
 			ResultSet result = state.executeQuery(LIST_ALL_REQUEST);
 			while(result.next()) {
-				Company c = this.queryResultToObject(result);
+				Company c = mapper.queryResultToObject(result);
 				companies.add(c);
 			}
 			result.close();
@@ -66,11 +68,4 @@ public class JdbcCompanyDAO implements CompanyDAO {
 		}
 		return companies;
 	}
-	
-	
-	private Company queryResultToObject(ResultSet result) throws SQLException {
-		
-		return new Company(result.getInt(1), result.getString(2));
-	}
-
 }
