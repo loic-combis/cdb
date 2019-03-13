@@ -4,17 +4,22 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import model.Computer;
 import persistence.PersistenceFacade;
-import ui.presenter.Presenter;
-import ui.presenter.PresenterFactory;
 
 public class UILayer implements PropertyChangeListener {
 
 	private PersistenceFacade persistenceFacade;
 	private Presenter presenter;
+	private UIManager manager;
 		
 	public UILayer() {
 		persistenceFacade = PersistenceFacade.getInstance();
-		presenter = PresenterFactory.getInstance().create(this);
+		manager = UIManagerFactory.getInstance().create(this);
+		presenter = manager.getPresenter();
+		
+	}
+	
+	public void start() {
+		manager.start();
 	}
 	
 	private void getComputer(long id) {
@@ -59,22 +64,18 @@ public class UILayer implements PropertyChangeListener {
 	private void listCompanies(int page) {
 		presenter.presentCompanies(persistenceFacade.listCompanies(page));
 	}
-	
-	public void start() {
-		presenter.start();
-	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
 		// TODO Auto-generated method stub
 		switch(event.getPropertyName()) {
-		case Presenter.LIST_COMPUTERS : this.listComputers((int) event.getNewValue());break;
-		case Presenter.LIST_COMPANIES : this.listCompanies((int) event.getNewValue());break;
- 		case Presenter.FETCH_COMPUTER : this.getComputer((long) event.getNewValue());break;
-		case Presenter.DELETE_COMPUTER : this.deleteComputer((long) event.getNewValue());break;
-		case Presenter.UPDATE_COMPUTER : this.updateComputer((Computer)event.getNewValue());break;
-		case Presenter.CREATE_COMPUTER : this.createComputer((Computer) event.getNewValue());break;
-		default : presenter.notify(Presenter.UNKNOWN_ACTION);break;
+		case UIManager.LIST_COMPUTERS : this.listComputers((int) event.getNewValue());break;
+		case UIManager.LIST_COMPANIES : this.listCompanies((int) event.getNewValue());break;
+ 		case UIManager.FETCH_COMPUTER : this.getComputer((long) event.getNewValue());break;
+		case UIManager.DELETE_COMPUTER : this.deleteComputer((long) event.getNewValue());break;
+		case UIManager.UPDATE_COMPUTER : this.updateComputer((Computer)event.getNewValue());break;
+		case UIManager.CREATE_COMPUTER : this.createComputer((Computer) event.getNewValue());break;
+		default : presenter.notify(UIManager.UNKNOWN_ACTION);break;
 		}
 	}
 }

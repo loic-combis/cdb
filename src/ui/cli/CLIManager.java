@@ -1,19 +1,21 @@
-package ui.presenter;
+package ui.cli;
 
 import java.beans.PropertyChangeListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Scanner;
 
 import model.Company;
 import model.CompanyFactory;
 import model.Computer;
 import model.ComputerFactory;
+import ui.Presenter;
+import ui.UIManager;
 
-public class CLIPresenter extends Presenter {
+public class CLIManager extends UIManager {
 	
+	private CLIPresenter cliPresenter;
 	private Scanner scanner;
 	private String[] menu;
 	private boolean shouldShowMenu = false;
@@ -27,9 +29,10 @@ public class CLIPresenter extends Presenter {
 	private  static final String SHOW_MENU_CMD = "MENU";
 	private  static final String QUIT_CMD = "QUIT";
 	
-	public CLIPresenter(PropertyChangeListener pcl) {
-		super(pcl);
+	public CLIManager(PropertyChangeListener pcl) {
 		// TODO Auto-generated constructor stub
+		super(pcl);
+		cliPresenter = new CLIPresenter();
 		scanner = new Scanner(System.in);
 		menu = new String[]{
 				"Show menu  : " 		+ SHOW_MENU_CMD,
@@ -42,50 +45,12 @@ public class CLIPresenter extends Presenter {
 			};
 	}
 
-	/////////////////////
-	/////////////////////
-	//////Implementation of Presenter abstract methods
-	/////////////////////
-	/////////////////////
-	
-	
-	
 	@Override
 	public void start() {
 		// TODO Auto-generated method stub
 		System.out.println("Welcome to the application !!!");
 		System.out.println("Which action do you want to perform ?");
 		this.showMenu();
-	}
-	
-	@Override
-	public void present(Computer c) {
-		// TODO Auto-generated method stub
-		System.out.println(c);
-	}
-
-	@Override
-	public void presentComputers(List<Computer> computers) {
-		// TODO Auto-generated method stub
-		for(Computer c  : computers) {
-			System.out.println(c);
-			System.out.println("---------------------------------------------------------------------------------------------------");
-		}
-	}
-
-	@Override
-	public void present(Company c) {
-		// TODO Auto-generated method stub
-		System.out.println(c);
-	}
-
-	@Override
-	public void presentCompanies(List<Company> c) {
-		// TODO Auto-generated method stub
-		for(Company comp  : c) {
-			System.out.println(comp);
-			System.out.println("----------------------------------------------------");
-		}
 	}
 	
 	@Override
@@ -96,9 +61,8 @@ public class CLIPresenter extends Presenter {
 	}
 	
 	@Override
-	public void notify(String s) {
-		// TODO Auto-generated method stub
-		System.out.println(s);
+	public Presenter getPresenter() {
+		return cliPresenter;
 	}
 	
 	/////////////////////
