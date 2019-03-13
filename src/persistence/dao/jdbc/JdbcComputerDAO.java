@@ -14,7 +14,7 @@ public class JdbcComputerDAO implements ComputerDAO {
 	
 	private static JdbcComputerDAO instance;
 	
-	private static final String LIST_ALL_REQUEST = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id";
+	private static final String LIST_REQUEST = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id %s";
 	private static final String FIND_BY_ID = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.id = %d";
 	private static final String DELETE_ONE = "DELETE FROM computer WHERE id = %d";
 	private static final String CREATE_ONE = "INSERT INTO computer(name, introduced, discontinued, company_id) VALUES('%s', ?, ?, ?)";
@@ -115,12 +115,16 @@ public class JdbcComputerDAO implements ComputerDAO {
 	}
 
 	@Override
-	public LinkedList<Computer> list() {
+	public LinkedList<Computer> list(int page) {
 		// TODO Auto-generated method stub
 		LinkedList<Computer> computers = new LinkedList<Computer>();
 		try {
 			Statement state = conn.createStatement();
-			ResultSet result = state.executeQuery(LIST_ALL_REQUEST);
+			int itemPerPage = 5;
+			String offsetClause = "LIMIT " + itemPerPage;
+			offsetClause += (page > 0) ? " OFFSET " + ((page -1) * itemPerPage) : "";
+			
+			ResultSet result = state.executeQuery(String.format(LIST_REQUEST, offsetClause));
 			while(result.next()) {
 				Computer c = mapper.queryResultToObject(result);
 				computers.add(c);

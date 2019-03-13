@@ -75,7 +75,7 @@ public class Computer {
 			.append(name).append("\t|\t")
 			.append(introductionDate != null ? introductionDate.toString() : "null").append("\t|\t")
 			.append(discontinuationDate != null ? discontinuationDate.toString(): "null").append("\t|\t")
-			.append(company != null ? company.getName() : "null");
+			.append(company != null ? company.getId() + " : " + company.getName() : "null");
 		return sb.toString();
 		
 	}

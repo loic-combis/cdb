@@ -17,7 +17,7 @@ public class JdbcCompanyDAO implements CompanyDAO {
 	private Connection conn;
 	private CompanyMapper mapper = new CompanyMapper();
 	
-	private static final String LIST_ALL_REQUEST = "SELECT * FROM company";
+	private static final String LIST_REQUEST = "SELECT * FROM company %s";
 	private static final String FIND_BY_ID = "SELECT * FROM company WHERE id = %d";
 	private JdbcCompanyDAO(Connection conn) {
 		this.conn = conn;
@@ -49,13 +49,16 @@ public class JdbcCompanyDAO implements CompanyDAO {
 	}
 
 	@Override
-	public LinkedList<Company> list() {
+	public LinkedList<Company> list(int page) {
 		// TODO Auto-generated method stub
 		LinkedList<Company> companies = new LinkedList<Company>();
 		try {
 			Statement state = conn.createStatement();
-			ResultSet result = state.executeQuery(LIST_ALL_REQUEST);
-			while(result.next()) {
+			int itemPerPage = 5;
+			String offsetClause = "LIMIT " + itemPerPage;
+			offsetClause += (page > 1) ? " OFFSET " + ((page - 1) * itemPerPage) : "";
+			
+			ResultSet result = state.executeQuery(String.format(LIST_REQUEST, offsetClause));			while(result.next()) {
 				Company c = mapper.queryResultToObject(result);
 				companies.add(c);
 			}

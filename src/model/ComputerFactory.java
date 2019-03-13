@@ -37,5 +37,5 @@ public class ComputerFactory {
 		c.setDiscontinuationDate(discontinuation);
 		c.setCompany(company);
 		return c;
-	}	
+	}
 }

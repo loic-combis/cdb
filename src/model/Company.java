@@ -5,6 +5,10 @@ public class Company {
 	private long id;
 	private String name;
 	
+	public Company(long id) {
+		this.id = id;
+	}
+	
 	public Company(String name) {
 		this.setName(name);
 	}

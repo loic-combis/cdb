@@ -17,4 +17,8 @@ public class CompanyFactory {
 		return new Company(id, name);
 	}
 	
+	public Company create(long id) {
+		return new Company(id);
+	}
+	
 }

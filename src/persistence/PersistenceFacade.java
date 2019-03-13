@@ -28,12 +28,12 @@ public class PersistenceFacade {
 	}
 	
 	
-	public LinkedList<Computer> listComputers(){
-		return computerDAO.list();
+	public LinkedList<Computer> listComputers(int page){
+		return computerDAO.list(page);
 	}
 	
-	public LinkedList<Company> listCompanies() {
-		return companyDAO.list();
+	public LinkedList<Company> listCompanies(int page) {
+		return companyDAO.list(page);
 	}
 	
 	public Computer getComputer(long id) {
