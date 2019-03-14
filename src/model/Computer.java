@@ -13,7 +13,8 @@ public class Computer {
 		this.setName(name);
 	}
 
-	public Computer(long id, String name, Date introduction, Date discontinuation, Company company) throws EmptyNameException {
+	public Computer(long id, String name, Date introduction, Date discontinuation, Company company)
+			throws EmptyNameException {
 		this.id = id;
 		this.setName(name);
 		this.setIntroductionDate(introduction);
@@ -88,10 +89,9 @@ class EmptyNameException extends IllegalArgumentException {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	public EmptyNameException() {
 		super();
 	}
 
-	
 }
