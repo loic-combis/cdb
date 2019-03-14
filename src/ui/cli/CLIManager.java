@@ -48,15 +48,15 @@ public class CLIManager extends UIManager {
 	@Override
 	public void start() {
 		// TODO Auto-generated method stub
-		System.out.println("Welcome to the application !!!");
-		System.out.println("Which action do you want to perform ?");
+		cliPresenter.notify("Welcome to the application !!!");
+		cliPresenter.notify("Which action do you want to perform ?");
 		this.showMenu();
 	}
 	
 	@Override
 	public void stop() {
 		// TODO Auto-generated method stub
-		System.out.println("Stopping the application...");
+		cliPresenter.notify("Stopping the application...");
 		System.exit(0);
 	}
 	
@@ -77,10 +77,10 @@ public class CLIManager extends UIManager {
 	private void showMenu() {
 		shouldShowMenu = false;
 		for(String item : menu) {
-			System.out.println(item);
+			cliPresenter.notify(item);
 		}
 		while(true) {
-			System.out.print("What do you want to do ? ");
+			cliPresenter.notify("What do you want to do ? ");
 			this.handleInput(this.nextLine());
 		}
 		
@@ -175,13 +175,13 @@ public class CLIManager extends UIManager {
 		Integer number = null;
 		boolean numberIsValid = false;
 		do {
-			System.out.print("Enter a page number : ");
+			cliPresenter.notify("Enter a page number : ");
 			String input = this.nextLine();
 			try {
 				number = Integer.parseInt(input);
 				numberIsValid = true;
 			}catch(NumberFormatException nfe) {
-				System.out.println("Page must be a number");
+				cliPresenter.notify("Page must be a number");
 			}
 		}
 		while(!numberIsValid);
@@ -196,13 +196,13 @@ public class CLIManager extends UIManager {
 		Long id = null;
 		boolean idIsValid = false;
 		do {
-			System.out.print("Enter the <ID> : ");
+			cliPresenter.notify("Enter the <ID> : ");
 			String inputID = this.nextLine();
 			try {
 				id = Long.parseLong(inputID);
 				idIsValid = true;
 			}catch(NumberFormatException nfe) {
-				System.out.println("<ID> must be a number");
+				cliPresenter.notify("<ID> must be a number");
 			}
 		}
 		while(!idIsValid);
@@ -217,10 +217,10 @@ public class CLIManager extends UIManager {
 		String name;
 		boolean nameIsValid = false;
 		do {
-			System.out.print("Enter the name : ");
+			cliPresenter.notify("Enter the name : ");
 			name = this.nextLine();
 			if(name.equals("")) {
-				System.out.println("Name cannot be empty.");
+				cliPresenter.notify("Name cannot be empty.");
 			}else {
 				nameIsValid = true;
 			}
@@ -235,7 +235,7 @@ public class CLIManager extends UIManager {
 		Date d = null;
 		boolean dateIsValid = false;
 		do {
-			System.out.print(type + " date (YYYY-MM-DD) : ");
+			cliPresenter.notify(type + " date (YYYY-MM-DD) : ");
 			String inputDate = this.nextLine();
 			
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-mm-dd");
@@ -246,7 +246,7 @@ public class CLIManager extends UIManager {
 				dateIsValid = true;
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
-				System.out.println("Wrong date format.");
+				cliPresenter.notify("Wrong date format.");
 				e.printStackTrace();
 			}
 		} while(!dateIsValid);
@@ -262,7 +262,7 @@ public class CLIManager extends UIManager {
 		Company comp = null;
 		boolean companyIsValid = false;
 		do {
-			System.out.print("Company id : ");
+			cliPresenter.notify("Company id : ");
 			String companyId = this.nextLine();
 			
 			try {
@@ -274,7 +274,7 @@ public class CLIManager extends UIManager {
 			}
 			catch(NumberFormatException nfe) {
 				nfe.printStackTrace();
-				System.out.println("<ID> Must be a number.");
+				cliPresenter.notify("<ID> Must be a number.");
 			}
 		} while(!companyIsValid);
 		
