@@ -24,3 +24,5 @@ tmp/
 local.properties
 .settings/
 .loadpath
+.project
+.classpath
