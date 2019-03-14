@@ -20,7 +20,7 @@ public class ComputerFactory {
 		Computer c;
 		try {
 			c = new Computer(name);
-		} catch (Exception e) {
+		} catch (EmptyNameException e) {
 			e.printStackTrace();
 			c = null;
 		}

@@ -9,11 +9,11 @@ public class Computer {
 	private Date discontinuationDate;
 	private Company company;
 
-	public Computer(String name) throws Exception {
+	public Computer(String name) throws EmptyNameException {
 		this.setName(name);
 	}
 
-	public Computer(long id, String name, Date introduction, Date discontinuation, Company company) throws Exception {
+	public Computer(long id, String name, Date introduction, Date discontinuation, Company company) throws EmptyNameException {
 		this.id = id;
 		this.setName(name);
 		this.setIntroductionDate(introduction);
@@ -25,9 +25,9 @@ public class Computer {
 		return name;
 	}
 
-	public void setName(String name) throws Exception {
+	public void setName(String name) throws EmptyNameException {
 		if (name == null || name.equals("")) {
-			throw new Exception("Computer name cannot be empty");
+			throw new EmptyNameException();
 		}
 		this.name = name;
 	}
@@ -80,4 +80,18 @@ public class Computer {
 		return sb.toString();
 
 	}
+}
+
+class EmptyNameException extends IllegalArgumentException {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	public EmptyNameException() {
+		super();
+	}
+
+	
 }
