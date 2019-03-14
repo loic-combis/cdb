@@ -4,15 +4,15 @@ public class Company {
 
 	private long id;
 	private String name;
-	
+
 	public Company(long id) {
 		this.id = id;
 	}
-	
+
 	public Company(String name) {
 		this.setName(name);
 	}
-	
+
 	public Company(long id, String name) {
 		this.id = id;
 		this.setName(name);
@@ -29,7 +29,7 @@ public class Company {
 	public long getId() {
 		return id;
 	}
-	
+
 	public String toString() {
 		return id + "\t|\t" + name;
 	}

@@ -1,9 +1,10 @@
 package persistence.dao;
 
-import java.util.LinkedList;
+import java.util.List;
 
 public interface DAO<T> {
-	
-	public  LinkedList<T> list(int page);
-	public  T get(long id);
+
+	public List<T> list(int page);
+
+	public T get(long id);
 }

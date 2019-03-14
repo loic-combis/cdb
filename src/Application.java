@@ -1,10 +1,10 @@
-import ui.UILayer;
+import ui.cli.CLIController;
 
 public class Application {
 
 	public static void main(String[] args) {
-		
-		UILayer ui = new UILayer();
-		ui.start();
+
+		CLIController cli = new CLIController();
+		cli.start();
 	}
 }
