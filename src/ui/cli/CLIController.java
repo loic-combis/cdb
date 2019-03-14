@@ -56,6 +56,7 @@ public class CLIController implements UIController, PageProvider {
 	private static final String UNKNOWN_ACTION = "Unknown action.";
 	private static final String WHAT_TO_DO = "\nWhat do you want to do?";
 
+	private final int itemPerPage = 100;
 	private PersistenceFacade persistence;
 	private CLIPresenter presenter;
 	private Scanner scanner;
@@ -100,12 +101,12 @@ public class CLIController implements UIController, PageProvider {
 	public List<?> fetchDataFor(Class<?> c, int page) {
 		// TODO Auto-generated method stub
 		if (c == Computer.class) {
-			List<Computer> computers = persistence.listComputers(page);
+			List<Computer> computers = persistence.listComputers(page, itemPerPage);
 			return computers;
 		}
 
 		if (c == Company.class) {
-			List<Company> companies = persistence.listCompanies(page);
+			List<Company> companies = persistence.listCompanies(page, itemPerPage);
 			return companies;
 		}
 

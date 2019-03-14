@@ -27,12 +27,12 @@ public class PersistenceFacade {
 		return instance;
 	}
 
-	public List<Computer> listComputers(int page) {
-		return computerDAO.list(page);
+	public List<Computer> listComputers(int page, int itemPerPage) {
+		return computerDAO.list(page, itemPerPage);
 	}
 
-	public List<Company> listCompanies(int page) {
-		return companyDAO.list(page);
+	public List<Company> listCompanies(int page, int itemPerPage) {
+		return companyDAO.list(page, itemPerPage);
 	}
 
 	public Computer getComputer(long id) {

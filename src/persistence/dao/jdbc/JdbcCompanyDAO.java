@@ -49,14 +49,13 @@ public class JdbcCompanyDAO implements CompanyDAO {
 	}
 
 	@Override
-	public List<Company> list(int page) {
+	public List<Company> list(int page, int itemPerPage) {
 		// TODO Auto-generated method stub
 		LinkedList<Company> companies = new LinkedList<Company>();
 		try {
 			Statement state = conn.createStatement();
-			int itemPerPage = 5;
-			String offsetClause = "LIMIT " + itemPerPage;
-			offsetClause += (page > 1) ? " OFFSET " + ((page - 1) * itemPerPage) : "";
+			String offsetClause = itemPerPage > 0 ? "LIMIT " + itemPerPage : "";
+			offsetClause += (page > 1 && itemPerPage > 0) ? " OFFSET " + ((page - 1) * itemPerPage) : "";
 
 			ResultSet result = state.executeQuery(String.format(LIST_REQUEST, offsetClause));
 			while (result.next()) {

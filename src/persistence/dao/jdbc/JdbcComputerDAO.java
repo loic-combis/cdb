@@ -53,24 +53,29 @@ public class JdbcComputerDAO implements ComputerDAO {
 	public Computer create(Computer c) {
 		// TODO Auto-generated method stub
 		Long companyId = (c.getCompany() != null ? c.getCompany().getId() : null);
+
 		Timestamp introductionDate = mapper.getSqlTimestampValue(c.getIntroductionDate());
 		Timestamp discontinuationDate = mapper.getSqlTimestampValue(c.getDiscontinuationDate());
 
 		try {
 			PreparedStatement state = conn.prepareStatement(String.format(CREATE_ONE, c.getName()),
 					Statement.RETURN_GENERATED_KEYS);
+
 			state.setTimestamp(1, introductionDate);
 			state.setTimestamp(2, discontinuationDate);
+
 			state.setObject(3, companyId, java.sql.Types.INTEGER);
+
 			int affectedRows = state.executeUpdate();
 			if (affectedRows == 0) {
 				return null;
 			}
 			ResultSet generatedKeys = state.getGeneratedKeys();
 			generatedKeys.next();
-			c.setId(generatedKeys.getLong(1));
 
+			c.setId(generatedKeys.getLong(1));
 			return c;
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
@@ -85,6 +90,7 @@ public class JdbcComputerDAO implements ComputerDAO {
 			int result = state.executeUpdate(String.format(DELETE_ONE, id));
 			state.close();
 			return result == 1;
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -101,11 +107,14 @@ public class JdbcComputerDAO implements ComputerDAO {
 
 		try {
 			PreparedStatement state = conn.prepareStatement(String.format(UPDATE_ONE, c.getName(), c.getId()));
+
 			state.setTimestamp(1, introductionDate);
 			state.setTimestamp(2, discontinuationDate);
 			state.setObject(3, companyId, java.sql.Types.INTEGER);
+
 			int affectedRows = state.executeUpdate();
 			return affectedRows == 1;
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
@@ -113,14 +122,13 @@ public class JdbcComputerDAO implements ComputerDAO {
 	}
 
 	@Override
-	public List<Computer> list(int page) {
+	public List<Computer> list(int page, int itemPerPage) {
 		// TODO Auto-generated method stub
 		LinkedList<Computer> computers = new LinkedList<Computer>();
 		try {
 			Statement state = conn.createStatement();
-			int itemPerPage = 5;
-			String offsetClause = "LIMIT " + itemPerPage;
-			offsetClause += (page > 0) ? " OFFSET " + ((page - 1) * itemPerPage) : "";
+			String offsetClause = itemPerPage > 0 ? "LIMIT " + itemPerPage : "";
+			offsetClause += (page > 0 && itemPerPage > 0) ? " OFFSET " + ((page - 1) * itemPerPage) : "";
 
 			ResultSet result = state.executeQuery(String.format(LIST_REQUEST, offsetClause));
 			while (result.next()) {

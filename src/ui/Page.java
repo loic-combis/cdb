@@ -39,7 +39,11 @@ public class Page<T> {
 	public List<T> nextPage() {
 		currentPage++;
 		List<T> data = (List<T>) listener.fetchDataFor(pageItemClass, currentPage);
-		setData(data);
+		if (data.isEmpty()) {
+			currentPage--;
+		} else {
+			setData(data);
+		}
 		return getData();
 	}
 
