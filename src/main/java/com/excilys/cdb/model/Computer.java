@@ -2,6 +2,7 @@ package com.excilys.cdb.model;
 
 import java.util.*;
 
+
 /**
  * Class responsible for managing the Computer entity within the application.
  * 
@@ -33,7 +34,7 @@ public class Computer {
 	 * company Company - Company manufacturing the computer.
 	 */
 	private Company company;
-
+	
 	/**
 	 * Constructor
 	 * 
@@ -81,6 +82,7 @@ public class Computer {
 	public void setName(String name) throws EmptyNameException {
 		if (name == null || name.equals("")) {
 			throw new EmptyNameException();
+			
 		}
 		this.name = name;
 	}

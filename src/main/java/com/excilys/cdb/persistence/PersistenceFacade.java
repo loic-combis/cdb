@@ -2,6 +2,9 @@ package com.excilys.cdb.persistence;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.persistence.dao.CompanyDAO;
@@ -34,6 +37,11 @@ public class PersistenceFacade {
 	private CompanyDAO companyDAO;
 
 	/**
+	 * logger Logger
+	 */
+	private final static Logger logger = LoggerFactory.getLogger(PersistenceFacade.class);
+	
+	/**
 	 * Constructor Get the instance of all the DAO Prevent from being instantiated
 	 * outside the class. {@link PersistenceFacade#computerDAO}
 	 * {@link PersistenceFacade#companyDAO}
@@ -51,6 +59,7 @@ public class PersistenceFacade {
 	public static PersistenceFacade getInstance() {
 		if (instance == null) {
 			instance = new PersistenceFacade();
+			logger.debug("PersistenceFacadeInstantiated.");
 		}
 		return instance;
 	}

@@ -4,8 +4,12 @@ import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.persistence.dao.ComputerDAO;
+import com.excilys.cdb.persistence.dao.DAOFactory;
 import com.excilys.cdb.persistence.mapper.ComputerMapper;
 
 /**
@@ -18,11 +22,6 @@ import com.excilys.cdb.persistence.mapper.ComputerMapper;
 public class JdbcComputerDAO implements ComputerDAO {
 
 	/**
-	 * conn Connection
-	 */
-	private Connection conn;
-
-	/**
 	 * mapper ComputerMapper
 	 */
 	private ComputerMapper mapper = new ComputerMapper();
@@ -32,6 +31,11 @@ public class JdbcComputerDAO implements ComputerDAO {
 	 */
 	private static JdbcComputerDAO instance;
 
+	/**
+	 * logger Logger
+	 */
+	private final static Logger logger = LoggerFactory.getLogger(JdbcComputerDAO.class);
+	
 	/**
 	 * String base SQL request.
 	 */
@@ -47,8 +51,7 @@ public class JdbcComputerDAO implements ComputerDAO {
 	 * 
 	 * @param conn
 	 */
-	private JdbcComputerDAO(Connection conn) {
-		this.conn = conn;
+	private JdbcComputerDAO() {
 	}
 
 	/**
@@ -57,9 +60,10 @@ public class JdbcComputerDAO implements ComputerDAO {
 	 * @param conn Connection
 	 * @return JdbcComputerDAO
 	 */
-	public static JdbcComputerDAO getInstance(Connection conn) {
+	public static JdbcComputerDAO getInstance() {
 		if (instance == null) {
-			instance = new JdbcComputerDAO(conn);
+			instance = new JdbcComputerDAO();
+			logger.debug("JdbcComputerDAO instantiated");
 		}
 		return instance;
 	}
@@ -67,15 +71,18 @@ public class JdbcComputerDAO implements ComputerDAO {
 	@Override
 	public Computer get(long id) {
 		// TODO Auto-generated method stub
-		try {
+		try (Connection conn = DAOFactory.getConnection()){
+			
 			Statement state = conn.createStatement();
 			ResultSet result = state.executeQuery(String.format(FIND_BY_ID, id));
 			Computer computer = result.next() ? mapper.queryResultToObject(result) : null;
+			
 			result.close();
 			state.close();
 			return computer;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
+			logger.error(e.getMessage());
 			e.printStackTrace();
 			return null;
 		}
@@ -89,7 +96,8 @@ public class JdbcComputerDAO implements ComputerDAO {
 		Timestamp introductionDate = mapper.getSqlTimestampValue(c.getIntroductionDate());
 		Timestamp discontinuationDate = mapper.getSqlTimestampValue(c.getDiscontinuationDate());
 
-		try {
+		try (Connection conn = DAOFactory.getConnection()){
+			
 			PreparedStatement state = conn.prepareStatement(String.format(CREATE_ONE, c.getName()),
 					Statement.RETURN_GENERATED_KEYS);
 
@@ -100,16 +108,19 @@ public class JdbcComputerDAO implements ComputerDAO {
 
 			int affectedRows = state.executeUpdate();
 			if (affectedRows == 0) {
+				logger.warn("Computer not created.");
 				return null;
 			}
+			
 			ResultSet generatedKeys = state.getGeneratedKeys();
 			generatedKeys.next();
-
 			c.setId(generatedKeys.getLong(1));
+			logger.info("Computer created with id : " + generatedKeys.getLong(1));
 			return c;
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			logger.error(e.getMessage());
 			return null;
 		}
 	}
@@ -117,15 +128,23 @@ public class JdbcComputerDAO implements ComputerDAO {
 	@Override
 	public Boolean delete(long id) {
 		// TODO Auto-generated method stub
-		try {
+		try (Connection conn = DAOFactory.getConnection()){
+			
 			Statement state = conn.createStatement();
 			int result = state.executeUpdate(String.format(DELETE_ONE, id));
 			state.close();
+			if(result == 1) {
+				logger.info("Computer " + id + " deleted.");
+			}
+			else {
+				logger.warn("Computer " + id + " could not be deleted.");
+			}
 			return result == 1;
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			logger.error(e.getMessage());
 			return false;
 		}
 	}
@@ -137,7 +156,8 @@ public class JdbcComputerDAO implements ComputerDAO {
 		Timestamp introductionDate = mapper.getSqlTimestampValue(c.getIntroductionDate());
 		Timestamp discontinuationDate = mapper.getSqlTimestampValue(c.getDiscontinuationDate());
 
-		try {
+		try (Connection conn = DAOFactory.getConnection()){
+			
 			PreparedStatement state = conn.prepareStatement(String.format(UPDATE_ONE, c.getName(), c.getId()));
 
 			state.setTimestamp(1, introductionDate);
@@ -145,10 +165,18 @@ public class JdbcComputerDAO implements ComputerDAO {
 			state.setObject(3, companyId, java.sql.Types.INTEGER);
 
 			int affectedRows = state.executeUpdate();
+			if(affectedRows == 1) {
+				logger.info("Computer " + c.getId() + " updated.");
+			}
+			else {
+				logger.warn("Computer " + c.getId() + " might not have been updated. Affected Rows : " + affectedRows);
+			}
+	
 			return affectedRows == 1;
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			logger.error(e.getMessage());
 			return null;
 		}
 	}
@@ -157,7 +185,9 @@ public class JdbcComputerDAO implements ComputerDAO {
 	public List<Computer> list(int page, int itemPerPage) {
 		// TODO Auto-generated method stub
 		LinkedList<Computer> computers = new LinkedList<Computer>();
-		try {
+		
+		try (Connection conn = DAOFactory.getConnection()){
+			
 			Statement state = conn.createStatement();
 			String offsetClause = itemPerPage > 0 ? "LIMIT " + itemPerPage : "";
 			offsetClause += (page > 0 && itemPerPage > 0) ? " OFFSET " + ((page - 1) * itemPerPage) : "";
@@ -173,6 +203,7 @@ public class JdbcComputerDAO implements ComputerDAO {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		return computers;
 	}

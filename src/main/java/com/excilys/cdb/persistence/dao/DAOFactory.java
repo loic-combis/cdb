@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.cdb.persistence.dao.jdbc.JdbcCompanyDAO;
 import com.excilys.cdb.persistence.dao.jdbc.JdbcComputerDAO;
 import com.excilys.cdb.util.PropertyReader;
@@ -20,40 +23,17 @@ public class DAOFactory {
 	 * instance DAOFactory - Unique instance of DAOFactory.
 	 */
 	private static DAOFactory instance;
-
+	
 	/**
-	 * conn Connection - Instance of the connection to the database.
+	 * logger Logger
 	 */
-	private Connection conn;
+	private static final Logger logger = LoggerFactory.getLogger(DAOFactory.class);
 
 	/**
-	 * Constructor {@link DAOFactory#conn} Prevent from being instantiated outside
-	 * the class.
+	 * Constructor 
+	 * Prevent from being instantiated outside the class.
 	 */
 	private DAOFactory() {
-		PropertyReader prop = new PropertyReader();
-		// TODO Auto-generated method stub
-		String dbURL = prop.get("dbName");
-		String dbUser = prop.get("dbUser");
-		String dbPassword = prop.get("dbPassword");
-
-		try {
-			this.conn = DriverManager.getConnection(dbURL, dbUser, dbPassword);
-
-		} catch (SQLException | IllegalArgumentException | SecurityException e) {
-			// TODO Auto-generated catch block
-			if (this.conn != null) {
-				try {
-					this.conn.close();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-					System.exit(1);
-				}
-			}
-			e.printStackTrace();
-			System.exit(1);
-		}
 	}
 
 	/**
@@ -65,17 +45,34 @@ public class DAOFactory {
 	public static DAOFactory getInstance() {
 		if (instance == null) {
 			instance = new DAOFactory();
+			logger.debug("DAOFactory instantiated.");
 		}
 		return instance;
 	}
 
+	/**
+	 * Creates a new instance of Connection.
+	 * @return Connection
+	 * @throws SQLException
+	 */
+	public static Connection getConnection() throws SQLException {
+		
+		PropertyReader prop = new PropertyReader();
+		
+		String dbURL = prop.get("dbName");
+		String dbUser = prop.get("dbUser");
+		String dbPassword = prop.get("dbPassword");
+		
+		return DriverManager.getConnection(dbURL, dbUser, dbPassword);
+	}
+	
 	/**
 	 * Getter Returns the instance of the concrete computer DAO.
 	 * 
 	 * @return ComputerDAO
 	 */
 	public ComputerDAO getComputerDAO() {
-		return JdbcComputerDAO.getInstance(this.conn);
+		return JdbcComputerDAO.getInstance();
 	}
 
 	/**
@@ -84,6 +81,6 @@ public class DAOFactory {
 	 * @return CompanyDAO
 	 */
 	public CompanyDAO getCompanyDAO() {
-		return JdbcCompanyDAO.getInstance(this.conn);
+		return JdbcCompanyDAO.getInstance();
 	}
 }

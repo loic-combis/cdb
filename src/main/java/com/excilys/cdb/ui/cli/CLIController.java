@@ -6,6 +6,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.CompanyFactory;
 import com.excilys.cdb.model.Computer;
@@ -133,6 +136,11 @@ public class CLIController implements UIController, PageProvider {
 	boolean shouldShowMenu = false;
 
 	/**
+	 * logger Logger
+	 */
+	private final Logger logger = LoggerFactory.getLogger(CLIController.class);
+		
+	/**
 	 * Constructor {@link CLIController#persistence} {@link CLIController#presenter}
 	 * {@link CLIController#scanner}
 	 */
@@ -145,6 +153,7 @@ public class CLIController implements UIController, PageProvider {
 	@Override
 	public void start() {
 		// TODO Auto-generated method stub
+		logger.debug("Starting the application.");
 		presenter.notify("Welcome to the application !");
 		showMenu();
 		do {
@@ -166,6 +175,7 @@ public class CLIController implements UIController, PageProvider {
 	public void stop() {
 		// TODO Auto-generated method stub
 		presenter.notify("Stopping the application.");
+		logger.debug("Terminating the application.");
 		System.exit(1);
 	}
 
@@ -249,6 +259,7 @@ public class CLIController implements UIController, PageProvider {
 			break;
 		default:
 			presenter.notify(UNKNOWN_ACTION);
+			logger.info("Unkown action : " + cmd.getName());
 		}
 	}
 
@@ -392,6 +403,7 @@ public class CLIController implements UIController, PageProvider {
 				idIsValid = true;
 			} catch (NumberFormatException nfe) {
 				presenter.notify("<ID> must be a number");
+				logger.info(nfe.getMessage());
 			}
 		} while (!idIsValid);
 		return id;
@@ -446,7 +458,7 @@ public class CLIController implements UIController, PageProvider {
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				presenter.notify("Wrong date format.");
-				e.printStackTrace();
+				logger.info(e.getMessage());
 			}
 		} while (!dateIsValid);
 
@@ -475,7 +487,7 @@ public class CLIController implements UIController, PageProvider {
 				}
 				companyIsValid = true;
 			} catch (NumberFormatException nfe) {
-				nfe.printStackTrace();
+				logger.info(nfe.getMessage());
 				presenter.notify("<ID> Must be a number.");
 			}
 		} while (!companyIsValid);
