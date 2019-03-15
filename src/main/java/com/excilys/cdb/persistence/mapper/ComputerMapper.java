@@ -8,15 +8,14 @@ import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.ComputerFactory;
 
+/**
+ * Concrete implementation of SQLMapper for computers.
+ * 
+ * @author excilys
+ *
+ */
 public class ComputerMapper extends SqlMapper<Computer> {
 
-	/**
-	 * Format a query result to a Computer object
-	 * 
-	 * @param result ResultSet
-	 * @return Computer
-	 * @throws SQLException
-	 */
 	@Override
 	public Computer queryResultToObject(ResultSet result) throws SQLException {
 

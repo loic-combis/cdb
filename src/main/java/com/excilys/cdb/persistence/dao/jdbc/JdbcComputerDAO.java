@@ -8,23 +8,55 @@ import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.persistence.dao.ComputerDAO;
 import com.excilys.cdb.persistence.mapper.ComputerMapper;
 
+/**
+ * Singleton Concrete implementation of ComputerDAO Responsible for bonding
+ * Computer objects to the database thanks to JDBC
+ * 
+ * @author excilys
+ *
+ */
 public class JdbcComputerDAO implements ComputerDAO {
 
+	/**
+	 * conn Connection
+	 */
 	private Connection conn;
+
+	/**
+	 * mapper ComputerMapper
+	 */
 	private ComputerMapper mapper = new ComputerMapper();
 
+	/**
+	 * instance JdbcComputerDAO - Unique instance of JdbcComputerDAO.
+	 */
 	private static JdbcComputerDAO instance;
 
+	/**
+	 * String base SQL request.
+	 */
 	private static final String LIST_REQUEST = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id %s";
 	private static final String FIND_BY_ID = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.id = %d";
 	private static final String DELETE_ONE = "DELETE FROM computer WHERE id = %d";
 	private static final String CREATE_ONE = "INSERT INTO computer(name, introduced, discontinued, company_id) VALUES('%s', ?, ?, ?)";
 	private static final String UPDATE_ONE = "UPDATE computer SET name='%s', introduced = ?, discontinued = ?, company_id = ? WHERE id = %d";
 
+	/**
+	 * Constructor Prevents from being instantiated outside the class.
+	 * {@link JdbcComputerDAO#instance}
+	 * 
+	 * @param conn
+	 */
 	private JdbcComputerDAO(Connection conn) {
 		this.conn = conn;
 	}
 
+	/**
+	 * Creates or returns the unique instance of JdbcComputerDAO
+	 * 
+	 * @param conn Connection
+	 * @return JdbcComputerDAO
+	 */
 	public static JdbcComputerDAO getInstance(Connection conn) {
 		if (instance == null) {
 			instance = new JdbcComputerDAO(conn);

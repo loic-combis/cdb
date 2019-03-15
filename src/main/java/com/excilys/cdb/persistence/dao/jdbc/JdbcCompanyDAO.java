@@ -11,19 +11,53 @@ import com.excilys.cdb.model.Company;
 import com.excilys.cdb.persistence.dao.CompanyDAO;
 import com.excilys.cdb.persistence.mapper.CompanyMapper;
 
+/**
+ * Singleton Concrete implementation of CompanyDAO. Responsible for bonding the
+ * application to the database thanks to JDBC.
+ * 
+ * @author excilys
+ *
+ */
 public class JdbcCompanyDAO implements CompanyDAO {
 
+	/**
+	 * instance JdbcCompanyDAO - Unique instance of JdbcCompanyDAO
+	 */
 	private static JdbcCompanyDAO instance;
+
+	/**
+	 * conn Connection - Instance of the connection to the database.
+	 */
 	private Connection conn;
+
+	/**
+	 * mapper CompanyMapper
+	 */
 	private CompanyMapper mapper = new CompanyMapper();
 
+	/**
+	 * String base SQL request.
+	 */
 	private static final String LIST_REQUEST = "SELECT * FROM company %s";
 	private static final String FIND_BY_ID = "SELECT * FROM company WHERE id = %d";
 
+	/**
+	 * Constructor Prevents from being instantiated outside the class
+	 * {@link JdbcCompanyDAO#conn}
+	 * 
+	 * @param conn Connection
+	 */
 	private JdbcCompanyDAO(Connection conn) {
 		this.conn = conn;
 	}
 
+	/**
+	 * Creates or returns the unique instance of JdbcCompanyDAO
+	 * {@link JdbcCompanyDAO#instance}
+	 * 
+	 * @param conn
+	 * @return
+	 */
 	public static JdbcCompanyDAO getInstance(Connection conn) {
 		if (instance == null) {
 			instance = new JdbcCompanyDAO(conn);

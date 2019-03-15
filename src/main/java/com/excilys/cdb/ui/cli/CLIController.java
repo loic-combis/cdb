@@ -16,6 +16,12 @@ import com.excilys.cdb.ui.PageProvider;
 import com.excilys.cdb.ui.Presenter;
 import com.excilys.cdb.ui.UIController;
 
+/**
+ * Enumeration Defines the commands accepted by the client.
+ * 
+ * @author excilys
+ *
+ */
 enum Command {
 
 	COMPUTERS("COMPUTERS", "List the computers."), COMPANIES("COMPANIES", "List the companies."),
@@ -24,22 +30,51 @@ enum Command {
 	NEXT("NEXT", "Go to next page."), PREVIOUS("PREVIOUS", "Go to previous page."),
 	MENU("MENU", "Go back to the main menu."), QUIT("QUIT", "Quit the application.");
 
+	/**
+	 * name String - Name of the command.
+	 */
 	private String name;
+
+	/**
+	 * action String - Action related to this command.
+	 */
 	private String action;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param name   String
+	 * @param action String
+	 */
 	private Command(String name, String action) {
 		this.name = name;
 		this.action = action;
 	}
 
+	/**
+	 * Getter {@link Command#name}
+	 * 
+	 * @return String
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Getter {@link Command#action}
+	 * 
+	 * @return String
+	 */
 	public String getAction() {
 		return action;
 	}
 
+	/**
+	 * Checks if the specified string corresponds to one of the command's name.
+	 * 
+	 * @param input String
+	 * @return boolean
+	 */
 	public static boolean contains(String input) {
 		boolean found = false;
 		for (Command c : values()) {
@@ -51,19 +86,56 @@ enum Command {
 	}
 }
 
+/**
+ * Concrete implementation of UIController and PageProvider Responsible for
+ * handling user interactions and bonding with the persistence.
+ * 
+ * @author excilys
+ *
+ */
 public class CLIController implements UIController, PageProvider {
 
+	/**
+	 * String actions.
+	 */
 	private static final String UNKNOWN_ACTION = "Unknown action.";
 	private static final String WHAT_TO_DO = "\nWhat do you want to do?";
 
-	private final int itemPerPage = 100;
+	/**
+	 * itemPerPage int - Defines the limit of item presented in one page.
+	 */
+	private final int itemPerPage = 10;
+
+	/**
+	 * persistence PersistenceFacade - Fetches data from persistence.
+	 */
 	private PersistenceFacade persistence;
+
+	/**
+	 * presenter CLIPresenter - Presents data to the client.
+	 */
 	private CLIPresenter presenter;
+
+	/**
+	 * scanner Scanner - Reads clients inputs.
+	 */
 	private Scanner scanner;
 
+	/**
+	 * shouldStop boolean - Defines if the main loop should stop.
+	 */
 	boolean shouldStop = false;
+
+	/**
+	 * shouldShowMenu boolean - Defines if the menu should be shown in the next
+	 * iteration.
+	 */
 	boolean shouldShowMenu = false;
 
+	/**
+	 * Constructor {@link CLIController#persistence} {@link CLIController#presenter}
+	 * {@link CLIController#scanner}
+	 */
 	public CLIController() {
 		persistence = PersistenceFacade.getInstance();
 		presenter = new CLIPresenter();
@@ -113,6 +185,11 @@ public class CLIController implements UIController, PageProvider {
 		return null;
 	}
 
+	/**
+	 * Custom nextLine() for handling QUIT and menu Command
+	 * 
+	 * @return String (null if the client's input is a QUIT or MENU command).
+	 */
 	private String nextLine() {
 		String input = scanner.nextLine();
 		if (input.equals(Command.QUIT.getName())) {
@@ -127,6 +204,9 @@ public class CLIController implements UIController, PageProvider {
 
 	}
 
+	/**
+	 * Presents the main menu to the client.
+	 */
 	private void showMenu() {
 		presenter.notify("Here is the list of the available commands : ");
 		Command[] commands = Command.values();
@@ -137,6 +217,11 @@ public class CLIController implements UIController, PageProvider {
 		shouldShowMenu = false;
 	}
 
+	/**
+	 * Dispatches according to the client's input.
+	 * 
+	 * @param input String
+	 */
 	private void handleInput(String input) {
 		if (!Command.contains(input)) {
 			presenter.notify(UNKNOWN_ACTION);
@@ -167,6 +252,11 @@ public class CLIController implements UIController, PageProvider {
 		}
 	}
 
+	/**
+	 * Responsible for handling a LIST command.
+	 * 
+	 * @param c Class of the objects to be listed.
+	 */
 	private void handleListCommand(Class<?> c) {
 		Page<?> p;
 		if (c == Computer.class) {
@@ -202,6 +292,9 @@ public class CLIController implements UIController, PageProvider {
 
 	}
 
+	/**
+	 * Handles show command
+	 */
 	private void handleShowCommand() {
 		Long id = requestValidId();
 		if (id == null)
@@ -210,6 +303,9 @@ public class CLIController implements UIController, PageProvider {
 		presenter.present(persistence.getComputer(id));
 	}
 
+	/**
+	 * Handles computer creation command.
+	 */
 	private void handleCreateCommand() {
 		String name = requestValidName();
 		if (name == null)
@@ -234,6 +330,9 @@ public class CLIController implements UIController, PageProvider {
 		presenter.present(persistence.create(c));
 	}
 
+	/**
+	 * Handles computer update command.
+	 */
 	private void handleUpdateCommand() {
 		Long id = requestValidId();
 		if (id == null)
@@ -262,6 +361,9 @@ public class CLIController implements UIController, PageProvider {
 		presenter.notify(persistence.update(c) ? Presenter.UPDATE_SUCCESS : Presenter.UPDATE_FAIL);
 	}
 
+	/**
+	 * Handles computer deletion command.
+	 */
 	private void handleDeleteCommand() {
 		Long id = requestValidId();
 		if (id == null)
@@ -270,6 +372,11 @@ public class CLIController implements UIController, PageProvider {
 		presenter.notify(persistence.deleteComputer(id) ? Presenter.DELETE_SUCCESS : Presenter.UPDATE_FAIL);
 	}
 
+	/**
+	 * Prompts the client to enter a valid Id (Number)
+	 * 
+	 * @return Long
+	 */
 	private Long requestValidId() {
 		Long id = null;
 		boolean idIsValid = false;
@@ -290,6 +397,11 @@ public class CLIController implements UIController, PageProvider {
 		return id;
 	}
 
+	/**
+	 * Prompts the client to enter a non empty name.
+	 * 
+	 * @return String
+	 */
 	private String requestValidName() {
 		String name;
 		boolean nameIsValid = false;
@@ -309,6 +421,12 @@ public class CLIController implements UIController, PageProvider {
 		return name;
 	}
 
+	/**
+	 * Prompts the client to enter a valid date
+	 * 
+	 * @param type String (type of date).
+	 * @return Date
+	 */
 	private Date requestValidDate(String type) {
 		Date d = null;
 		boolean dateIsValid = false;
@@ -335,6 +453,11 @@ public class CLIController implements UIController, PageProvider {
 		return d;
 	}
 
+	/**
+	 * Prompts the user to enter a valid company id.
+	 * 
+	 * @return Company
+	 */
 	private Company requestValidCompany() {
 		Company comp = null;
 		boolean companyIsValid = false;

@@ -6,8 +6,14 @@ import java.util.Properties;
 
 public class PropertyReader {
 
+	/**
+	 * prop Properties
+	 */
 	Properties prop;
 
+	/**
+	 * Constructor
+	 */
 	public PropertyReader() {
 		this.prop = new Properties();
 
@@ -21,6 +27,12 @@ public class PropertyReader {
 
 	}
 
+	/**
+	 * Returns the value of the specified property.
+	 * 
+	 * @param key String
+	 * @return String
+	 */
 	public String get(String key) {
 		return this.prop.getProperty(key);
 	}
