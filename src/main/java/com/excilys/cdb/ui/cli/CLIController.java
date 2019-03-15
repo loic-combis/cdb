@@ -174,7 +174,7 @@ public class CLIController implements UIController, PageProvider {
 		} else {
 			p = new Page<Company>(Company.class, this);
 		}
-		presenter.presentMany(p.first());
+		presenter.presentMany(p.nextPage());
 
 		boolean shouldGoBack = false;
 		do {

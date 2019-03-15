@@ -1,6 +1,5 @@
 package com.excilys.cdb.persistence.dao;
 
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -24,7 +23,7 @@ public class DAOFactory {
 		try {
 			this.conn = DriverManager.getConnection(dbURL, dbUser, dbPassword);
 
-		} catch (SQLException | IllegalArgumentException | SecurityException  e) {
+		} catch (SQLException | IllegalArgumentException | SecurityException e) {
 			// TODO Auto-generated catch block
 			if (this.conn != null) {
 				try {
