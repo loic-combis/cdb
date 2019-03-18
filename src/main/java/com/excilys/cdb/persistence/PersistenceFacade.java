@@ -59,7 +59,7 @@ public class PersistenceFacade {
 	public static PersistenceFacade getInstance() {
 		if (instance == null) {
 			instance = new PersistenceFacade();
-			logger.debug("PersistenceFacadeInstantiated.");
+			logger.debug("PersistenceFacade Instantiated.");
 		}
 		return instance;
 	}

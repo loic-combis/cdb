@@ -1,7 +1,7 @@
 package com.excilys.cdb.model;
 
 /**
- * Class managing the comany entity within the application.
+ * Class managing the company entity within the application.
  * 
  * @author excilys
  *

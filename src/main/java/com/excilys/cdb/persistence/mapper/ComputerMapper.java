@@ -18,7 +18,9 @@ public class ComputerMapper extends SqlMapper<Computer> {
 
 	@Override
 	public Computer queryResultToObject(ResultSet result) throws SQLException {
-
+		if(result == null) {
+			return null;
+		}
 		int computerId = result.getInt(1);
 		String computerName = result.getString(2);
 		Date introduction = this.getDateValue(result.getTimestamp(3));

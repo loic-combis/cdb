@@ -18,6 +18,7 @@ public class CompanyMapper extends SqlMapper<Company> {
 	@Override
 	public Company queryResultToObject(ResultSet result) throws SQLException {
 		// TODO Auto-generated method stub
+		if(result == null) return null;
 		return CompanyFactory.getInstance().create(result.getInt(1), result.getString(2));
 	}
 
