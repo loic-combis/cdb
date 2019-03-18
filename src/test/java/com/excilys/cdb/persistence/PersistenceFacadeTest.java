@@ -16,13 +16,13 @@ import java.util.LinkedList;
 public class PersistenceFacadeTest {
 
 	private PersistenceFacade persistence;
-	
+
 	private LinkedList<Computer> computers;
 	private static final String COMPUTER_NAME = "Mackbook Pro";
 	private static final long COMPUTER_ID = 21L;
 	private LinkedList<Company> companies;
 	private static final long COMPANY_ID = 1L;
-	
+
 	@Before
 	public void setUp() {
 		persistence = PersistenceFacade.getInstance();
@@ -31,15 +31,15 @@ public class PersistenceFacadeTest {
 		companies = new LinkedList<Company>();
 		companies.add(CompanyFactory.getInstance().create(COMPANY_ID));
 	}
-	
+
 	@Test
 	public void notNullInstanceTest() {
 		assertNotNull(persistence);
 	}
-	
+
 	@Test
 	public void sharedInstanceTest() {
 		assertEquals(persistence, PersistenceFacade.getInstance());
 	}
-	
+
 }

@@ -10,14 +10,13 @@ import org.junit.Test;
 
 public class CompanyMapperTest {
 
-	
 	private CompanyMapper mapper;
-	
+
 	@Before
 	public void setUp() {
 		mapper = new CompanyMapper();
 	}
-	
+
 	@Test
 	public void mapFromNullTest() {
 		try {

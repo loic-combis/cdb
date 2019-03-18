@@ -91,10 +91,10 @@ public class JdbcComputerDAO implements ComputerDAO {
 	@Override
 	public Computer create(Computer c) {
 		// TODO Auto-generated method stub
-		if(c == null) {
+		if (c == null) {
 			return null;
 		}
-		
+
 		Long companyId = (c.getCompany() != null ? c.getCompany().getId() : null);
 
 		Timestamp introductionDate = mapper.getSqlTimestampValue(c.getIntroductionDate());

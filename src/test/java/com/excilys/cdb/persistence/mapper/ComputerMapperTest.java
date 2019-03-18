@@ -10,14 +10,13 @@ import org.junit.Test;
 
 public class ComputerMapperTest {
 
-	
 	private ComputerMapper mapper;
-	
+
 	@Before
 	public void setUp() {
 		mapper = new ComputerMapper();
 	}
-	
+
 	@Test
 	public void resultToObjectTest() {
 		try {
@@ -27,5 +26,5 @@ public class ComputerMapperTest {
 			e.printStackTrace();
 			fail("Not handling null parameter.");
 		}
-	} 
+	}
 }
