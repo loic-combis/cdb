@@ -139,7 +139,7 @@ public class CLIController implements UIController, PageProvider {
 	 * logger Logger
 	 */
 	private final Logger logger = LoggerFactory.getLogger(CLIController.class);
-		
+
 	/**
 	 * Constructor {@link CLIController#persistence} {@link CLIController#presenter}
 	 * {@link CLIController#scanner}

@@ -38,7 +38,7 @@ public class JdbcCompanyDAO implements CompanyDAO {
 	 * logger Logger
 	 */
 	private final static Logger logger = LoggerFactory.getLogger(JdbcCompanyDAO.class);
-	
+
 	/**
 	 * String base SQL request.
 	 */
@@ -46,9 +46,10 @@ public class JdbcCompanyDAO implements CompanyDAO {
 	private static final String FIND_BY_ID = "SELECT * FROM company WHERE id = %d";
 
 	/**
-	 * Constructor 
+	 * Constructor
 	 * 
 	 * Prevents from being instantiated outside the class
+	 * 
 	 * @param conn Connection
 	 */
 	private JdbcCompanyDAO() {
@@ -72,8 +73,8 @@ public class JdbcCompanyDAO implements CompanyDAO {
 	@Override
 	public Company get(long id) {
 		// TODO Auto-generated method stub
-		try (Connection conn = DAOFactory.getConnection()){
-			
+		try (Connection conn = DAOFactory.getConnection()) {
+
 			Statement state = conn.createStatement();
 			ResultSet result = state.executeQuery(String.format(FIND_BY_ID, id));
 			Company company = result.next() ? mapper.queryResultToObject(result) : null;
@@ -92,8 +93,8 @@ public class JdbcCompanyDAO implements CompanyDAO {
 	public List<Company> list(int page, int itemPerPage) {
 		// TODO Auto-generated method stub
 		LinkedList<Company> companies = new LinkedList<Company>();
-		
-		try (Connection conn = DAOFactory.getConnection()){
+
+		try (Connection conn = DAOFactory.getConnection()) {
 			Statement state = conn.createStatement();
 			String offsetClause = itemPerPage > 0 ? "LIMIT " + itemPerPage : "";
 			offsetClause += (page > 1 && itemPerPage > 0) ? " OFFSET " + ((page - 1) * itemPerPage) : "";

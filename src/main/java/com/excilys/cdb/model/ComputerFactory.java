@@ -23,7 +23,7 @@ public class ComputerFactory {
 	 * logger Logger
 	 */
 	private final Logger logger = LoggerFactory.getLogger(ComputerFactory.class);
-	
+
 	/**
 	 * Constructor Prevent from being instantiated outside the class.
 	 */

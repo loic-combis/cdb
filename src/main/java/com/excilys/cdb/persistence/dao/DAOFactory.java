@@ -23,15 +23,14 @@ public class DAOFactory {
 	 * instance DAOFactory - Unique instance of DAOFactory.
 	 */
 	private static DAOFactory instance;
-	
+
 	/**
 	 * logger Logger
 	 */
 	private static final Logger logger = LoggerFactory.getLogger(DAOFactory.class);
 
 	/**
-	 * Constructor 
-	 * Prevent from being instantiated outside the class.
+	 * Constructor Prevent from being instantiated outside the class.
 	 */
 	private DAOFactory() {
 	}
@@ -52,20 +51,21 @@ public class DAOFactory {
 
 	/**
 	 * Creates a new instance of Connection.
+	 * 
 	 * @return Connection
 	 * @throws SQLException
 	 */
 	public static Connection getConnection() throws SQLException {
-		
+
 		PropertyReader prop = new PropertyReader();
-		
+
 		String dbURL = prop.get("dbName");
 		String dbUser = prop.get("dbUser");
 		String dbPassword = prop.get("dbPassword");
-		
+
 		return DriverManager.getConnection(dbURL, dbUser, dbPassword);
 	}
-	
+
 	/**
 	 * Getter Returns the instance of the concrete computer DAO.
 	 * 
