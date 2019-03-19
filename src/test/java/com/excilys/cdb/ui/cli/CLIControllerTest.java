@@ -10,20 +10,20 @@ import com.excilys.cdb.ui.UIController;
 
 public class CLIControllerTest {
 
-	private CLIController cli;
+    private CLIController cli;
 
-	@Before
-	public void setUp() {
-		cli = new CLIController();
-	}
+    @Before
+    public void setUp() {
+        cli = new CLIController();
+    }
 
-	@Test
-	public void instanceOfController() {
-		assertTrue(cli instanceof UIController);
-	}
+    @Test
+    public void instanceOfController() {
+        assertTrue(cli instanceof UIController);
+    }
 
-	@Test
-	public void instanceOfPageProvider() {
-		assertTrue(cli instanceof PageProvider);
-	}
+    @Test
+    public void instanceOfPageProvider() {
+        assertTrue(cli instanceof PageProvider);
+    }
 }

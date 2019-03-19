@@ -8,13 +8,13 @@ import com.excilys.cdb.ui.cli.CLIController;
  */
 public class App {
 
-	/**
-	 * Main method
-	 * 
-	 * @param args String[]
-	 */
-	public static void main(String[] args) {
-		CLIController cli = new CLIController();
-		cli.start();
-	}
+    /**
+     * Main method.
+     *
+     * @param args String[]
+     */
+    public static void main(String[] args) {
+        CLIController cli = new CLIController();
+        cli.start();
+    }
 }

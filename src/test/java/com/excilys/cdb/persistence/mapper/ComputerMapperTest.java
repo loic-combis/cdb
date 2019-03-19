@@ -10,21 +10,21 @@ import org.junit.Test;
 
 public class ComputerMapperTest {
 
-	private ComputerMapper mapper;
+    private ComputerMapper mapper;
 
-	@Before
-	public void setUp() {
-		mapper = new ComputerMapper();
-	}
+    @Before
+    public void setUp() {
+        mapper = new ComputerMapper();
+    }
 
-	@Test
-	public void resultToObjectTest() {
-		try {
-			assertNull(mapper.queryResultToObject(null));
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			fail("Not handling null parameter.");
-		}
-	}
+    @Test
+    public void resultToObjectTest() {
+        try {
+            assertNull(mapper.queryResultToObject(null));
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            fail("Not handling null parameter.");
+        }
+    }
 }

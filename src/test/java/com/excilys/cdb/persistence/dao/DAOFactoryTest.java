@@ -14,66 +14,66 @@ import org.junit.Test;
 
 public class DAOFactoryTest {
 
-	private DAOFactory factory;
+    private DAOFactory factory;
 
-	private Connection connection;
+    private Connection connection;
 
-	@Before
-	public void setUp() {
-		factory = DAOFactory.getInstance();
-	}
+    @Before
+    public void setUp() {
+        factory = DAOFactory.getInstance();
+    }
 
-	@Test
-	public void notNullInstanceTest() {
-		assertNotNull(factory);
-	}
+    @Test
+    public void notNullInstanceTest() {
+        assertNotNull(factory);
+    }
 
-	@Test
-	public void sharedInstanceTest() {
-		assertEquals(factory, DAOFactory.getInstance());
-	}
+    @Test
+    public void sharedInstanceTest() {
+        assertEquals(factory, DAOFactory.getInstance());
+    }
 
-	@Test
-	public void notNullComputerDAOTest() {
-		assertNotNull(factory.getComputerDAO());
-	}
+    @Test
+    public void notNullComputerDAOTest() {
+        assertNotNull(factory.getComputerDAO());
+    }
 
-	@Test
-	public void validInstanceTest() {
-		assertTrue(factory.getComputerDAO() instanceof ComputerDAO);
-	}
+    @Test
+    public void validInstanceTest() {
+        assertTrue(factory.getComputerDAO() instanceof ComputerDAO);
+    }
 
-	@Test
-	public void notNullCompanyDAOTest() {
-		assertNotNull(factory.getCompanyDAO());
-	}
+    @Test
+    public void notNullCompanyDAOTest() {
+        assertNotNull(factory.getCompanyDAO());
+    }
 
-	@Test
-	public void validInstanceCompanyDAOTest() {
-		assertTrue(factory.getCompanyDAO() instanceof CompanyDAO);
-	}
+    @Test
+    public void validInstanceCompanyDAOTest() {
+        assertTrue(factory.getCompanyDAO() instanceof CompanyDAO);
+    }
 
-	@Test
-	public void getConnectionTest() {
-		try {
-			connection = DAOFactory.getConnection();
-			assertNotNull(connection);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			fail("Couldn't connect to the DB.");
-			e.printStackTrace();
-		}
-	}
+    @Test
+    public void getConnectionTest() {
+        try {
+            connection = DAOFactory.getConnection();
+            assertNotNull(connection);
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            fail("Couldn't connect to the DB.");
+            e.printStackTrace();
+        }
+    }
 
-	@After
-	public void terminate() {
-		if (connection != null) {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
+    @After
+    public void terminate() {
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
 }

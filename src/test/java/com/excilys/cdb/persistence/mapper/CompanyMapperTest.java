@@ -10,21 +10,21 @@ import org.junit.Test;
 
 public class CompanyMapperTest {
 
-	private CompanyMapper mapper;
+    private CompanyMapper mapper;
 
-	@Before
-	public void setUp() {
-		mapper = new CompanyMapper();
-	}
+    @Before
+    public void setUp() {
+        mapper = new CompanyMapper();
+    }
 
-	@Test
-	public void mapFromNullTest() {
-		try {
-			assertNull(mapper.queryResultToObject(null));
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			fail("Not handling null result.");
-			e.printStackTrace();
-		}
-	}
+    @Test
+    public void mapFromNullTest() {
+        try {
+            assertNull(mapper.queryResultToObject(null));
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            fail("Not handling null result.");
+            e.printStackTrace();
+        }
+    }
 }

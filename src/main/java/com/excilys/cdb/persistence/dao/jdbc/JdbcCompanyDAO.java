@@ -16,102 +16,99 @@ import com.excilys.cdb.persistence.dao.DAOFactory;
 import com.excilys.cdb.persistence.mapper.CompanyMapper;
 
 /**
- * Singleton Concrete implementation of CompanyDAO. Responsible for bonding the
- * application to the database thanks to JDBC.
- * 
+ * Singleton Concrete implementation of CompanyDAO. Responsible for bonding the application to the database thanks to JDBC.
+ *
  * @author excilys
  *
  */
 public class JdbcCompanyDAO implements CompanyDAO {
 
-	/**
-	 * instance JdbcCompanyDAO - Unique instance of JdbcCompanyDAO
-	 */
-	private static JdbcCompanyDAO instance;
+    /**
+     * instance JdbcCompanyDAO - Unique instance of JdbcCompanyDAO.
+     */
+    private static JdbcCompanyDAO instance;
 
-	/**
-	 * mapper CompanyMapper
-	 */
-	private CompanyMapper mapper = new CompanyMapper();
+    /**
+     * mapper CompanyMapper.
+     */
+    private CompanyMapper mapper = new CompanyMapper();
 
-	/**
-	 * logger Logger
-	 */
-	private final static Logger logger = LoggerFactory.getLogger(JdbcCompanyDAO.class);
+    /**
+     * LOGGER Logger.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(JdbcCompanyDAO.class);
 
-	/**
-	 * String base SQL request.
-	 */
-	private static final String LIST_REQUEST = "SELECT * FROM company %s";
-	private static final String FIND_BY_ID = "SELECT * FROM company WHERE id = %d";
+    /**
+     * String base SQL request.
+     */
+    private static final String LIST_REQUEST = "SELECT * FROM company %s";
+    private static final String FIND_BY_ID = "SELECT * FROM company WHERE id = %d";
 
-	/**
-	 * Constructor
-	 * 
-	 * Prevents from being instantiated outside the class
-	 * 
-	 * @param conn Connection
-	 */
-	private JdbcCompanyDAO() {
-	}
+    /**
+     * Constructor.
+     *
+     * Prevents from being instantiated outside the class.
+     */
+    private JdbcCompanyDAO() {
+    }
 
-	/**
-	 * Creates or returns the unique instance of JdbcCompanyDAO
-	 * {@link JdbcCompanyDAO#instance}
-	 * 
-	 * @param conn
-	 * @return
-	 */
-	public static JdbcCompanyDAO getInstance() {
-		if (instance == null) {
-			instance = new JdbcCompanyDAO();
-			logger.debug("JdbcComputerDAO instantiated.");
-		}
-		return instance;
-	}
+    /**
+     * Creates or returns the unique instance of JdbcCompanyDAO.
+     *
+     * {@link JdbcCompanyDAO#instance}
+     *
+     * @return JdbcCompanyDAO
+     */
+    public static JdbcCompanyDAO getInstance() {
+        if (instance == null) {
+            instance = new JdbcCompanyDAO();
+            LOGGER.debug("JdbcComputerDAO instantiated.");
+        }
+        return instance;
+    }
 
-	@Override
-	public Company get(long id) {
-		// TODO Auto-generated method stub
-		try (Connection conn = DAOFactory.getConnection()) {
+    @Override
+    public Company get(long id) {
+        // TODO Auto-generated method stub
+        try (Connection conn = DAOFactory.getConnection()) {
 
-			Statement state = conn.createStatement();
-			ResultSet result = state.executeQuery(String.format(FIND_BY_ID, id));
-			Company company = result.next() ? mapper.queryResultToObject(result) : null;
-			result.close();
-			state.close();
-			return company;
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			logger.error(e.getMessage());
-			return null;
-		}
-	}
+            Statement state = conn.createStatement();
+            ResultSet result = state.executeQuery(String.format(FIND_BY_ID, id));
+            Company company = result.next() ? mapper.queryResultToObject(result) : null;
+            result.close();
+            state.close();
+            return company;
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            LOGGER.error(e.getMessage());
+            return null;
+        }
+    }
 
-	@Override
-	public List<Company> list(int page, int itemPerPage) {
-		// TODO Auto-generated method stub
-		LinkedList<Company> companies = new LinkedList<Company>();
+    @Override
+    public List<Company> list(int page, int itemPerPage) {
+        // TODO Auto-generated method stub
+        LinkedList<Company> companies = new LinkedList<Company>();
 
-		try (Connection conn = DAOFactory.getConnection()) {
-			Statement state = conn.createStatement();
-			String offsetClause = itemPerPage > 0 ? "LIMIT " + itemPerPage : "";
-			offsetClause += (page > 1 && itemPerPage > 0) ? " OFFSET " + ((page - 1) * itemPerPage) : "";
+        try (Connection conn = DAOFactory.getConnection()) {
+            Statement state = conn.createStatement();
+            String offsetClause = itemPerPage > 0 ? "LIMIT " + itemPerPage : "";
+            offsetClause += (page > 1 && itemPerPage > 0) ? " OFFSET " + ((page - 1) * itemPerPage) : "";
 
-			ResultSet result = state.executeQuery(String.format(LIST_REQUEST, offsetClause));
-			while (result.next()) {
-				Company c = mapper.queryResultToObject(result);
-				companies.add(c);
-			}
-			result.close();
-			state.close();
+            ResultSet result = state.executeQuery(String.format(LIST_REQUEST, offsetClause));
+            while (result.next()) {
+                Company c = mapper.queryResultToObject(result);
+                companies.add(c);
+            }
+            result.close();
+            state.close();
 
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			logger.error(e.getMessage());
-			e.printStackTrace();
-		}
-		return companies;
-	}
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            LOGGER.error(e.getMessage());
+            e.printStackTrace();
+        }
+        return companies;
+    }
 }
