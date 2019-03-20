@@ -1,4 +1,4 @@
-package com.excilys.cdb.server;
+package com.excilys.cdb.servlet;
 
 import java.io.IOException;
 
@@ -19,7 +19,7 @@ public class StaticServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println();
+        System.out.println("coucou");
         request.getRequestDispatcher("/WEB-INF/assets/" + request.getRequestURI());
     }
 }

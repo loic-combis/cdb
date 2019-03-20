@@ -1,4 +1,4 @@
-package com.excilys.cdb.server;
+package com.excilys.cdb.servlet;
 
 import java.io.IOException;
 
@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.cdb.persistence.PersistenceFacade;
+import com.excilys.cdb.service.ComputerService;
 
 @WebServlet(name = "List Computers", urlPatterns = "/list-computers")
 public class ListComputerServlet extends HttpServlet {
@@ -17,6 +17,8 @@ public class ListComputerServlet extends HttpServlet {
      * serialVersionUID long.
      */
     private static final long serialVersionUID = 4009417829257782424L;
+
+    private ComputerService computerService = new ComputerService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -32,7 +34,7 @@ public class ListComputerServlet extends HttpServlet {
             itemPerPage = 10;
         }
 
-        request.setAttribute("computers", PersistenceFacade.getInstance().listComputers(page, itemPerPage));
+        request.setAttribute("computers", computerService.list(page, itemPerPage));
         request.getRequestDispatcher("/WEB-INF/static/views/dashboard.jsp").forward(request, response);
     }
 
