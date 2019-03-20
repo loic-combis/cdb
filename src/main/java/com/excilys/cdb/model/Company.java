@@ -32,7 +32,7 @@ public class Company {
      * @param name String - name to be set.
      */
     public Company(String name) {
-        this.setName(name);
+        setName(name);
     }
 
     /**
@@ -43,7 +43,7 @@ public class Company {
      */
     public Company(long id, String name) {
         this.id = id;
-        this.setName(name);
+        setName(name);
     }
 
     /**

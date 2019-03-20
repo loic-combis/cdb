@@ -15,11 +15,11 @@ public class PropertyReader {
      * Constructor.
      */
     public PropertyReader() {
-        this.prop = new Properties();
+        prop = new Properties();
 
         try {
             FileInputStream inputStream = new FileInputStream("src/main/resources/config.properties");
-            this.prop.load(inputStream);
+            prop.load(inputStream);
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
@@ -34,6 +34,6 @@ public class PropertyReader {
      * @return String
      */
     public String get(String key) {
-        return this.prop.getProperty(key);
+        return prop.getProperty(key);
     }
 }

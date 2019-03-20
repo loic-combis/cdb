@@ -26,8 +26,8 @@ public class ComputerMapper extends SqlMapper<Computer> {
 
             int computerId = result.getInt(1);
             String computerName = result.getString(2);
-            Date introduction = this.getDateValue(result.getTimestamp(3));
-            Date discontinuation = this.getDateValue(result.getTimestamp(4));
+            Date introduction = getDateValue(result.getTimestamp(3));
+            Date discontinuation = getDateValue(result.getTimestamp(4));
 
             int companyId = result.getInt(5);
             String companyName = result.getString(7);

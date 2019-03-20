@@ -56,11 +56,11 @@ public class Computer {
      */
     public Computer(long id, String name, Date introduction, Date discontinuation, Company company)
             throws EmptyNameException {
-        this.id = id;
-        this.setName(name);
-        this.setIntroductionDate(introduction);
-        this.setDiscontinuationDate(discontinuation);
-        this.setCompany(company);
+        setId(id);
+        setName(name);
+        setIntroductionDate(introduction);
+        setDiscontinuationDate(discontinuation);
+        setCompany(company);
     }
 
     /**
@@ -83,7 +83,7 @@ public class Computer {
      * @throws EmptyNameException ene
      */
     public void setName(String name) throws EmptyNameException {
-        if (name == null || name.equals("")) {
+        if ("".equals(name)) {
             throw new EmptyNameException();
         }
         this.name = name;
@@ -108,9 +108,9 @@ public class Computer {
      * @param introduction Date - Introduction date of the computer.
      */
     public void setIntroductionDate(Date introduction) {
-        if (this.getDiscontinuationDate() == null || introduction == null
-                || (this.getDiscontinuationDate().getTime() - introduction.getTime()) > 0) {
-            this.introductionDate = introduction;
+        if (getDiscontinuationDate() == null || introduction == null
+                || (getDiscontinuationDate().getTime() - introduction.getTime()) > 0) {
+            introductionDate = introduction;
         }
     }
 
@@ -133,9 +133,9 @@ public class Computer {
      * @param discontinued Date - Discontinuation date of the computer.
      */
     public void setDiscontinuationDate(Date discontinued) {
-        if (this.getIntroductionDate() == null || discontinued == null
-                || (this.getIntroductionDate().getTime() - discontinued.getTime()) < 0) {
-            this.discontinuationDate = discontinued;
+        if (getIntroductionDate() == null || discontinued == null
+                || (getIntroductionDate().getTime() - discontinued.getTime()) < 0) {
+            discontinuationDate = discontinued;
         }
     }
 

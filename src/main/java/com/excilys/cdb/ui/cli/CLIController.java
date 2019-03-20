@@ -509,7 +509,7 @@ public class CLIController implements UIController, PageProvider {
         boolean companyIsValid = false;
         do {
             presenter.notify("Company id : ");
-            String companyId = this.nextLine();
+            String companyId = nextLine();
 
             if (companyId == null) {
                 break;
