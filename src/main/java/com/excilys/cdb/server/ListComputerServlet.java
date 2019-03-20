@@ -1,8 +1,6 @@
 package com.excilys.cdb.server;
 
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.persistence.PersistenceFacade;
 
 @WebServlet(name = "List Computers", urlPatterns = "/list-computers")
 public class ListComputerServlet extends HttpServlet {
@@ -23,10 +21,18 @@ public class ListComputerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
-        List<Computer> computers = new LinkedList<Computer>();
-        computers.add(new Computer("Test"));
-        computers.add(new Computer("Test 2"));
-        request.setAttribute("computers", computers);
+
+        int page, itemPerPage;
+        try {
+            page = Integer.parseInt(request.getParameter("page"));
+            itemPerPage = Integer.parseInt(request.getParameter("itemPerPage"));
+
+        } catch (NumberFormatException nfe) {
+            page = 0;
+            itemPerPage = 10;
+        }
+
+        request.setAttribute("computers", PersistenceFacade.getInstance().listComputers(page, itemPerPage));
         request.getRequestDispatcher("/WEB-INF/static/views/dashboard.jsp").forward(request, response);
     }
 
