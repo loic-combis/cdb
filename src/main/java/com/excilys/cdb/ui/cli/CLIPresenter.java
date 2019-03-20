@@ -23,10 +23,10 @@ public class CLIPresenter extends Presenter {
     @Override
     public void presentMany(List<?> list) {
         // TODO Auto-generated method stub
-        for (Object element : list) {
+        list.stream().forEach(element -> {
             System.out.println(element);
             System.out.println("----------------------------------------------------");
-        }
+        });
         System.out.println("\nPREVIOUS | NEXT | MENU ?");
     }
 

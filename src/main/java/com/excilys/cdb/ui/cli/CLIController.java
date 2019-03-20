@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -225,10 +226,9 @@ public class CLIController implements UIController, PageProvider {
      */
     private void showMenu() {
         presenter.notify("Here is the list of the available commands : ");
-        Command[] commands = Command.values();
-        for (Command command : commands) {
-            presenter.notify(command.getName() + " : " + command.getAction());
-        }
+        
+        Stream.of(Command.values())
+            .forEach(command -> presenter.notify(command.getName() + " : " + command.getAction()));
 
         shouldShowMenu = false;
     }
