@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +17,8 @@ import com.excilys.cdb.persistence.dao.DAOFactory;
 import com.excilys.cdb.persistence.mapper.CompanyMapper;
 
 /**
- * Singleton Concrete implementation of CompanyDAO. Responsible for bonding the application to the database thanks to JDBC.
+ * Singleton Concrete implementation of CompanyDAO. Responsible for bonding the
+ * application to the database thanks to JDBC.
  *
  * @author excilys
  *
@@ -68,22 +70,21 @@ public class JdbcCompanyDAO implements CompanyDAO {
     }
 
     @Override
-    public Company get(long id) {
+    public Optional<Company> get(long id) {
         // TODO Auto-generated method stub
+        Optional<Company> company = null;
         try (Connection conn = DAOFactory.getConnection()) {
 
             Statement state = conn.createStatement();
             ResultSet result = state.executeQuery(String.format(FIND_BY_ID, id));
-            Company company = result.next() ? mapper.queryResultToObject(result) : null;
+            company = result.next() ? mapper.queryResultToObject(result) : null;
             result.close();
             state.close();
-            return company;
         } catch (SQLException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
             LOGGER.error(e.getMessage());
-            return null;
         }
+        return company;
     }
 
     @Override
@@ -98,8 +99,10 @@ public class JdbcCompanyDAO implements CompanyDAO {
 
             ResultSet result = state.executeQuery(String.format(LIST_REQUEST, offsetClause));
             while (result.next()) {
-                Company c = mapper.queryResultToObject(result);
-                companies.add(c);
+                Optional<Company> c = mapper.queryResultToObject(result);
+                if (c.isPresent()) {
+                    companies.add(c.get());
+                }
             }
             result.close();
             state.close();
@@ -107,7 +110,6 @@ public class JdbcCompanyDAO implements CompanyDAO {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             LOGGER.error(e.getMessage());
-            e.printStackTrace();
         }
         return companies;
     }

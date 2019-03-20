@@ -1,6 +1,7 @@
 package com.excilys.cdb.persistence.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Responsible for defining the common methods shared among all the DAO.
@@ -14,7 +15,7 @@ public interface DAO<T> {
     /**
      * List a specific range of items.
      *
-     * @param page int - Page to be fecthed.
+     * @param page        int - Page to be fecthed.
      * @param itemPerPage int - Number of item per page.
      * @return List<T> - The lost of items fetched.
      */
@@ -26,5 +27,5 @@ public interface DAO<T> {
      * @param id long - ID of the item in the database.
      * @return T - An instance of the item.
      */
-    T get(long id);
+    Optional<T> get(long id);
 }

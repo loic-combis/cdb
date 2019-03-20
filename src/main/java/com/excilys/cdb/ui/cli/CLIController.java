@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 import org.slf4j.Logger;
@@ -53,7 +54,6 @@ enum Command {
         this.name = name;
         this.action = action;
     }
-
 
     /**
      * Getter.
@@ -318,7 +318,14 @@ public class CLIController implements UIController, PageProvider {
             return;
         }
 
-        presenter.present(persistence.getComputer(id));
+        Optional<Computer> computer = persistence.getComputer(id);
+
+        if (computer.isPresent()) {
+            presenter.present(computer.get());
+
+        } else {
+            presenter.notify(Presenter.COMPUTER_NOT_FOUND);
+        }
     }
 
     /**
@@ -349,7 +356,13 @@ public class CLIController implements UIController, PageProvider {
         }
         c.setCompany(comp);
 
-        presenter.present(persistence.create(c));
+        Optional<Computer> computer = persistence.create(c);
+        if (computer.isPresent()) {
+            presenter.present(computer.get());
+
+        } else {
+            presenter.notify(Presenter.CREATE_FAIL);
+        }
     }
 
     /**

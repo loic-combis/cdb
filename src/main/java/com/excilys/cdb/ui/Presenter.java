@@ -19,6 +19,7 @@ public abstract class Presenter {
     public static final String DELETE_FAIL = "Deletion unsuccessful";
     public static final String UPDATE_SUCCESS = "Update successful";
     public static final String UPDATE_FAIL = "Update unsuccessful";
+    public static final String COMPUTER_NOT_FOUND = "Computer not found.";
 
     /**
      * Notifies the client of the specified message.

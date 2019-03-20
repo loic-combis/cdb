@@ -4,7 +4,6 @@ package com.excilys.cdb.model;
  * Class managing the company entity within the application.
  *
  * @author excilys
- *
  */
 public class Company {
 
@@ -82,6 +81,7 @@ public class Company {
 
     /**
      * Describes the company object as a String.
+     *
      * @return String
      */
     @Override

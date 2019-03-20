@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +19,8 @@ import com.excilys.cdb.persistence.dao.DAOFactory;
 import com.excilys.cdb.persistence.mapper.ComputerMapper;
 
 /**
- * Singleton Concrete implementation of ComputerDAO Responsible for bonding Computer objects to the database thanks to JDBC.
+ * Singleton Concrete implementation of ComputerDAO Responsible for bonding
+ * Computer objects to the database thanks to JDBC.
  *
  * @author excilys
  *
@@ -73,32 +75,27 @@ public class JdbcComputerDAO implements ComputerDAO {
     }
 
     @Override
-    public Computer get(long id) {
+    public Optional<Computer> get(long id) {
         // TODO Auto-generated method stub
+        Optional<Computer> computer = null;
         try (Connection conn = DAOFactory.getConnection()) {
 
             Statement state = conn.createStatement();
             ResultSet result = state.executeQuery(String.format(FIND_BY_ID, id));
-            Computer computer = result.next() ? mapper.queryResultToObject(result) : null;
+            computer = result.next() ? mapper.queryResultToObject(result) : null;
 
             result.close();
             state.close();
-            return computer;
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             LOGGER.error(e.getMessage());
-            e.printStackTrace();
-            return null;
         }
+        return computer;
     }
 
     @Override
-    public Computer create(Computer c) {
+    public Optional<Computer> create(Computer c) {
         // TODO Auto-generated method stub
-        if (c == null) {
-            return null;
-        }
-
         Long companyId = (c.getCompany() != null ? c.getCompany().getId() : null);
 
         Timestamp introductionDate = mapper.getSqlTimestampValue(c.getIntroductionDate());
@@ -117,24 +114,23 @@ public class JdbcComputerDAO implements ComputerDAO {
             int affectedRows = state.executeUpdate();
             if (affectedRows == 0) {
                 LOGGER.warn("Computer not created.");
-                return null;
             }
 
             ResultSet generatedKeys = state.getGeneratedKeys();
             generatedKeys.next();
             c.setId(generatedKeys.getLong(1));
             LOGGER.info("Computer created with id : " + generatedKeys.getLong(1));
-            return c;
 
         } catch (SQLException e) {
             e.printStackTrace();
             LOGGER.error(e.getMessage());
-            return null;
         }
+
+        return Optional.of(c);
     }
 
     @Override
-    public Boolean delete(long id) {
+    public boolean delete(long id) {
         // TODO Auto-generated method stub
         try (Connection conn = DAOFactory.getConnection()) {
 
@@ -150,14 +146,13 @@ public class JdbcComputerDAO implements ComputerDAO {
 
         } catch (SQLException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
             LOGGER.error(e.getMessage());
             return false;
         }
     }
 
     @Override
-    public Boolean update(Computer c) {
+    public boolean update(Computer c) {
         // TODO Auto-generated method stub
         Long companyId = (c.getCompany() != null ? c.getCompany().getId() : null);
         Timestamp introductionDate = mapper.getSqlTimestampValue(c.getIntroductionDate());
@@ -181,9 +176,8 @@ public class JdbcComputerDAO implements ComputerDAO {
             return affectedRows == 1;
 
         } catch (SQLException e) {
-            e.printStackTrace();
             LOGGER.error(e.getMessage());
-            return null;
+            return false;
         }
     }
 
@@ -200,15 +194,16 @@ public class JdbcComputerDAO implements ComputerDAO {
 
             ResultSet result = state.executeQuery(String.format(LIST_REQUEST, offsetClause));
             while (result.next()) {
-                Computer c = mapper.queryResultToObject(result);
-                computers.add(c);
+                Optional<Computer> c = mapper.queryResultToObject(result);
+                if (c.isPresent()) {
+                    computers.add(c.get());
+                }
             }
             result.close();
             state.close();
 
         } catch (SQLException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
             LOGGER.error(e.getMessage());
         }
         return computers;

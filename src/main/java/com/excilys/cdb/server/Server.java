@@ -29,5 +29,4 @@ public class Server extends HttpServlet {
         System.out.println("Servlet " + this.getServletName() + " has stopped");
     }
 
-
 }

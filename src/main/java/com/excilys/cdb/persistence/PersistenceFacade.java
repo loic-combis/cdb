@@ -1,6 +1,7 @@
 package com.excilys.cdb.persistence;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,12 +26,14 @@ public class PersistenceFacade {
     private static PersistenceFacade instance;
 
     /**
-     * computerDao ComputerDAO Responsible for bonding the Computer instances to the database.
+     * computerDao ComputerDAO Responsible for bonding the Computer instances to the
+     * database.
      */
     private ComputerDAO computerDAO;
 
     /**
-     * companyDAO CompanyDAO Responsible for bonding the Company instances to the database.
+     * companyDAO CompanyDAO Responsible for bonding the Company instances to the
+     * database.
      */
     private CompanyDAO companyDAO;
 
@@ -42,10 +45,10 @@ public class PersistenceFacade {
     /**
      * Constructor.
      *
-     * Get the instance of all the DAO Prevent from being instantiated outside the class.
+     * Get the instance of all the DAO Prevent from being instantiated outside the
+     * class.
      *
-     * {@link PersistenceFacade#computerDAO}
-     * {@link PersistenceFacade#companyDAO}
+     * {@link PersistenceFacade#computerDAO} {@link PersistenceFacade#companyDAO}
      */
     private PersistenceFacade() {
         computerDAO = DAOFactory.getInstance().getComputerDAO();
@@ -53,7 +56,8 @@ public class PersistenceFacade {
     }
 
     /**
-     * Creates or return the only instance of PersistenceFacade (Lazy instantiation).
+     * Creates or return the only instance of PersistenceFacade (Lazy
+     * instantiation).
      *
      * @return PersistenceFacade
      */
@@ -93,7 +97,7 @@ public class PersistenceFacade {
      * @param id long - Id of the computer to be fetched.
      * @return Computer.
      */
-    public Computer getComputer(long id) {
+    public Optional<Computer> getComputer(long id) {
         return computerDAO.get(id);
     }
 
@@ -103,7 +107,7 @@ public class PersistenceFacade {
      * @param id long - Id of the company to be fetched.
      * @return Company
      */
-    public Company getCompany(long id) {
+    public Optional<Company> getCompany(long id) {
         return companyDAO.get(id);
     }
 
@@ -113,7 +117,7 @@ public class PersistenceFacade {
      * @param id long - Id of the computer to be deleted.
      * @return Boolean - True if the deletion is successful, false otherwise.
      */
-    public Boolean deleteComputer(long id) {
+    public boolean deleteComputer(long id) {
         return computerDAO.delete(id);
     }
 
@@ -123,7 +127,7 @@ public class PersistenceFacade {
      * @param c Computer - Computer to be saved.
      * @return Computer - Computer with its unique id in the database.
      */
-    public Computer create(Computer c) {
+    public Optional<Computer> create(Computer c) {
         return computerDAO.create(c);
     }
 

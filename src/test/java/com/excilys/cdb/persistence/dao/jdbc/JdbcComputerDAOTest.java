@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -43,9 +44,9 @@ public class JdbcComputerDAOTest {
     @Test
     public void createComputerTest() {
         Computer computer = new Computer(NAME);
-        Computer savedComputer = dao.create(computer);
+        Optional<Computer> savedComputer = dao.create(computer);
         assertNotNull(savedComputer);
-        assertTrue(dao.delete(savedComputer.getId()));
+        assertTrue(dao.delete(savedComputer.get().getId()));
     }
 
     @Test
@@ -60,12 +61,13 @@ public class JdbcComputerDAOTest {
 
     @Test
     public void updateTest() {
-        Computer computer = dao.create(new Computer(NAME));
-        assertNotNull(computer);
-        computer.setName(NEW_NAME);
-        assertTrue(dao.update(computer));
-        assertEquals(dao.get(computer.getId()).getName(), NEW_NAME);
-        assertTrue(dao.delete(computer.getId()));
+        Optional<Computer> computer = dao.create(new Computer(NAME));
+        assertTrue(computer.isPresent());
+        Computer c = computer.get();
+        c.setName(NEW_NAME);
+        assertTrue(dao.update(c));
+        assertEquals(dao.get(c.getId()).get().getName(), NEW_NAME);
+        assertTrue(dao.delete(c.getId()));
 
     }
 }

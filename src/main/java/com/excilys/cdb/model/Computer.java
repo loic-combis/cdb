@@ -185,6 +185,7 @@ public class Computer {
 
     /**
      * Describe the computer object in a string.
+     *
      * @return String
      */
     @Override
@@ -201,7 +202,8 @@ public class Computer {
 }
 
 /**
- * Responsible for defining a custom exception when a computer is created with an invalid name.
+ * Responsible for defining a custom exception when a computer is created with
+ * an invalid name.
  *
  * @author excilys
  *

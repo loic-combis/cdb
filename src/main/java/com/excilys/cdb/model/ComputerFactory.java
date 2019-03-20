@@ -6,7 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Singleton Responsible for instantiating Computer objects within the application.
+ * Singleton Responsible for instantiating Computer objects within the
+ * application.
  *
  * @author excilys
  *

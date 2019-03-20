@@ -1,5 +1,7 @@
 package com.excilys.cdb.persistence.dao;
 
+import java.util.Optional;
+
 import com.excilys.cdb.model.Computer;
 
 /**
@@ -17,7 +19,7 @@ public interface ComputerDAO extends DAO<Computer> {
      * @param id long
      * @return Boolean - True if the deletion is successful, false otherwise.
      */
-    Boolean delete(long id);
+    boolean delete(long id);
 
     /**
      * Updates the specified computer.
@@ -25,7 +27,7 @@ public interface ComputerDAO extends DAO<Computer> {
      * @param c Computer
      * @return Boolean - True if the update is successful, false otherwise.
      */
-    Boolean update(Computer c);
+    boolean update(Computer c);
 
     /**
      * Saves the specified computer.
@@ -33,6 +35,6 @@ public interface ComputerDAO extends DAO<Computer> {
      * @param c Computer
      * @return Computer - Newly created computer with its unique id in the database.
      */
-    Computer create(Computer c);
+    Optional<Computer> create(Computer c);
 
 }
