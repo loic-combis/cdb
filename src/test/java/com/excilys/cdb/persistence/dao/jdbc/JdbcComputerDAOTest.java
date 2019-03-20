@@ -3,7 +3,6 @@ package com.excilys.cdb.persistence.dao.jdbc;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -52,7 +51,7 @@ public class JdbcComputerDAOTest {
 
     @Test
     public void createWithNullTest() {
-        assertNull(dao.create(null));
+        assertFalse(dao.create(null).isPresent());
     }
 
     @Test

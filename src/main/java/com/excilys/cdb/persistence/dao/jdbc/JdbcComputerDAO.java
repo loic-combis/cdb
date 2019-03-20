@@ -95,6 +95,9 @@ public class JdbcComputerDAO implements ComputerDAO {
 
     @Override
     public Optional<Computer> create(Computer c) {
+        if(c == null) {
+            return Optional.ofNullable(c);
+        }
         // TODO Auto-generated method stub
         Long companyId = (c.getCompany() != null ? c.getCompany().getId() : null);
 
@@ -126,7 +129,7 @@ public class JdbcComputerDAO implements ComputerDAO {
             LOGGER.error(e.getMessage());
         }
 
-        return Optional.of(c);
+        return Optional.ofNullable(c);
     }
 
     @Override

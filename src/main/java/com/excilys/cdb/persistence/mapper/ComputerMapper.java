@@ -37,6 +37,6 @@ public class ComputerMapper extends SqlMapper<Computer> {
                     discontinuation, company);
         }
 
-        return Optional.of(computer);
+        return Optional.ofNullable(computer);
     }
 }

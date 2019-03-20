@@ -23,7 +23,7 @@ public class CompanyMapper extends SqlMapper<Company> {
         if (result != null) {
             company = CompanyFactory.getInstance().create(result.getInt(1), result.getString(2));
         }
-        return Optional.of(company);
+        return Optional.ofNullable(company);
     }
 
 }

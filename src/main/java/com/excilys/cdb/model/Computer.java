@@ -83,7 +83,7 @@ public class Computer {
      * @throws EmptyNameException ene
      */
     public void setName(String name) throws EmptyNameException {
-        if ("".equals(name)) {
+        if (name == null || "".equals(name)) {
             throw new EmptyNameException();
         }
         this.name = name;

@@ -1,6 +1,6 @@
 package com.excilys.cdb.persistence.mapper;
 
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
 import java.sql.SQLException;
@@ -20,7 +20,7 @@ public class CompanyMapperTest {
     @Test
     public void mapFromNullTest() {
         try {
-            assertNull(mapper.queryResultToObject(null));
+            assertFalse(mapper.queryResultToObject(null).isPresent());
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             fail("Not handling null result.");
