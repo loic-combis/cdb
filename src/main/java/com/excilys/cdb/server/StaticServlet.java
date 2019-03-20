@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "StaticServlet", urlPatterns = "/assets/*")
+@WebServlet(name = "Static Servlet", urlPatterns = {"*.js", "*.css", "*.html"})
 public class StaticServlet extends HttpServlet {
 
     /**
@@ -19,6 +19,7 @@ public class StaticServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        System.out.println();
+        request.getRequestDispatcher("/WEB-INF/assets/" + request.getRequestURI());
     }
 }
