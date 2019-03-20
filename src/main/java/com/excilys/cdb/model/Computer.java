@@ -199,6 +199,20 @@ public class Computer {
         return sb.toString();
 
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(!(o instanceof Computer)) {
+            return false;
+        }
+        return getName().equals(((Computer) o).getName());
+    }
+
+    @Override
+    public int hashCode() {
+        int prime = 17;
+        return 31 * prime + getName().hashCode();
+    }
 }
 
 /**

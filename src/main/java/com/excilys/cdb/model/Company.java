@@ -88,4 +88,19 @@ public class Company {
     public String toString() {
         return id + "\t|\t" + name;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Company)) {
+            return false;
+        }
+        return getName().equals(((Company) o).getName());
+    }
+
+    @Override
+    public int hashCode() {
+        int prime = 17;
+        return 31 * prime + getName().hashCode();
+    }
+
 }
