@@ -97,7 +97,7 @@ public class JdbcComputerDAO implements ComputerDAO {
 
     @Override
     public Optional<Computer> create(Computer c) {
-        if(c == null) {
+        if (c == null) {
             return Optional.ofNullable(c);
         }
         // TODO Auto-generated method stub
@@ -241,14 +241,14 @@ public class JdbcComputerDAO implements ComputerDAO {
         // TODO Auto-generated method stub
         try (Connection conn = DAOFactory.getConnection()) {
             StringBuilder sb = new StringBuilder();
-            for(int i = 0; i < ids.length; i++) {
-                if(i != 0) {
+            for (int i = 0; i < ids.length; i++) {
+                if (i != 0) {
                     sb.append(", ");
                 }
                 sb.append("?");
             }
             PreparedStatement state = conn.prepareStatement(String.format(DELETE_MANY, sb.toString()));
-            for(int i = 0; i < ids.length; i++) {
+            for (int i = 0; i < ids.length; i++) {
                 state.setInt(i + 1, Integer.parseInt(ids[i]));
             }
 
@@ -256,7 +256,7 @@ public class JdbcComputerDAO implements ComputerDAO {
             state.close();
             return result > 0;
 
-        } catch(NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) {
             LOGGER.error("deleteMany : " + nfe.getMessage());
             return false;
         } catch (SQLException e) {

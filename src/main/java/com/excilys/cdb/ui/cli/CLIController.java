@@ -235,7 +235,7 @@ public class CLIController implements UIController, PageProvider {
         presenter.notify("Here is the list of the available commands : ");
 
         Stream.of(Command.values())
-            .forEach(command -> presenter.notify(command.getName() + " : " + command.getAction()));
+                .forEach(command -> presenter.notify(command.getName() + " : " + command.getAction()));
 
         shouldShowMenu = false;
     }

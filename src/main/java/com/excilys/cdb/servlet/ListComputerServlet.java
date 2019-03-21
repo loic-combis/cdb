@@ -21,7 +21,8 @@ public class ListComputerServlet extends HttpServlet {
     private ComputerService computerService = new ComputerService();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         response.setContentType("text/html");
 
         int page, itemPerPage;
@@ -34,11 +35,11 @@ public class ListComputerServlet extends HttpServlet {
             itemPerPage = 10;
         }
         int computerCount = computerService.count();
-        request.setAttribute("sizes", new int[]{10,20,50,100});
+        request.setAttribute("sizes", new int[]{10, 20, 50, 100});
         request.setAttribute("computerCount", computerCount);
         request.setAttribute("itemPerPage", itemPerPage);
         request.setAttribute("currentPage", page);
-        request.setAttribute("minPage", Math.max(page-3,1));
+        request.setAttribute("minPage", Math.max(page - 3, 1));
         request.setAttribute("maxPage", Math.min(page + 3, computerCount / itemPerPage));
         request.setAttribute("computers", computerService.list(page, itemPerPage));
         request.setAttribute("contextPath", request.getContextPath());
@@ -46,8 +47,11 @@ public class ListComputerServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         String[] selection = request.getParameter("selection").split(",");
-        response.getWriter().print(computerService.deleteMany(selection));
+
+        request.setAttribute("feedBack", computerService.deleteMany(selection));
+        request.getRequestDispatcher("/WEB-INF/jsp/dashboard.jsp").forward(request, response);
     }
 }

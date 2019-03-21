@@ -19,7 +19,7 @@ public class JdbcComputerDAOTest {
     private static final String NAME = "Macbook Air";
     private static final String NEW_NAME = "Macbook Pro";
 
-    //TODO : Use In-Memory Database.
+    // TODO : Use In-Memory Database.
     @Before
     public void setUp() {
         dao = JdbcComputerDAO.getInstance();

@@ -202,7 +202,7 @@ public class Computer {
 
     @Override
     public boolean equals(Object o) {
-        if(!(o instanceof Computer)) {
+        if (!(o instanceof Computer)) {
             return false;
         }
         return getName().equals(((Computer) o).getName());
