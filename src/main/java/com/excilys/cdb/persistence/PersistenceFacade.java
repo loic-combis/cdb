@@ -140,4 +140,8 @@ public class PersistenceFacade {
     public boolean update(Computer c) {
         return computerDAO.update(c);
     }
+
+    public int countComputers() {
+        return computerDAO.count();
+    }
 }

@@ -50,7 +50,7 @@ public class JdbcComputerDAO implements ComputerDAO {
     private static final String DELETE_ONE = "DELETE FROM computer WHERE id = %d";
     private static final String CREATE_ONE = "INSERT INTO computer(name, introduced, discontinued, company_id) VALUES('%s', ?, ?, ?)";
     private static final String UPDATE_ONE = "UPDATE computer SET name='%s', introduced = ?, discontinued = ?, company_id = ? WHERE id = %d";
-
+    private static final String COUNT_ALL = "SELECT COUNT(*) AS total FROM computer";
     /**
      * Constructor.
      *
@@ -210,6 +210,28 @@ public class JdbcComputerDAO implements ComputerDAO {
             LOGGER.error(e.getMessage());
         }
         return computers;
+    }
+
+    @Override
+    public int count() {
+        // TODO Auto-generated method stub
+        int count = -1;
+        try (Connection conn = DAOFactory.getConnection()) {
+
+            Statement state = conn.createStatement();
+
+            ResultSet result = state.executeQuery(COUNT_ALL);
+            result.next();
+            count = result.getInt("total");
+            result.close();
+            state.close();
+
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            LOGGER.error(e.getMessage());
+        }
+
+        return count;
     }
 
 }

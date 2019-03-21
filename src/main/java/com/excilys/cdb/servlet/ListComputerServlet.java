@@ -30,24 +30,24 @@ public class ListComputerServlet extends HttpServlet {
             itemPerPage = Integer.parseInt(request.getParameter("itemPerPage"));
 
         } catch (NumberFormatException nfe) {
-            page = 0;
+            page = 1;
             itemPerPage = 10;
         }
-
+        int computerCount = computerService.count();
+        request.setAttribute("sizes", new int[]{10,20,50,100});
+        request.setAttribute("computerCount", computerCount);
+        request.setAttribute("itemPerPage", itemPerPage);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("minPage", Math.max(page-3,1));
+        request.setAttribute("maxPage", Math.min(page + 3, computerCount / itemPerPage));
         request.setAttribute("computers", computerService.list(page, itemPerPage));
         request.setAttribute("contextPath", request.getContextPath());
         request.getRequestDispatcher("/WEB-INF/jsp/dashboard.jsp").forward(request, response);
     }
 
     @Override
-    public void init() throws ServletException {
-        System.out.println("Servlet " + this.getServletName() + " has started");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String[] selection = request.getParameter("selection").split(",");
+        response.getWriter().print(selection);
     }
-
-    @Override
-    public void destroy() {
-        System.out.println("Servlet " + this.getServletName() + " has stopped");
-    }
-
-
 }

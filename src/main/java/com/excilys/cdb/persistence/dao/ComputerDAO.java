@@ -37,4 +37,10 @@ public interface ComputerDAO extends DAO<Computer> {
      */
     Optional<Computer> create(Computer c);
 
+    /**
+     * Count the number of computers stored.
+     * @return
+     */
+    int count();
+
 }

@@ -13,14 +13,14 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="dashboard.html"> Application - Computer Database </a>
+            <a class="navbar-brand" href="${contextPath}/list-computer"> Application - Computer Database </a>
         </div>
     </header>
 
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-                ${computers.size()} Computers found
+                ${computerCount} Computer(s) found
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
@@ -32,13 +32,13 @@
                     </form>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="addComputer.html">Add Computer</a> 
+                    <a class="btn btn-success" id="addComputer" href="${contextPath}/add-computer">Add Computer</a> 
                     <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
                 </div>
             </div>
         </div>
 
-        <form id="deleteForm" action="#" method="POST">
+        <form id="deleteForm" action="${contextPath}/list-computers" method="POST">
             <input type="hidden" name="selection" value="">
         </form>
 
@@ -79,7 +79,7 @@
                 	<c:forEach items="${computers}" var="computer">
 					    <tr>      
 					        <td class="editMode">
-					       		<input type="checkbox" name="cb" class="cb" value="0">
+					       		<input type="checkbox" name="cb" class="cb" value="${computer.getId()}">
 					        </td>
 					        <td>${computer.getName()}</td>
 					        <td>${computer.getIntroductionDate()}</td>
@@ -96,26 +96,34 @@
         <div class="container text-center">
             <ul class="pagination">
                 <li>
-                    <a href="#" aria-label="Previous">
+                    <a href="${contextPath}/list-computers?page=${currentPage == 1 ? 1 : currentPage - 1}&itemPerPage=${itemPerPage}" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               </li>
-              <li><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
+              <c:forEach 
+              	var="count" 
+              	begin="${minPage}" 
+              	end="${maxPage}" 
+              	step="1"
+              >
+              	<li>
+              		<a class='${count == currentPage ? "current" : ""}' href="${contextPath}/list-computers?page=${count}&itemPerPage=${itemPerPage}">${count}</a>
+              	</li>
+              </c:forEach>
               <li>
-                <a href="#" aria-label="Next">
+                <a 
+                	href="${contextPath}/list-computers?page=${currentPage == maxPage ? currentPage : currentPage + 1}&itemPerPage=${itemPerPage}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
-        </ul>
+        	</ul>
 		</div>
-        <div class="btn-group btn-group-sm pull-right" role="group" >
-            <button type="button" class="btn btn-default">10</button>
-            <button type="button" class="btn btn-default">50</button>
-            <button type="button" class="btn btn-default">100</button>
+        <div  class="btn-group btn-group-sm pull-right" role="group" style="transform:translateY(-50px);">
+        	<c:forEach items="${sizes}" var="size" >
+        	<a 
+        	class="btn ${size == itemPerPage ? 'current' : ''}"
+        	href="${contextPath}/list-computers?page=1&itemPerPage=${size}" class="btn btn-default">${size}</a>
+        	</c:forEach>
         </div>
     </footer>
 <script src="${contextPath}/assets/js/jquery.min.js"></script>

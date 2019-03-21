@@ -27,3 +27,8 @@ input[type='checkbox'] {
     border-radius: 5px;
     white-space: nowrap;
 }
+
+.current {
+	background-color : #337ab7 !important;
+	color : #fff !important;
+}

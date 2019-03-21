@@ -12,4 +12,8 @@ public class ComputerService {
     public List<Computer> list(int page, int itemPerPage){
         return persistence.listComputers(page, itemPerPage);
     }
+
+    public int count() {
+        return persistence.countComputers();
+    }
 }
