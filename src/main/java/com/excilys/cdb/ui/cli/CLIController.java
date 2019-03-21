@@ -15,7 +15,8 @@ import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.CompanyFactory;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.ComputerFactory;
-import com.excilys.cdb.persistence.PersistenceFacade;
+import com.excilys.cdb.service.CompanyService;
+import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.ui.Page;
 import com.excilys.cdb.ui.PageProvider;
 import com.excilys.cdb.ui.Presenter;
@@ -117,9 +118,14 @@ public class CLIController implements UIController, PageProvider {
     private final int itemPerPage = 10;
 
     /**
-     * persistence PersistenceFacade - Fetches data from persistence.
+     * computerService ComputerService - Fetches computer data from persistence.
      */
-    private PersistenceFacade persistence;
+    private ComputerService computerService;
+
+    /**
+     * companyService CompanyService - Fetches company data from persistence.
+     */
+    private CompanyService companyService;
 
     /**
      * presenter CLIPresenter - Presents data to the client.
@@ -152,7 +158,8 @@ public class CLIController implements UIController, PageProvider {
      * {@link CLIController#presenter} {@link CLIController#scanner}
      */
     public CLIController() {
-        persistence = PersistenceFacade.getInstance();
+        computerService = new ComputerService();
+        companyService = new CompanyService();
         presenter = new CLIPresenter();
         scanner = new Scanner(System.in);
     }
@@ -190,12 +197,12 @@ public class CLIController implements UIController, PageProvider {
     public List<?> fetchDataFor(Class<?> c, int page) {
         // TODO Auto-generated method stub
         if (c == Computer.class) {
-            List<Computer> computers = persistence.listComputers(page, itemPerPage);
+            List<Computer> computers = computerService.list(page, itemPerPage);
             return computers;
         }
 
         if (c == Company.class) {
-            List<Company> companies = persistence.listCompanies(page, itemPerPage);
+            List<Company> companies = companyService.list(page, itemPerPage);
             return companies;
         }
 
@@ -318,7 +325,7 @@ public class CLIController implements UIController, PageProvider {
             return;
         }
 
-        Optional<Computer> computer = persistence.getComputer(id);
+        Optional<Computer> computer = computerService.get(id);
 
         if (computer.isPresent()) {
             presenter.present(computer.get());
@@ -356,7 +363,7 @@ public class CLIController implements UIController, PageProvider {
         }
         c.setCompany(comp);
 
-        Optional<Computer> computer = persistence.create(c);
+        Optional<Computer> computer = computerService.create(c);
         if (computer.isPresent()) {
             presenter.present(computer.get());
 
@@ -398,7 +405,7 @@ public class CLIController implements UIController, PageProvider {
         }
         c.setCompany(comp);
 
-        presenter.notify(persistence.update(c) ? Presenter.UPDATE_SUCCESS : Presenter.UPDATE_FAIL);
+        presenter.notify(computerService.update(c) ? Presenter.UPDATE_SUCCESS : Presenter.UPDATE_FAIL);
     }
 
     /**
@@ -410,7 +417,7 @@ public class CLIController implements UIController, PageProvider {
             return;
         }
 
-        presenter.notify(persistence.deleteComputer(id) ? Presenter.DELETE_SUCCESS : Presenter.UPDATE_FAIL);
+        presenter.notify(computerService.delete(id) ? Presenter.DELETE_SUCCESS : Presenter.UPDATE_FAIL);
     }
 
     /**

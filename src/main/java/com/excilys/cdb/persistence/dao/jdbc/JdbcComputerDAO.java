@@ -51,6 +51,8 @@ public class JdbcComputerDAO implements ComputerDAO {
     private static final String CREATE_ONE = "INSERT INTO computer(name, introduced, discontinued, company_id) VALUES('%s', ?, ?, ?)";
     private static final String UPDATE_ONE = "UPDATE computer SET name='%s', introduced = ?, discontinued = ?, company_id = ? WHERE id = %d";
     private static final String COUNT_ALL = "SELECT COUNT(*) AS total FROM computer";
+    private static final String DELETE_MANY = "DELETE FROM computer WHERE id IN (%s)";
+
     /**
      * Constructor.
      *
@@ -232,6 +234,37 @@ public class JdbcComputerDAO implements ComputerDAO {
         }
 
         return count;
+    }
+
+    @Override
+    public boolean deleteMany(String[] ids) {
+        // TODO Auto-generated method stub
+        try (Connection conn = DAOFactory.getConnection()) {
+            StringBuilder sb = new StringBuilder();
+            for(int i = 0; i < ids.length; i++) {
+                if(i != 0) {
+                    sb.append(", ");
+                }
+                sb.append("?");
+            }
+            PreparedStatement state = conn.prepareStatement(String.format(DELETE_MANY, sb.toString()));
+            for(int i = 0; i < ids.length; i++) {
+                state.setInt(i + 1, Integer.parseInt(ids[i]));
+            }
+
+            int result = state.executeUpdate();
+            state.close();
+            return result > 0;
+
+        } catch(NumberFormatException nfe) {
+            LOGGER.error("deleteMany : " + nfe.getMessage());
+            return false;
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            LOGGER.error(e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
     }
 
 }

@@ -48,6 +48,6 @@ public class ListComputerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String[] selection = request.getParameter("selection").split(",");
-        response.getWriter().print(selection);
+        response.getWriter().print(computerService.deleteMany(selection));
     }
 }

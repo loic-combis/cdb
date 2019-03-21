@@ -10,7 +10,8 @@ import org.junit.Test;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.persistence.PersistenceFacade;
+import com.excilys.cdb.service.CompanyService;
+import com.excilys.cdb.service.ComputerService;
 
 public class PageTest {
 
@@ -26,7 +27,7 @@ public class PageTest {
             @Override
             public List<?> fetchDataFor(Class<?> c, int page) {
                 // TODO Auto-generated method stub
-                return PersistenceFacade.getInstance().listComputers(page, ITEM_PER_PAGE);
+                return (new ComputerService()).list(page, ITEM_PER_PAGE);
             }
 
         });
@@ -36,7 +37,7 @@ public class PageTest {
             @Override
             public List<?> fetchDataFor(Class<?> c, int page) {
                 // TODO Auto-generated method stub
-                return PersistenceFacade.getInstance().listCompanies(page, ITEM_PER_PAGE);
+                return (new CompanyService()).list(page, ITEM_PER_PAGE);
             }
         });
     }
@@ -53,28 +54,28 @@ public class PageTest {
 
     @Test
     public void computersListFilteringTest() {
-        List<?> items = PersistenceFacade.getInstance().listComputers(1, ITEM_PER_PAGE);
+        List<?> items = (new ComputerService()).list(1, ITEM_PER_PAGE);
         List<Computer> computers = Page.filter(Computer.class, items);
         assertTrue(computers.size() <= ITEM_PER_PAGE);
     }
 
     @Test
     public void companiesListFilteringTest() {
-        List<?> items = PersistenceFacade.getInstance().listCompanies(1, ITEM_PER_PAGE);
+        List<?> items = (new CompanyService()).list(1, ITEM_PER_PAGE);
         List<Company> companies = Page.filter(Company.class, items);
         assertTrue(companies.size() <= ITEM_PER_PAGE);
     }
 
     @Test
     public void computersFilteringWithWrongClassTest() {
-        List<?> items = PersistenceFacade.getInstance().listCompanies(1, ITEM_PER_PAGE);
+        List<?> items = (new CompanyService()).list(1, ITEM_PER_PAGE);
         List<Computer> computers = Page.filter(Computer.class, items);
         assertEquals(computers.size(), 0);
     }
 
     @Test
     public void companiesFilteringWithWrongClassTest() {
-        List<?> items = PersistenceFacade.getInstance().listComputers(1, ITEM_PER_PAGE);
+        List<?> items = (new ComputerService()).list(1, ITEM_PER_PAGE);
         List<Company> companies = Page.filter(Company.class, items);
         assertEquals(companies.size(), 0);
     }

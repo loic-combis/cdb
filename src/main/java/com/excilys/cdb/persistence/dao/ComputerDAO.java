@@ -39,8 +39,17 @@ public interface ComputerDAO extends DAO<Computer> {
 
     /**
      * Count the number of computers stored.
-     * @return
+     *
+     * @return int.
      */
     int count();
+
+    /**
+     * Delete computers whose id is in ids.
+     *
+     * @param ids String[]
+     * @return boolean.
+     */
+    boolean deleteMany(String[] ids);
 
 }
