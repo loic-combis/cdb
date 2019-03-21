@@ -54,8 +54,7 @@ public class ComputerFactory {
         try {
             c = new Computer(name);
         } catch (EmptyNameException e) {
-            logger.info("EmptyNameException thrown.");
-            e.printStackTrace();
+            logger.warn("EmptyNameException thrown.");
             c = null;
         }
         return c;

@@ -35,7 +35,8 @@ public class ListComputerServlet extends HttpServlet {
         }
 
         request.setAttribute("computers", computerService.list(page, itemPerPage));
-        request.getRequestDispatcher("/WEB-INF/static/views/dashboard.jsp").forward(request, response);
+        request.setAttribute("contextPath", request.getContextPath());
+        request.getRequestDispatcher("/WEB-INF/jsp/dashboard.jsp").forward(request, response);
     }
 
     @Override
