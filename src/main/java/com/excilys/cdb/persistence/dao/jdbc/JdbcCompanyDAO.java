@@ -83,6 +83,9 @@ public class JdbcCompanyDAO implements CompanyDAO {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             LOGGER.error(e.getMessage());
+        } catch (ClassNotFoundException e1) {
+            // TODO Auto-generated catch block
+            LOGGER.error(e1.getMessage());
         }
         return company;
     }
@@ -110,6 +113,9 @@ public class JdbcCompanyDAO implements CompanyDAO {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             LOGGER.error(e.getMessage());
+        } catch (ClassNotFoundException e1) {
+            // TODO Auto-generated catch block
+            LOGGER.error(e1.getMessage());
         }
         return companies;
     }

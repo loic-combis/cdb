@@ -55,14 +55,16 @@ public class DAOFactory {
      *
      * @return Connection
      * @throws SQLException sqle
+     * @throws ClassNotFoundException
      */
-    public static Connection getConnection() throws SQLException {
+    public static Connection getConnection() throws SQLException, ClassNotFoundException {
 
         PropertyReader prop = new PropertyReader();
 
         String dbURL = prop.get("dbName");
         String dbUser = prop.get("dbUser");
         String dbPassword = prop.get("dbPassword");
+        Class.forName("com.mysql.cj.jdbc.Driver");
 
         return DriverManager.getConnection(dbURL, dbUser, dbPassword);
     }

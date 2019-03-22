@@ -91,6 +91,9 @@ public class JdbcComputerDAO implements ComputerDAO {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             LOGGER.error(e.getMessage());
+        } catch (ClassNotFoundException e1) {
+            // TODO Auto-generated catch block
+            LOGGER.error(e1.getMessage());
         }
         return computer;
     }
@@ -129,6 +132,10 @@ public class JdbcComputerDAO implements ComputerDAO {
         } catch (SQLException e) {
             e.printStackTrace();
             LOGGER.error(e.getMessage());
+
+        } catch (ClassNotFoundException e1) {
+            // TODO Auto-generated catch block
+            LOGGER.error(e1.getMessage());
         }
 
         return Optional.ofNullable(c);
@@ -137,6 +144,7 @@ public class JdbcComputerDAO implements ComputerDAO {
     @Override
     public boolean delete(long id) {
         // TODO Auto-generated method stub
+        boolean isSuccess = false;
         try (Connection conn = DAOFactory.getConnection()) {
 
             Statement state = conn.createStatement();
@@ -147,18 +155,24 @@ public class JdbcComputerDAO implements ComputerDAO {
             } else {
                 LOGGER.warn("Computer " + id + " could not be deleted.");
             }
-            return result == 1;
+            isSuccess = result == 1;
 
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             LOGGER.error(e.getMessage());
-            return false;
+
+        } catch (ClassNotFoundException e1) {
+            // TODO Auto-generated catch block
+            LOGGER.error(e1.getMessage());
         }
+
+        return isSuccess;
     }
 
     @Override
     public boolean update(Computer c) {
         // TODO Auto-generated method stub
+        boolean isSuccess = false;
         Long companyId = (c.getCompany() != null ? c.getCompany().getId() : null);
         Timestamp introductionDate = mapper.getSqlTimestampValue(c.getIntroductionDate());
         Timestamp discontinuationDate = mapper.getSqlTimestampValue(c.getDiscontinuationDate());
@@ -178,12 +192,16 @@ public class JdbcComputerDAO implements ComputerDAO {
                 LOGGER.warn("Computer " + c.getId() + " might not have been updated. Affected Rows : " + affectedRows);
             }
 
-            return affectedRows == 1;
+            isSuccess = affectedRows == 1;
 
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
-            return false;
+        } catch (ClassNotFoundException e1) {
+            // TODO Auto-generated catch block
+            LOGGER.error(e1.getMessage());
         }
+
+        return isSuccess;
     }
 
     @Override
@@ -210,6 +228,10 @@ public class JdbcComputerDAO implements ComputerDAO {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             LOGGER.error(e.getMessage());
+
+        } catch (ClassNotFoundException e1) {
+            // TODO Auto-generated catch block
+            LOGGER.error(e1.getMessage());
         }
         return computers;
     }
@@ -231,6 +253,10 @@ public class JdbcComputerDAO implements ComputerDAO {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             LOGGER.error(e.getMessage());
+
+        } catch (ClassNotFoundException e1) {
+            // TODO Auto-generated catch block
+            LOGGER.error(e1.getMessage());
         }
 
         return count;
@@ -239,6 +265,7 @@ public class JdbcComputerDAO implements ComputerDAO {
     @Override
     public boolean deleteMany(String[] ids) {
         // TODO Auto-generated method stub
+        boolean isSuccess = false;
         try (Connection conn = DAOFactory.getConnection()) {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < ids.length; i++) {
@@ -254,17 +281,20 @@ public class JdbcComputerDAO implements ComputerDAO {
 
             int result = state.executeUpdate();
             state.close();
-            return result > 0;
+            isSuccess = result > 0;
 
         } catch (NumberFormatException nfe) {
             LOGGER.error("deleteMany : " + nfe.getMessage());
-            return false;
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             LOGGER.error(e.getMessage());
-            e.printStackTrace();
-            return false;
+
+        } catch (ClassNotFoundException e1) {
+            // TODO Auto-generated catch block
+            LOGGER.error(e1.getMessage());
         }
+
+        return isSuccess;
     }
 
 }
