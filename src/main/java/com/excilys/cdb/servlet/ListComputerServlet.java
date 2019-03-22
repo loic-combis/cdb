@@ -28,10 +28,14 @@ public class ListComputerServlet extends HttpServlet {
         int page, itemPerPage;
         try {
             page = Integer.parseInt(request.getParameter("page"));
-            itemPerPage = Integer.parseInt(request.getParameter("itemPerPage"));
 
         } catch (NumberFormatException nfe) {
             page = 1;
+        }
+        try {
+            itemPerPage = Integer.parseInt(request.getParameter("itemPerPage"));
+
+        } catch (NumberFormatException nfe) {
             itemPerPage = 10;
         }
         request.setAttribute("feedbackStyle", request.getParameter("feedback"));
