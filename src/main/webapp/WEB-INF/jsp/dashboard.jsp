@@ -107,19 +107,31 @@
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               </li>
+              <li>
+              	<a href="${contextPath}/list-computers?page=1&itemPerPage=${itemPerPage}">1</a>
+              </li>
+              <c:if test="${firstPage - 1 > 1}">
+                <li><a href="#">...</a></li>
+              </c:if>
               <c:forEach 
               	var="count" 
-              	begin="${minPage}" 
-              	end="${maxPage}" 
+              	begin="${firstPage}" 
+              	end="${lastPage}" 
               	step="1"
               >
               	<li>
               		<a class='${count == currentPage ? "current" : ""}' href="${contextPath}/list-computers?page=${count}&itemPerPage=${itemPerPage}">${count}</a>
               	</li>
               </c:forEach>
+              <c:if test="${lastPage + 1 < maxPage}">
+                <li><a href="#">...</a></li>
+              </c:if>
+              <li>
+              	<a href="${contextPath}/list-computers?page=${maxPage}&itemPerPage=${itemPerPage}">${maxPage}</a>
+              </li>
               <li>
                 <a 
-                	href="${contextPath}/list-computers?page=${currentPage == maxPage ? currentPage : currentPage + 1}&itemPerPage=${itemPerPage}" aria-label="Next">
+                	href="${contextPath}/list-computers?page=${currentPage == lastPage ? currentPage : currentPage + 1}&itemPerPage=${itemPerPage}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>

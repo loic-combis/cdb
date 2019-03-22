@@ -45,8 +45,9 @@ public class ListComputerServlet extends HttpServlet {
         request.setAttribute("computerCount", computerCount);
         request.setAttribute("itemPerPage", itemPerPage);
         request.setAttribute("currentPage", page);
-        request.setAttribute("minPage", Math.max(page - 3, 1));
-        request.setAttribute("maxPage", Math.min(page + 3, computerCount / itemPerPage));
+        request.setAttribute("firstPage", Math.max(page - 1, 2));
+        request.setAttribute("lastPage", Math.min(page + 1, computerCount / itemPerPage - 1));
+        request.setAttribute("maxPage", computerCount / itemPerPage);
         request.setAttribute("computers", computerService.list(page, itemPerPage));
         request.setAttribute("contextPath", request.getContextPath());
         request.getRequestDispatcher("/WEB-INF/jsp/dashboard.jsp").forward(request, response);
