@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.cdb.service.ComputerService;
 
-@WebServlet(name = "List Computers", urlPatterns = "/list-computers")
+@WebServlet(name = "List Computers", urlPatterns = {"/list-computers", "/delete-computers"})
 public class ListComputerServlet extends HttpServlet {
 
     /**
@@ -34,6 +34,8 @@ public class ListComputerServlet extends HttpServlet {
             page = 1;
             itemPerPage = 10;
         }
+        request.setAttribute("feedbackStyle", request.getParameter("feedback"));
+        request.setAttribute("message", request.getParameter("message"));
         int computerCount = computerService.count();
         request.setAttribute("sizes", new int[]{10, 20, 50, 100});
         request.setAttribute("computerCount", computerCount);
@@ -49,9 +51,14 @@ public class ListComputerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String[] selection = request.getParameter("selection").split(",");
 
-        request.setAttribute("feedBack", computerService.deleteMany(selection));
-        request.getRequestDispatcher("/WEB-INF/jsp/dashboard.jsp").forward(request, response);
+        String[] selection = request.getParameter("selection").split(",");
+        boolean success = computerService.deleteMany(selection);
+
+        if (success) {
+            response.sendRedirect(request.getContextPath() + "/list-computers?feedback=success&message=" + ComputerService.DELETE_MANY_SUCCESS);
+        } else {
+            response.sendRedirect(request.getContextPath() + "/list-computers?feedback=danger&message=" + ComputerService.DELETE_MANY_FAILURE);
+        }
     }
 }

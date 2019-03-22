@@ -16,6 +16,12 @@ import com.excilys.cdb.persistence.dao.DAOFactory;
 public class ComputerService {
 
     /**
+     * Feedback messages.
+     */
+    public static final String DELETE_MANY_SUCCESS = "Deletion successful.";
+    public static final String DELETE_MANY_FAILURE = "Deletion unsuccessfull.";
+
+    /**
      * computerDAO ComputerDAO.
      */
     ComputerDAO computerDAO = DAOFactory.getInstance().getComputerDAO();

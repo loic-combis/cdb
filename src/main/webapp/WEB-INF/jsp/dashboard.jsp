@@ -13,15 +13,22 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="${contextPath}/list-computer"> Application - Computer Database </a>
+            <a class="navbar-brand" href="${contextPath}/list-computers"> Application - Computer Database </a>
         </div>
     </header>
 
     <section id="main">
         <div class="container">
-            <h1 id="homeTitle">
-                ${computerCount} Computer(s) found
-            </h1>
+        	<div class="row">
+        		<div class="col-lg-5 col-md-12">
+	        		<h1 id="homeTitle"> ${computerCount} Computer(s) found.</h1>
+        		</div>
+        		<div class="col-lg-7 col-md-12">
+        			<c:if test='${message != null}'>
+        				<p class="alert alert-${feedbackStyle}">${message}</p>
+        			</c:if>
+        		</div>
+        	</div>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
                     <form id="searchForm" action="#" method="GET" class="form-inline">
@@ -38,7 +45,7 @@
             </div>
         </div>
 
-        <form id="deleteForm" action="${contextPath}/list-computers" method="POST">
+        <form id="deleteForm" action="${contextPath}/delete-computers" method="POST">
             <input type="hidden" name="selection" value="">
         </form>
 
