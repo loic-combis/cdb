@@ -3,13 +3,13 @@ package com.excilys.cdb.ui.cli;
 import java.util.List;
 
 import com.excilys.cdb.model.Company;
-import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.model.ComputerDTO;
 import com.excilys.cdb.ui.Presenter;
 
 public class CLIPresenter extends Presenter {
 
     @Override
-    public void present(Computer c) {
+    public void present(ComputerDTO c) {
         // TODO Auto-generated method stub
         System.out.println(c);
     }

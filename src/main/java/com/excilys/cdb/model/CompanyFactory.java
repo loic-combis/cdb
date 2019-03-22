@@ -41,7 +41,11 @@ public class CompanyFactory {
      * @return Company
      */
     public Company create(long id, String name) {
-        return new Company(id, name);
+        Company company = new Company();
+        company.setId(id);
+        company.setName(name);
+        return company;
+
     }
 
     /**
@@ -51,7 +55,18 @@ public class CompanyFactory {
      * @return Company
      */
     public Company create(long id) {
-        return new Company(id);
+       Company company = new Company();
+       company.setId(id);
+       return company;
     }
+
+
+    public Company create(String name) {
+        Company company = new Company();
+        company.setName(name);
+        return company;
+    }
+
+
 
 }

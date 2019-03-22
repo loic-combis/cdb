@@ -1,6 +1,6 @@
 package com.excilys.cdb.persistence.mapper;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import java.sql.SQLException;
@@ -8,13 +8,15 @@ import java.sql.SQLException;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.excilys.cdb.mapper.ComputerSQLMapper;
+
 public class ComputerMapperTest {
 
-    private ComputerMapper mapper;
+    private ComputerSQLMapper mapper;
 
     @Before
     public void setUp() {
-        mapper = new ComputerMapper();
+        mapper = new ComputerSQLMapper();
     }
 
     @Test
@@ -22,7 +24,7 @@ public class ComputerMapperTest {
         try {
 
             System.out.println(mapper.queryResultToObject(null));
-            assertFalse(mapper.queryResultToObject(null).isPresent());
+            assertNull(mapper.queryResultToObject(null));
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

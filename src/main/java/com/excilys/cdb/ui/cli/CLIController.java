@@ -2,7 +2,6 @@ package com.excilys.cdb.ui.cli;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -13,8 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.CompanyFactory;
-import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.model.ComputerFactory;
+import com.excilys.cdb.model.ComputerDTO;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.ui.Page;
@@ -196,8 +194,8 @@ public class CLIController implements UIController, PageProvider {
     @Override
     public List<?> fetchDataFor(Class<?> c, int page) {
         // TODO Auto-generated method stub
-        if (c == Computer.class) {
-            List<Computer> computers = computerService.list(page, itemPerPage);
+        if (c == ComputerDTO.class) {
+            List<ComputerDTO> computers = computerService.list(page, itemPerPage);
             return computers;
         }
 
@@ -253,7 +251,7 @@ public class CLIController implements UIController, PageProvider {
         Command cmd = Command.valueOf(input);
         switch (cmd) {
         case COMPUTERS:
-            handleListCommand(Computer.class);
+            handleListCommand(ComputerDTO.class);
             break;
         case COMPANIES:
             handleListCommand(Company.class);
@@ -283,8 +281,8 @@ public class CLIController implements UIController, PageProvider {
      */
     private void handleListCommand(Class<?> c) {
         Page<?> p;
-        if (c == Computer.class) {
-            p = new Page<Computer>(Computer.class, this);
+        if (c == ComputerDTO.class) {
+            p = new Page<ComputerDTO>(ComputerDTO.class, this);
         } else {
             p = new Page<Company>(Company.class, this);
         }
@@ -325,7 +323,7 @@ public class CLIController implements UIController, PageProvider {
             return;
         }
 
-        Optional<Computer> computer = computerService.get(id);
+        Optional<ComputerDTO> computer = computerService.get(id);
 
         if (computer.isPresent()) {
             presenter.present(computer.get());
@@ -343,27 +341,32 @@ public class CLIController implements UIController, PageProvider {
         if (name == null) {
             return;
         }
-        Computer c = ComputerFactory.getInstance().createWithName(name);
+        ComputerDTO c = new ComputerDTO();
+        c.setName(name);
 
-        Date intro = requestValidDate("Introduction");
+        String intro = requestValidDate("Introduction");
         if (intro == null && (shouldStop || shouldShowMenu)) {
             return;
         }
-        c.setIntroductionDate(intro);
+        c.setIntroduction(intro);
 
-        Date disco = requestValidDate("Discontinuation");
+        String disco = requestValidDate("Discontinuation");
         if (disco == null && (shouldStop || shouldShowMenu)) {
             return;
         }
-        c.setDiscontinuationDate(disco);
+        c.setDiscontinuation(disco);
 
         Company comp = requestValidCompany();
         if (comp == null && (shouldStop || shouldShowMenu)) {
             return;
         }
-        c.setCompany(comp);
 
-        Optional<Computer> computer = computerService.create(c);
+        if(comp != null) {
+            c.setCompany(comp.getName());
+            c.setCompanyId(comp.getId());
+        }
+
+        Optional<ComputerDTO> computer = computerService.create(c);
         if (computer.isPresent()) {
             presenter.present(computer.get());
 
@@ -380,30 +383,39 @@ public class CLIController implements UIController, PageProvider {
         if (id == null) {
             return;
         }
+        Optional<ComputerDTO> opt = computerService.get(id);
+        if(!opt.isPresent()) {
+           presenter.notify(Presenter.COMPUTER_NOT_FOUND);
+           return;
+        }
+        ComputerDTO c = opt.get();
 
         String name = requestValidName();
         if (name == null) {
             return;
         }
-        Computer c = ComputerFactory.getInstance().createWithAll(id, name, null, null, null);
 
-        Date intro = requestValidDate("Introduction");
+        String intro = requestValidDate("Introduction");
         if (intro == null && (shouldStop || shouldShowMenu)) {
             return;
         }
-        c.setIntroductionDate(intro);
+        c.setIntroduction(intro);
 
-        Date disco = requestValidDate("Discontinuation");
+        String disco = requestValidDate("Discontinuation");
         if (disco == null && (shouldStop || shouldShowMenu)) {
             return;
         }
-        c.setDiscontinuationDate(disco);
+        c.setDiscontinuation(disco);
 
         Company comp = requestValidCompany();
         if (comp == null && (shouldStop || shouldShowMenu)) {
             return;
         }
-        c.setCompany(comp);
+        if(comp != null) {
+            c.setCompany(comp.getName());
+            c.setCompanyId(comp.getId());
+        }
+
 
         presenter.notify(computerService.update(c) ? Presenter.UPDATE_SUCCESS : Presenter.UPDATE_FAIL);
     }
@@ -478,10 +490,10 @@ public class CLIController implements UIController, PageProvider {
      * Prompts the client to enter a valid date.
      *
      * @param type String (type of date).
-     * @return Date
+     * @return String
      */
-    private Date requestValidDate(String type) {
-        Date d = null;
+    private String requestValidDate(String type) {
+        String date = null;
         boolean dateIsValid = false;
         do {
             presenter.notify(type + " date (YYYY-MM-DD) : ");
@@ -493,7 +505,7 @@ public class CLIController implements UIController, PageProvider {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-mm-dd");
             try {
                 if (!inputDate.equals("")) {
-                    d = df.parse(inputDate);
+                   df.parse(inputDate);
                 }
                 dateIsValid = true;
             } catch (ParseException e) {
@@ -503,7 +515,7 @@ public class CLIController implements UIController, PageProvider {
             }
         } while (!dateIsValid);
 
-        return d;
+        return date;
     }
 
     /**

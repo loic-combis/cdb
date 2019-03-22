@@ -3,7 +3,7 @@ package com.excilys.cdb.ui;
 import java.util.List;
 
 import com.excilys.cdb.model.Company;
-import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.model.ComputerDTO;
 
 /**
  * Abstract Responsible for defining the contract a Presenter must respect
@@ -33,7 +33,7 @@ public abstract class Presenter {
      *
      * @param c Computer
      */
-    public abstract void present(Computer c);
+    public abstract void present(ComputerDTO c);
 
     /**
      * Presents a company to the client.

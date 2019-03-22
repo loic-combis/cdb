@@ -18,9 +18,9 @@ public class CompanyTest {
 
     @Before
     public void setUp() {
-        company = new Company(ID, NAME);
-        companyWithoutId = new Company(NAME);
-        companyWithoutName = new Company(ID);
+        company = CompanyFactory.getInstance().create(ID, NAME);
+        companyWithoutId = CompanyFactory.getInstance().create(NAME);
+        companyWithoutName = CompanyFactory.getInstance().create(ID);
     }
 
     @Test

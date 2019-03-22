@@ -73,7 +73,7 @@ public class ComputerFactoryTest {
     @Test
     public void createWithAllTest() {
         Computer computer = computerFactory.createWithAll(ID, NAME, NOW, TOMORROW,
-                new Company(COMPANY_ID, COMPANY_NAME));
+                CompanyFactory.getInstance().create(COMPANY_ID, COMPANY_NAME));
         assertNotNull(computer);
     }
 }

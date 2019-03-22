@@ -13,10 +13,10 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.cdb.mapper.ComputerSQLMapper;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.persistence.dao.ComputerDAO;
 import com.excilys.cdb.persistence.dao.DAOFactory;
-import com.excilys.cdb.persistence.mapper.ComputerMapper;
 
 /**
  * Singleton Concrete implementation of ComputerDAO Responsible for bonding
@@ -30,7 +30,7 @@ public class JdbcComputerDAO implements ComputerDAO {
     /**
      * mapper ComputerMapper.
      */
-    private ComputerMapper mapper = new ComputerMapper();
+    private ComputerSQLMapper mapper = new ComputerSQLMapper();
 
     /**
      * instance JdbcComputerDAO - Unique instance of JdbcComputerDAO.
@@ -79,7 +79,7 @@ public class JdbcComputerDAO implements ComputerDAO {
     @Override
     public Optional<Computer> get(long id) {
         // TODO Auto-generated method stub
-        Optional<Computer> computer = null;
+        Computer computer = null;
         try (Connection conn = DAOFactory.getConnection()) {
 
             Statement state = conn.createStatement();
@@ -95,7 +95,7 @@ public class JdbcComputerDAO implements ComputerDAO {
             // TODO Auto-generated catch block
             LOGGER.error(e1.getMessage());
         }
-        return computer;
+        return Optional.ofNullable(computer);
     }
 
     @Override
@@ -217,9 +217,9 @@ public class JdbcComputerDAO implements ComputerDAO {
 
             ResultSet result = state.executeQuery(String.format(LIST_REQUEST, offsetClause));
             while (result.next()) {
-                Optional<Computer> c = mapper.queryResultToObject(result);
-                if (c.isPresent()) {
-                    computers.add(c.get());
+                Computer c = mapper.queryResultToObject(result);
+                if (c != null) {
+                    computers.add(c);
                 }
             }
             result.close();

@@ -34,7 +34,7 @@ public class ComputerTest {
         cal.add(Calendar.DATE, 1);
         TOMORROW = cal.getTime();
 
-        computerWithAll = new Computer(ID, NAME, NOW, TOMORROW, new Company(COMPANY_ID, COMPANY_NAME));
+        computerWithAll = ComputerFactory.getInstance().createWithAll(ID, NAME, NOW, TOMORROW, CompanyFactory.getInstance().create(COMPANY_ID, COMPANY_NAME));
     }
 
     @Test
@@ -155,6 +155,6 @@ public class ComputerTest {
     public void setCompanyWithNullTest() {
         computerWithAll.setCompany(null);
         assertNull(computerWithAll.getCompany());
-        computerWithAll.setCompany(new Company(COMPANY_ID, COMPANY_NAME));
+        computerWithAll.setCompany(CompanyFactory.getInstance().create(COMPANY_ID, COMPANY_NAME));
     }
 }

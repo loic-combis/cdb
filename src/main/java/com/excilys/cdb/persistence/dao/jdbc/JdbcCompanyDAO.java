@@ -11,10 +11,10 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.cdb.mapper.CompanySQLMapper;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.persistence.dao.CompanyDAO;
 import com.excilys.cdb.persistence.dao.DAOFactory;
-import com.excilys.cdb.persistence.mapper.CompanyMapper;
 
 /**
  * Singleton Concrete implementation of CompanyDAO. Responsible for bonding the
@@ -33,7 +33,7 @@ public class JdbcCompanyDAO implements CompanyDAO {
     /**
      * mapper CompanyMapper.
      */
-    private CompanyMapper mapper = new CompanyMapper();
+    private CompanySQLMapper mapper = new CompanySQLMapper();
 
     /**
      * LOGGER Logger.
@@ -72,7 +72,7 @@ public class JdbcCompanyDAO implements CompanyDAO {
     @Override
     public Optional<Company> get(long id) {
         // TODO Auto-generated method stub
-        Optional<Company> company = null;
+        Company company = null;
         try (Connection conn = DAOFactory.getConnection()) {
 
             Statement state = conn.createStatement();
@@ -87,7 +87,7 @@ public class JdbcCompanyDAO implements CompanyDAO {
             // TODO Auto-generated catch block
             LOGGER.error(e1.getMessage());
         }
-        return company;
+        return Optional.ofNullable(company);
     }
 
     @Override
@@ -102,9 +102,9 @@ public class JdbcCompanyDAO implements CompanyDAO {
 
             ResultSet result = state.executeQuery(String.format(LIST_REQUEST, offsetClause));
             while (result.next()) {
-                Optional<Company> c = mapper.queryResultToObject(result);
-                if (c.isPresent()) {
-                    companies.add(c.get());
+                Company c = mapper.queryResultToObject(result);
+                if (c != null) {
+                    companies.add(c);
                 }
             }
             result.close();

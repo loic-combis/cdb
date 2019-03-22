@@ -45,25 +45,6 @@ public class Computer {
     }
 
     /**
-     * Constructor.
-     *
-     * @param id              long - Id to be set.
-     * @param name            String - Name to be set.
-     * @param introduction    Date - Introduction date to be set.
-     * @param discontinuation Date - Discontinuation date to be set.
-     * @param company         Company - Company to be set.
-     * @throws EmptyNameException ene.
-     */
-    public Computer(long id, String name, Date introduction, Date discontinuation, Company company)
-            throws EmptyNameException {
-        setId(id);
-        setName(name);
-        setIntroductionDate(introduction);
-        setDiscontinuationDate(discontinuation);
-        setCompany(company);
-    }
-
-    /**
      * Getter.
      *
      * {@link Computer#name}

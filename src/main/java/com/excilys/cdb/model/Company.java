@@ -18,35 +18,6 @@ public class Company {
     private String name;
 
     /**
-     * Constructor.
-     *
-     * @param id long - id to be set.
-     */
-    public Company(long id) {
-        this.id = id;
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param name String - name to be set.
-     */
-    public Company(String name) {
-        setName(name);
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param id   long - id to be set.
-     * @param name - name to be set.
-     */
-    public Company(long id, String name) {
-        this.id = id;
-        setName(name);
-    }
-
-    /**
      * Getter.
      *
      * {@link Company#name}
@@ -77,6 +48,17 @@ public class Company {
      */
     public long getId() {
         return id;
+    }
+
+    /**
+     * Setter.
+     *
+     * {@link Company#id}
+     *
+     * @param id long - The id to be set.
+     */
+    public void setId(long id) {
+        this.id = id;
     }
 
     /**

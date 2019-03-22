@@ -1,10 +1,9 @@
-package com.excilys.cdb.persistence.mapper;
+package com.excilys.cdb.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.Optional;
 
 /**
  * Abstract.
@@ -22,7 +21,7 @@ public abstract class SqlMapper<T> {
      * @return T
      * @throws SQLException sqle
      */
-    public abstract Optional<T> queryResultToObject(ResultSet result) throws SQLException;
+    public abstract T queryResultToObject(ResultSet result) throws SQLException;
 
     /**
      * Format a java.util.Date to java.sql.Timestamp.

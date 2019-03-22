@@ -89,9 +89,9 @@
 					       		<input type="checkbox" name="cb" class="cb" value="${computer.getId()}">
 					        </td>
 					        <td>${computer.getName()}</td>
-					        <td>${computer.getIntroductionDate()}</td>
-					        <td>${computer.getDiscontinuationDate()}</td>
-					        <td>${computer.getCompany().getName()}</td>  
+					        <td>${computer.getIntroduction()}</td>
+					        <td>${computer.getDiscontinuation()}</td>
+					        <td>${computer.getCompany()}</td>  
 					    </tr>
 					</c:forEach>
                 </tbody>

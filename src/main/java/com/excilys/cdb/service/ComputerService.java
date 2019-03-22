@@ -1,9 +1,12 @@
 package com.excilys.cdb.service;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import com.excilys.cdb.mapper.ComputerDTOMapper;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.model.ComputerDTO;
 import com.excilys.cdb.persistence.dao.ComputerDAO;
 import com.excilys.cdb.persistence.dao.DAOFactory;
 
@@ -24,37 +27,63 @@ public class ComputerService {
     /**
      * computerDAO ComputerDAO.
      */
-    ComputerDAO computerDAO = DAOFactory.getInstance().getComputerDAO();
+    private ComputerDAO computerDAO = DAOFactory.getInstance().getComputerDAO();
+
+    /**
+     * mapper ComputerDTOMapper.
+     */
+    private ComputerDTOMapper mapper;
+
+    /**
+     * Constructor.
+     */
+    public ComputerService() {
+        mapper = new ComputerDTOMapper();
+    }
 
     /**
      * List a specific range of computers.
      *
      * @param page int
      * @param itemPerPage int
-     * @return List<Computer>
+     * @return List<ComputerDTO>
      */
-    public List<Computer> list(int page, int itemPerPage) {
-        return computerDAO.list(page, itemPerPage);
+    public List<ComputerDTO> list(int page, int itemPerPage) {
+        LinkedList<ComputerDTO> computers = new LinkedList<ComputerDTO>();
+        computerDAO.list(page, itemPerPage).stream().forEach(c -> {
+            computers.add(mapper.toDTO(c));
+        });
+        return computers;
     }
 
     /**
      * Fetches a specific computer.
      *
      * @param id long
-     * @return Optional<Computer>
+     * @return Optional<ComputerDTO>
      */
-    public Optional<Computer> get(long id) {
-        return computerDAO.get(id);
+    public Optional<ComputerDTO> get(long id) {
+        ComputerDTO dto = null;
+        Optional<Computer> opt = computerDAO.get(id);
+        if(opt.isPresent()) {
+            dto = mapper.toDTO(opt.get());
+        }
+        return Optional.ofNullable(dto);
     }
 
     /**
      * Saves a new Computer.
      *
      * @param c computer to be saved.
-     * @return Optional<Computer>.
+     * @return Optional<ComputerDTO>.
      */
-    public Optional<Computer> create(Computer c) {
-        return computerDAO.create(c);
+    public Optional<ComputerDTO> create(ComputerDTO c) {
+        Optional<ComputerDTO> dto = null;
+        Optional<Computer> opt = computerDAO.create(mapper.toComputer(c));
+        if(opt.isPresent()) {
+            dto = Optional.of(mapper.toDTO(opt.get()));
+        }
+        return dto;
     }
 
     /**
@@ -63,8 +92,9 @@ public class ComputerService {
      * @param c Computer
      * @return boolean
      */
-    public boolean update(Computer c) {
-        return computerDAO.update(c);
+    public boolean update(ComputerDTO c) {
+
+        return computerDAO.update(mapper.toComputer(c));
     }
 
     /**

@@ -1,11 +1,11 @@
-package com.excilys.cdb.persistence.mapper;
+package com.excilys.cdb.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.Optional;
 
 import com.excilys.cdb.model.Company;
+import com.excilys.cdb.model.CompanyFactory;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.ComputerFactory;
 
@@ -15,10 +15,10 @@ import com.excilys.cdb.model.ComputerFactory;
  * @author excilys
  *
  */
-public class ComputerMapper extends SqlMapper<Computer> {
+public class ComputerSQLMapper extends SqlMapper<Computer> {
 
     @Override
-    public Optional<Computer> queryResultToObject(ResultSet result) throws SQLException {
+    public Computer queryResultToObject(ResultSet result) throws SQLException {
 
         Computer computer = null;
 
@@ -31,12 +31,12 @@ public class ComputerMapper extends SqlMapper<Computer> {
 
             int companyId = result.getInt(5);
             String companyName = result.getString(7);
-            Company company = new Company(companyId, companyName);
+            Company company = CompanyFactory.getInstance().create(companyId, companyName);
 
             computer = ComputerFactory.getInstance().createWithAll(computerId, computerName, introduction,
                     discontinuation, company);
         }
 
-        return Optional.ofNullable(computer);
+        return computer;
     }
 }
