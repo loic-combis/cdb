@@ -2,9 +2,6 @@ package com.excilys.cdb.model;
 
 import java.util.Date;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * Singleton Responsible for instantiating Computer objects within the
  * application.
@@ -18,11 +15,6 @@ public class ComputerFactory {
      * instance ComputerFactory - Unique instance of ComputerFactory.
      */
     private static ComputerFactory instance;
-
-    /**
-     * logger Logger.
-     */
-    private final Logger logger = LoggerFactory.getLogger(ComputerFactory.class);
 
     /**
      * Constructor Prevent from being instantiated outside the class.
@@ -48,16 +40,10 @@ public class ComputerFactory {
      *
      * @param name String - Name to be set.
      * @return Computer.
+     * @throws EmptyNameException ene.
      */
-    public Computer createWithName(String name) {
-        Computer c;
-        try {
-            c = new Computer(name);
-        } catch (EmptyNameException e) {
-            logger.warn("EmptyNameException thrown.");
-            c = null;
-        }
-        return c;
+    public Computer createWithName(String name) throws EmptyNameException {
+        return new Computer(name);
     }
 
     /**

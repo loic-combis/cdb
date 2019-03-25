@@ -2,7 +2,6 @@ package com.excilys.cdb.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -40,16 +39,14 @@ public class ComputerFactoryTest {
         assertEquals(computerFactory, ComputerFactory.getInstance());
     }
 
-    @Test
+    @Test(expected = EmptyNameException.class)
     public void createWithNullNameTest() {
-        Computer computer = computerFactory.createWithName(null);
-        assertNull(computer);
+        computerFactory.createWithName(null);
     }
 
-    @Test
+    @Test(expected = EmptyNameException.class)
     public void createWithEmptyNameTest() {
-        Computer computer = computerFactory.createWithName("");
-        assertNull(computer);
+        computerFactory.createWithName("");
     }
 
     @Test
@@ -58,10 +55,9 @@ public class ComputerFactoryTest {
         assertNotNull(computer);
     }
 
-    @Test
+    @Test(expected = EmptyNameException.class)
     public void createWithAllToNullTest() {
-        Computer computer = computerFactory.createWithAll(ID, null, null, null, null);
-        assertNull(computer);
+        computerFactory.createWithAll(ID, null, null, null, null);
     }
 
     @Test

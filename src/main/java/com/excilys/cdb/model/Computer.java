@@ -195,26 +195,3 @@ public class Computer {
         return 31 * prime + getName().hashCode();
     }
 }
-
-/**
- * Responsible for defining a custom exception when a computer is created with
- * an invalid name.
- *
- * @author excilys
- *
- */
-class EmptyNameException extends IllegalArgumentException {
-
-    /**
-     * serialVersionUID long.
-     */
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * Constructor.
-     */
-    EmptyNameException() {
-        super();
-    }
-
-}

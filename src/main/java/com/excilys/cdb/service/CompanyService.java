@@ -20,9 +20,10 @@ public class CompanyService {
     CompanyDAO companyDAO = DAOFactory.getInstance().getCompanyDAO();
 
     /**
-     * List a specific range of companies according to the page and the number of items.
+     * List a specific range of companies according to the page and the number of
+     * items.
      *
-     * @param page int
+     * @param page        int
      * @param itemPerPage int
      * @return List<Company>
      */

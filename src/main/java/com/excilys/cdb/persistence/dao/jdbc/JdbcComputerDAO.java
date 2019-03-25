@@ -100,8 +100,10 @@ public class JdbcComputerDAO implements ComputerDAO {
 
     @Override
     public Optional<Computer> create(Computer c) {
+        Optional<Computer> savedComputer = Optional.ofNullable(null);
+
         if (c == null) {
-            return Optional.ofNullable(c);
+            return savedComputer;
         }
         // TODO Auto-generated method stub
         Long companyId = (c.getCompany() != null ? c.getCompany().getId() : null);
@@ -122,15 +124,16 @@ public class JdbcComputerDAO implements ComputerDAO {
             int affectedRows = state.executeUpdate();
             if (affectedRows == 0) {
                 LOGGER.warn("Computer not created.");
+                return savedComputer;
             }
 
             ResultSet generatedKeys = state.getGeneratedKeys();
             generatedKeys.next();
             c.setId(generatedKeys.getLong(1));
+            savedComputer = Optional.ofNullable(c);
             LOGGER.info("Computer created with id : " + generatedKeys.getLong(1));
 
         } catch (SQLException e) {
-            e.printStackTrace();
             LOGGER.error(e.getMessage());
 
         } catch (ClassNotFoundException e1) {
@@ -138,7 +141,7 @@ public class JdbcComputerDAO implements ComputerDAO {
             LOGGER.error(e1.getMessage());
         }
 
-        return Optional.ofNullable(c);
+        return savedComputer;
     }
 
     @Override

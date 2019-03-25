@@ -54,8 +54,8 @@ public class DAOFactory {
      * Creates a new instance of Connection.
      *
      * @return Connection
-     * @throws SQLException sqle
-     * @throws ClassNotFoundException
+     * @throws SQLException           sqle
+     * @throws ClassNotFoundException cnfe
      */
     public static Connection getConnection() throws SQLException, ClassNotFoundException {
 

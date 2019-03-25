@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.CompanyFactory;
 import com.excilys.cdb.model.ComputerDTO;
+import com.excilys.cdb.model.EmptyNameException;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.ui.Page;
@@ -361,17 +362,31 @@ public class CLIController implements UIController, PageProvider {
             return;
         }
 
-        if(comp != null) {
+        if (comp != null) {
             c.setCompany(comp.getName());
             c.setCompanyId(comp.getId());
         }
 
-        Optional<ComputerDTO> computer = computerService.create(c);
-        if (computer.isPresent()) {
-            presenter.present(computer.get());
+        Optional<ComputerDTO> computer = Optional.ofNullable(null);
 
-        } else {
-            presenter.notify(Presenter.CREATE_FAIL);
+        try {
+            computer = computerService.create(c);
+        } catch (NumberFormatException e) {
+            // TODO Auto-generated catch block
+            logger.error(e.getMessage());
+        } catch (EmptyNameException e) {
+            // TODO Auto-generated catch block
+            logger.error(e.getMessage());
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            logger.error(e.getMessage());
+        } finally {
+            if (computer.isPresent()) {
+                presenter.present(computer.get());
+
+            } else {
+                presenter.notify(Presenter.CREATE_FAIL);
+            }
         }
     }
 
@@ -384,9 +399,9 @@ public class CLIController implements UIController, PageProvider {
             return;
         }
         Optional<ComputerDTO> opt = computerService.get(id);
-        if(!opt.isPresent()) {
-           presenter.notify(Presenter.COMPUTER_NOT_FOUND);
-           return;
+        if (!opt.isPresent()) {
+            presenter.notify(Presenter.COMPUTER_NOT_FOUND);
+            return;
         }
         ComputerDTO c = opt.get();
 
@@ -411,13 +426,26 @@ public class CLIController implements UIController, PageProvider {
         if (comp == null && (shouldStop || shouldShowMenu)) {
             return;
         }
-        if(comp != null) {
+        if (comp != null) {
             c.setCompany(comp.getName());
             c.setCompanyId(comp.getId());
         }
 
-
-        presenter.notify(computerService.update(c) ? Presenter.UPDATE_SUCCESS : Presenter.UPDATE_FAIL);
+        boolean success = false;
+        try {
+            success = computerService.update(c);
+        } catch (NumberFormatException e) {
+            // TODO Auto-generated catch block
+            logger.error(e.getMessage());
+        } catch (EmptyNameException e) {
+            // TODO Auto-generated catch block
+            logger.error(e.getMessage());
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            logger.error(e.getMessage());
+        } finally {
+            presenter.notify(success ? Presenter.UPDATE_SUCCESS : Presenter.UPDATE_FAIL);
+        }
     }
 
     /**
@@ -505,7 +533,7 @@ public class CLIController implements UIController, PageProvider {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-mm-dd");
             try {
                 if (!inputDate.equals("")) {
-                   df.parse(inputDate);
+                    df.parse(inputDate);
                 }
                 dateIsValid = true;
             } catch (ParseException e) {

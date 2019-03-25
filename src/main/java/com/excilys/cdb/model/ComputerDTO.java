@@ -10,6 +10,27 @@ public class ComputerDTO {
     private long companyId;
 
     /**
+     * Constructor.
+     */
+    public ComputerDTO() {
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param name    String
+     * @param intro   String
+     * @param disco   String
+     * @param company String
+     */
+    public ComputerDTO(String name, String intro, String disco, long company) {
+        this.setName(name);
+        this.setIntroduction(intro);
+        this.setDiscontinuation(disco);
+        this.setCompanyId(company);
+    }
+
+    /**
      * Getter.
      *
      * @return long.

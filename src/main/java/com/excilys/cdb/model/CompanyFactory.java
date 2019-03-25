@@ -55,18 +55,21 @@ public class CompanyFactory {
      * @return Company
      */
     public Company create(long id) {
-       Company company = new Company();
-       company.setId(id);
-       return company;
+        Company company = new Company();
+        company.setId(id);
+        return company;
     }
 
-
+    /**
+     * Create a company with the specified name.
+     *
+     * @param name String
+     * @return Company
+     */
     public Company create(String name) {
         Company company = new Company();
         company.setName(name);
         return company;
     }
-
-
 
 }

@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.cdb.service.ComputerService;
 
-@WebServlet(name = "List Computers", urlPatterns = {"/list-computers", "/delete-computers"})
+@WebServlet(name = "List Computers", urlPatterns = { "/list-computers", "/delete-computers" })
 public class ListComputerServlet extends HttpServlet {
 
     /**
@@ -46,8 +46,10 @@ public class ListComputerServlet extends HttpServlet {
         request.setAttribute("itemPerPage", itemPerPage);
         request.setAttribute("currentPage", page);
         request.setAttribute("firstPage", Math.max(page - 1, 2));
-        request.setAttribute("lastPage", Math.min(page + 1, computerCount / itemPerPage - 1));
-        request.setAttribute("maxPage", computerCount / itemPerPage);
+        int maxPage = (computerCount % itemPerPage == 0) ? computerCount / itemPerPage
+                : computerCount / itemPerPage + 1;
+        request.setAttribute("lastPage", Math.min(page + 1, maxPage - 1));
+        request.setAttribute("maxPage", maxPage);
         request.setAttribute("computers", computerService.list(page, itemPerPage));
         request.setAttribute("contextPath", request.getContextPath());
         request.getRequestDispatcher("/WEB-INF/jsp/dashboard.jsp").forward(request, response);
@@ -61,9 +63,11 @@ public class ListComputerServlet extends HttpServlet {
         boolean success = computerService.deleteMany(selection);
 
         if (success) {
-            response.sendRedirect(request.getContextPath() + "/list-computers?feedback=success&message=" + ComputerService.DELETE_MANY_SUCCESS);
+            response.sendRedirect(request.getContextPath() + "/list-computers?feedback=success&message="
+                    + ComputerService.DELETE_MANY_SUCCESS);
         } else {
-            response.sendRedirect(request.getContextPath() + "/list-computers?feedback=danger&message=" + ComputerService.DELETE_MANY_FAILURE);
+            response.sendRedirect(request.getContextPath() + "/list-computers?feedback=danger&message="
+                    + ComputerService.DELETE_MANY_FAILURE);
         }
     }
 }

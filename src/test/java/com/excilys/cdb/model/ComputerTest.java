@@ -34,7 +34,8 @@ public class ComputerTest {
         cal.add(Calendar.DATE, 1);
         TOMORROW = cal.getTime();
 
-        computerWithAll = ComputerFactory.getInstance().createWithAll(ID, NAME, NOW, TOMORROW, CompanyFactory.getInstance().create(COMPANY_ID, COMPANY_NAME));
+        computerWithAll = ComputerFactory.getInstance().createWithAll(ID, NAME, NOW, TOMORROW,
+                CompanyFactory.getInstance().create(COMPANY_ID, COMPANY_NAME));
     }
 
     @Test

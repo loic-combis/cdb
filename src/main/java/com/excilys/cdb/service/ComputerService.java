@@ -1,5 +1,6 @@
 package com.excilys.cdb.service;
 
+import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -7,6 +8,7 @@ import java.util.Optional;
 import com.excilys.cdb.mapper.ComputerDTOMapper;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.ComputerDTO;
+import com.excilys.cdb.model.EmptyNameException;
 import com.excilys.cdb.persistence.dao.ComputerDAO;
 import com.excilys.cdb.persistence.dao.DAOFactory;
 
@@ -23,6 +25,11 @@ public class ComputerService {
      */
     public static final String DELETE_MANY_SUCCESS = "Deletion successful.";
     public static final String DELETE_MANY_FAILURE = "Deletion unsuccessfull.";
+    public static final String ADD_COMPUTER_SUCCESS = "Computer successfully added.";
+    public static final String ADD_COMPUTER_FAILURE = "Couldn't create the computer.";
+    public static final String WRONG_DATE_FORMAT = "Wrong date format.";
+    public static final String EMPTY_NAME = "Name cannot be empty.";
+    public static final String INVALID_COMPANY = "Provided company is invalid";
 
     /**
      * computerDAO ComputerDAO.
@@ -44,7 +51,7 @@ public class ComputerService {
     /**
      * List a specific range of computers.
      *
-     * @param page int
+     * @param page        int
      * @param itemPerPage int
      * @return List<ComputerDTO>
      */
@@ -65,7 +72,7 @@ public class ComputerService {
     public Optional<ComputerDTO> get(long id) {
         ComputerDTO dto = null;
         Optional<Computer> opt = computerDAO.get(id);
-        if(opt.isPresent()) {
+        if (opt.isPresent()) {
             dto = mapper.toDTO(opt.get());
         }
         return Optional.ofNullable(dto);
@@ -76,11 +83,15 @@ public class ComputerService {
      *
      * @param c computer to be saved.
      * @return Optional<ComputerDTO>.
+     * @throws ParseException pe
+     * @throws EmptyNameException ene
+     * @throws NumberFormatException nfe
      */
-    public Optional<ComputerDTO> create(ComputerDTO c) {
+    public Optional<ComputerDTO> create(ComputerDTO c)
+            throws NumberFormatException, EmptyNameException, ParseException {
         Optional<ComputerDTO> dto = null;
         Optional<Computer> opt = computerDAO.create(mapper.toComputer(c));
-        if(opt.isPresent()) {
+        if (opt.isPresent()) {
             dto = Optional.of(mapper.toDTO(opt.get()));
         }
         return dto;
@@ -91,8 +102,11 @@ public class ComputerService {
      *
      * @param c Computer
      * @return boolean
+     * @throws ParseException pe
+     * @throws EmptyNameException ene
+     * @throws NumberFormatException nfe
      */
-    public boolean update(ComputerDTO c) {
+    public boolean update(ComputerDTO c) throws NumberFormatException, EmptyNameException, ParseException {
 
         return computerDAO.update(mapper.toComputer(c));
     }
