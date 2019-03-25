@@ -132,7 +132,7 @@
               </li>
               <li>
                 <a
-                	href="${contextPath}/list-computers?page=${currentPage == lastPage ? currentPage : currentPage + 1}&itemPerPage=${itemPerPage}" aria-label="Next">
+                	href="${contextPath}/list-computers?page=${currentPage == maxPage ? currentPage : currentPage + 1}&itemPerPage=${itemPerPage}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
