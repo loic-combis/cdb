@@ -62,7 +62,7 @@ public class DAOFactory {
         String dbURL = prop.get("dbName");
         String dbUser = prop.get("dbUser");
         String dbPassword = prop.get("dbPassword");
-        Class.forName("com.mysql.cj.jdbc.Driver");
+        Class.forName(prop.get("driver"));
 
         return DriverManager.getConnection(dbURL, dbUser, dbPassword);
     }
