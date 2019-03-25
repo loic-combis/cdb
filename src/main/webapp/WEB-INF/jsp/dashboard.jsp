@@ -108,7 +108,7 @@
                   </a>
               </li>
               <li>
-              	<a href="${contextPath}/list-computers?page=1&itemPerPage=${itemPerPage}">1</a>
+              	<a class='${1 == currentPage ? "current" : ""}' href="${contextPath}/list-computers?page=1&itemPerPage=${itemPerPage}">1</a>
               </li>
               <c:if test="${firstPage - 1 > 1}">
                 <li><a href="#">...</a></li>
@@ -127,10 +127,11 @@
                 <li><a href="#">...</a></li>
               </c:if>
               <li>
-              	<a href="${contextPath}/list-computers?page=${maxPage}&itemPerPage=${itemPerPage}">${maxPage}</a>
+              	<a 	class='${maxPage == currentPage ? "current" : ""}'
+              		href="${contextPath}/list-computers?page=${maxPage}&itemPerPage=${itemPerPage}">${maxPage}</a>
               </li>
               <li>
-                <a 
+                <a
                 	href="${contextPath}/list-computers?page=${currentPage == lastPage ? currentPage : currentPage + 1}&itemPerPage=${itemPerPage}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
