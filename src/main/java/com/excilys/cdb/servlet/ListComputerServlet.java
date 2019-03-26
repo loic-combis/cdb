@@ -8,9 +8,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.cdb.model.Feedback;
+import com.excilys.cdb.model.Pagination;
 import com.excilys.cdb.service.ComputerService;
 
-@WebServlet(name = "List Computers", urlPatterns = { "/list-computers", "/delete-computers" })
+@WebServlet(name = "List Computers", urlPatterns = { "/list-computers" })
 public class ListComputerServlet extends HttpServlet {
 
     /**
@@ -24,6 +26,8 @@ public class ListComputerServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html");
+
+        request.setAttribute("feedback", new Feedback(request.getParameter("status"), request.getParameter("message")));
 
         int page, itemPerPage;
         try {
@@ -39,43 +43,10 @@ public class ListComputerServlet extends HttpServlet {
             itemPerPage = 10;
         }
         request.setAttribute("contextPath", request.getContextPath());
-        request.setAttribute("feedbackStyle", request.getParameter("feedback"));
-        request.setAttribute("message", request.getParameter("message"));
-
-        request.setAttribute("sizes", new int[]{10, 20, 50, 100});
-        request.setAttribute("itemPerPage", itemPerPage);
-        request.setAttribute("currentPage", page);
-        request.setAttribute("computers", computerService.list(page, itemPerPage));
-
         int computerCount = computerService.count();
-        request.setAttribute("computerCount", computerCount);
-        request.setAttribute("firstPage", Math.max(page - 1, 2));
 
-        int maxPage = (computerCount % itemPerPage == 0) ? computerCount / itemPerPage
-                : computerCount / itemPerPage + 1;
-        request.setAttribute("lastPage", Math.min(page + 1, maxPage - 1));
-        request.setAttribute("maxPage", maxPage);
-
+        request.setAttribute("pagination", new Pagination(page, itemPerPage, computerCount));
+        request.setAttribute("computers", computerService.list(page, itemPerPage));
         request.getRequestDispatcher("/WEB-INF/jsp/dashboard.jsp").forward(request, response);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        String[] selection = request.getParameter("selection").split(",");
-        boolean success = computerService.deleteMany(selection);
-
-        String message, status;
-        if (success) {
-            status = "success";
-            message = ComputerService.DELETE_MANY_SUCCESS;
-        } else {
-            status = "danger";
-            message = ComputerService.DELETE_MANY_FAILURE;
-        }
-
-        response.sendRedirect(request.getContextPath() + "/list-computers?feedback=" + status + "&message=" + message);
-
     }
 }

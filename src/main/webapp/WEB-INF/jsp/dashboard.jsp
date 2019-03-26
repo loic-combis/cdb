@@ -21,11 +21,11 @@
         <div class="container">
         	<div class="row">
         		<div class="col-lg-5 col-md-12">
-	        		<h1 id="homeTitle"> ${computerCount} Computer(s) found.</h1>
+	        		<h1 id="homeTitle"> ${pagination.getItemCount()} Computer(s) found.</h1>
         		</div>
         		<div class="col-lg-7 col-md-12">
-        			<c:if test='${message != null}'>
-        				<p class="alert alert-${feedbackStyle}">${message}</p>
+        			<c:if test='${feedback.getMessage() != null}'>
+        				<p class="alert alert-${feedback.getStatus()}">${feedback.getMessage()}</p>
         			</c:if>
         		</div>
         	</div>
@@ -103,45 +103,45 @@
         <div class="container text-center">
             <ul class="pagination">
                 <li>
-                    <a href="${contextPath}/list-computers?page=${currentPage == 1 ? 1 : currentPage - 1}&itemPerPage=${itemPerPage}" aria-label="Previous">
+                    <a href="${contextPath}/list-computers?page=${pagination.previous()}&itemPerPage=${pagination.getItemPerPage()}" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               </li>
               <li>
-              	<a class='${1 == currentPage ? "current" : ""}' href="${contextPath}/list-computers?page=1&itemPerPage=${itemPerPage}">1</a>
+              	<a class="${pagination.compareCurrent(1)}" href="${contextPath}/list-computers?page=1&itemPerPage=${pagination.getItemPerPage()}">1</a>
               </li>
-              <c:if test="${firstPage - 1 > 1}">
+              <c:if test="${pagination.currentPageStart() - 1 > 1}">
                 <li><a href="#">...</a></li>
               </c:if>
               <c:forEach 
               	var="count" 
-              	begin="${firstPage}" 
-              	end="${lastPage}" 
+              	begin="${pagination.currentPageStart()}" 
+              	end="${pagination.currentPageEnd()}" 
               	step="1"
               >
               	<li>
-              		<a class='${count == currentPage ? "current" : ""}' href="${contextPath}/list-computers?page=${count}&itemPerPage=${itemPerPage}">${count}</a>
+              		<a class="${pagination.compareCurrent(count)}" href="${contextPath}/list-computers?page=${count}&itemPerPage=${pagination.getItemPerPage()}">${count}</a>
               	</li>
               </c:forEach>
-              <c:if test="${lastPage + 1 < maxPage}">
+              <c:if test="${pagination.currentPageEnd() + 1 < pagination.lastPage()}">
                 <li><a href="#">...</a></li>
               </c:if>
               <li>
-              	<a 	class='${maxPage == currentPage ? "current" : ""}'
-              		href="${contextPath}/list-computers?page=${maxPage}&itemPerPage=${itemPerPage}">${maxPage}</a>
+              	<a 	class="${pagination.compareCurrent(pagination.lastPage())}"
+              		href="${contextPath}/list-computers?page=${pagination.lastPage()}&itemPerPage=${pagination.getItemPerPage()}">${pagination.lastPage()}</a>
               </li>
               <li>
                 <a
-                	href="${contextPath}/list-computers?page=${currentPage == maxPage ? currentPage : currentPage + 1}&itemPerPage=${itemPerPage}" aria-label="Next">
+                	href="${contextPath}/list-computers?page=${pagination.next()}&itemPerPage=${pagination.getItemPerPage()}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
         	</ul>
 		</div>
         <div  class="btn-group btn-group-sm pull-right" role="group" style="transform:translateY(-50px);">
-        	<c:forEach items="${sizes}" var="size" >
+        	<c:forEach items="${pagination.getSizes()}" var="size" >
         	<a 
-        	class="btn ${size == itemPerPage ? 'current' : ''}"
+        	class="btn ${pagination.compareItemPerPage(size)}"
         	href="${contextPath}/list-computers?page=1&itemPerPage=${size}" class="btn btn-default">${size}</a>
         	</c:forEach>
         </div>
