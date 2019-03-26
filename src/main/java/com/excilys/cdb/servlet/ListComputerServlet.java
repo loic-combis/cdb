@@ -65,6 +65,7 @@ public class ListComputerServlet extends HttpServlet {
 
         String[] selection = request.getParameter("selection").split(",");
         boolean success = computerService.deleteMany(selection);
+
         String message, status;
         if (success) {
             status = "success";

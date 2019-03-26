@@ -66,10 +66,14 @@ public class Computer {
      * @throws EmptyNameException ene
      */
     public void setName(String name) throws EmptyNameException {
-        if (name == null || "".equals(name)) {
+        if(name == null) {
             throw new EmptyNameException();
         }
-        this.name = name;
+        String trimmedName = name.trim();
+        if ("".equals(trimmedName)) {
+            throw new EmptyNameException();
+        }
+        this.name = trimmedName;
     }
 
     /**

@@ -42,6 +42,7 @@
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
                                 <input type="date" class="form-control" name="introduced" id="introduced" placeholder="Introduced date">
+                            	<small>Both introduction and discontinuation date are optional.</small>
                             	<span class="glyphicon glyphicon-remove form-control-feedback"></span>
                                 <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                             </div>
@@ -60,6 +61,7 @@
 									    <option value="${company.getId()}">${company.getName()}</option>
 									</c:forEach>
                                 </select>
+                                <small>Company is optional.</small>
                             </div>                  
                         </fieldset>
                         <div class="actions pull-right">

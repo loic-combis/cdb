@@ -38,6 +38,7 @@
 (function($) {
 	$("#addComputer").on("submit", function(event){
 		var input = $("#computerName");
+		input.val(input.val().trim());
 		if(input.val() === ""){ // Check the name.
 			event.preventDefault();
 			event.stopPropagation();
@@ -58,9 +59,13 @@
 (function($) {
 	$("#computerName").change(function(event){
 		input = $("#computerName");
+		input.val(input.val().trim());
 		$.fn.addFeedback(input.parent(), input.val() === "");
 		if(input.val() !== ""){
 			input.parent().find("small").css("visibility", "hidden");
+		}
+		else{
+			input.parent().find("small").css("visibility", "visible");
 		}
 	});
 }(jQuery));
