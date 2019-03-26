@@ -35,13 +35,13 @@ public class ComputerDTOMapper {
     public ComputerDTO toDTO(Computer computer) {
         ComputerDTOBuilder builder = new ComputerDTOBuilder();
 
-        builder
-            .setId(computer.getId())
-            .setName(computer.getName())
-            .setIntroduction(computer.getIntroductionDate() == null ? null : df.format(computer.getIntroductionDate()))
-            .setDiscontinuation(computer.getDiscontinuationDate() == null ? null : df.format(computer.getDiscontinuationDate()))
-            .setCompanyName(computer.getCompany() != null ? computer.getCompany().getName() : null)
-            .setCompanyId(computer.getCompany() != null ? computer.getCompany().getId() : null);
+        builder.setId(computer.getId()).setName(computer.getName())
+                .setIntroduction(
+                        computer.getIntroductionDate() == null ? null : df.format(computer.getIntroductionDate()))
+                .setDiscontinuation(
+                        computer.getDiscontinuationDate() == null ? null : df.format(computer.getDiscontinuationDate()))
+                .setCompanyName(computer.getCompany() != null ? computer.getCompany().getName() : null)
+                .setCompanyId(computer.getCompany() != null ? computer.getCompany().getId() : null);
 
         return builder.get();
     }
@@ -51,9 +51,9 @@ public class ComputerDTOMapper {
      *
      * @param dto ComputerDTO
      * @return Computer
-     * @throws EmptyNameException ene
+     * @throws EmptyNameException    ene
      * @throws NumberFormatException nfe
-     * @throws ParseException pe
+     * @throws ParseException        pe
      */
     public Computer toComputer(ComputerDTO dto) throws ParseException, NumberFormatException, EmptyNameException {
         Date introduction = dto.getIntroduction() == null || dto.getIntroduction() == "" ? null

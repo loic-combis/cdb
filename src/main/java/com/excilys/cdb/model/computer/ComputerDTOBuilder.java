@@ -9,7 +9,7 @@ package com.excilys.cdb.model.computer;
 public class ComputerDTOBuilder {
 
     /**
-     * dto ComputerDTO
+     * dto ComputerDTO.
      */
     private ComputerDTO dto;
 

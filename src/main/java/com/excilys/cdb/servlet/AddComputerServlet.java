@@ -60,13 +60,11 @@ public class AddComputerServlet extends HttpServlet {
         String message = ComputerService.ADD_COMPUTER_SUCCESS;
         try {
             ComputerDTOBuilder builder = new ComputerDTOBuilder();
-            builder
-                .setName(request.getParameter("name"))
-                .setIntroduction(request.getParameter("introduced"))
-                .setDiscontinuation(request.getParameter("discontinued"));
+            builder.setName(request.getParameter("name")).setIntroduction(request.getParameter("introduced"))
+                    .setDiscontinuation(request.getParameter("discontinued"));
 
             Long companyId = Long.valueOf(request.getParameter("company"));
-            if(companyId != -1) {
+            if (companyId != -1) {
                 builder.setCompanyId(companyId);
             }
 
