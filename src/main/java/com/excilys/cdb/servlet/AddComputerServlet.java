@@ -13,8 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.cdb.model.ComputerDTO;
-import com.excilys.cdb.model.EmptyNameException;
+import com.excilys.cdb.model.computer.ComputerDTO;
+import com.excilys.cdb.model.computer.ComputerDTOBuilder;
+import com.excilys.cdb.model.computer.EmptyNameException;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 
@@ -58,9 +59,18 @@ public class AddComputerServlet extends HttpServlet {
         String status = "success";
         String message = ComputerService.ADD_COMPUTER_SUCCESS;
         try {
-            ComputerDTO dto = new ComputerDTO(request.getParameter("name"), request.getParameter("introduced"),
-                    request.getParameter("discontinued"), Long.parseLong(request.getParameter("company")));
-            Optional<ComputerDTO> opt = computerService.create(dto);
+            ComputerDTOBuilder builder = new ComputerDTOBuilder();
+            builder
+                .setName(request.getParameter("name"))
+                .setIntroduction(request.getParameter("introduced"))
+                .setDiscontinuation(request.getParameter("discontinued"));
+
+            Long companyId = Long.parseLong(request.getParameter("company"));
+            if(companyId != -1) {
+                builder.setCompanyId(companyId);
+            }
+
+            Optional<ComputerDTO> opt = computerService.create(builder.get());
             if (!opt.isPresent()) {
                 status = "danger";
                 message = ComputerService.ADD_COMPUTER_FAILURE;

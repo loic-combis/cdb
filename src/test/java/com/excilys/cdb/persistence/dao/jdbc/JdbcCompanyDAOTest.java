@@ -10,7 +10,7 @@ import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.excilys.cdb.model.Company;
+import com.excilys.cdb.model.company.Company;
 
 public class JdbcCompanyDAOTest {
 
@@ -39,7 +39,7 @@ public class JdbcCompanyDAOTest {
 
     @Test
     public void getCompanyTest() {
-        Optional<Company> company = jdbcCompanyDAO.get(10);
-        assertTrue(!company.isPresent() || company.get().getId() == 10);
+        Optional<Company> company = jdbcCompanyDAO.get(10L);
+        assertTrue(!company.isPresent() || company.get().getId() == 10L);
     }
 }

@@ -1,6 +1,8 @@
-package com.excilys.cdb.model;
+package com.excilys.cdb.model.computer;
 
 import java.util.Date;
+
+import com.excilys.cdb.model.company.Company;
 
 /**
  * Class responsible for managing the Computer entity within the application.
@@ -10,9 +12,9 @@ import java.util.Date;
  */
 public class Computer {
     /**
-     * id long - Unique id of the computer in the database.
+     * id Long - Unique id of the computer in the database.
      */
-    private long id;
+    private Long id;
 
     /**
      * name String - Name of the computer.
@@ -147,9 +149,9 @@ public class Computer {
      *
      * {@link Computer#id}
      *
-     * @return long
+     * @return Long
      */
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -158,9 +160,9 @@ public class Computer {
      *
      * {@link Computer#id}
      *
-     * @param id long - The id to be set.
+     * @param id Long - The id to be set.
      */
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

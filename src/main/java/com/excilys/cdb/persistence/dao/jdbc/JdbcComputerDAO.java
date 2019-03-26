@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.mapper.ComputerSQLMapper;
-import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.model.computer.Computer;
 import com.excilys.cdb.persistence.dao.ComputerDAO;
 import com.excilys.cdb.persistence.dao.DAOFactory;
 
@@ -77,7 +77,7 @@ public class JdbcComputerDAO implements ComputerDAO {
     }
 
     @Override
-    public Optional<Computer> get(long id) {
+    public Optional<Computer> get(Long id) {
         // TODO Auto-generated method stub
         Computer computer = null;
         try (Connection conn = DAOFactory.getConnection()) {
@@ -145,7 +145,7 @@ public class JdbcComputerDAO implements ComputerDAO {
     }
 
     @Override
-    public boolean delete(long id) {
+    public boolean delete(Long id) {
         // TODO Auto-generated method stub
         boolean isSuccess = false;
         try (Connection conn = DAOFactory.getConnection()) {

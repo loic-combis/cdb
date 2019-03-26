@@ -1,7 +1,7 @@
 package com.excilys.cdb.util;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class PropertyReader {
@@ -18,7 +18,7 @@ public class PropertyReader {
         prop = new Properties();
 
         try {
-            FileInputStream inputStream = new FileInputStream("src/main/resources/config.properties");
+            InputStream inputStream = PropertyReader.class.getResourceAsStream("/config.properties");
             prop.load(inputStream);
         } catch (IOException e) {
             e.printStackTrace();

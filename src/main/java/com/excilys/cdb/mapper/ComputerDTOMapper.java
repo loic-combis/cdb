@@ -4,12 +4,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.excilys.cdb.model.Company;
-import com.excilys.cdb.model.CompanyFactory;
-import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.model.ComputerDTO;
-import com.excilys.cdb.model.ComputerFactory;
-import com.excilys.cdb.model.EmptyNameException;
+import com.excilys.cdb.model.company.Company;
+import com.excilys.cdb.model.company.CompanyFactory;
+import com.excilys.cdb.model.computer.Computer;
+import com.excilys.cdb.model.computer.ComputerDTO;
+import com.excilys.cdb.model.computer.ComputerDTOBuilder;
+import com.excilys.cdb.model.computer.ComputerFactory;
+import com.excilys.cdb.model.computer.EmptyNameException;
 
 public class ComputerDTOMapper {
 
@@ -32,16 +33,17 @@ public class ComputerDTOMapper {
      * @return ComputerDTO
      */
     public ComputerDTO toDTO(Computer computer) {
-        ComputerDTO dto = new ComputerDTO();
+        ComputerDTOBuilder builder = new ComputerDTOBuilder();
 
-        dto.setId(computer.getId());
-        dto.setName(computer.getName());
-        dto.setIntroduction(computer.getIntroductionDate() == null ? null : df.format(computer.getIntroductionDate()));
-        dto.setDiscontinuation(
-                computer.getDiscontinuationDate() == null ? null : df.format(computer.getDiscontinuationDate()));
-        dto.setCompany(computer.getCompany() != null ? computer.getCompany().getName() : null);
-        dto.setCompanyId(computer.getCompany() != null ? computer.getCompany().getId() : null);
-        return dto;
+        builder
+            .setId(computer.getId())
+            .setName(computer.getName())
+            .setIntroduction(computer.getIntroductionDate() == null ? null : df.format(computer.getIntroductionDate()))
+            .setDiscontinuation(computer.getDiscontinuationDate() == null ? null : df.format(computer.getDiscontinuationDate()))
+            .setCompanyName(computer.getCompany() != null ? computer.getCompany().getName() : null)
+            .setCompanyId(computer.getCompany() != null ? computer.getCompany().getId() : null);
+
+        return builder.get();
     }
 
     /**

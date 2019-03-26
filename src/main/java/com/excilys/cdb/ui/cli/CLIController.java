@@ -10,10 +10,10 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.cdb.model.Company;
-import com.excilys.cdb.model.CompanyFactory;
-import com.excilys.cdb.model.ComputerDTO;
-import com.excilys.cdb.model.EmptyNameException;
+import com.excilys.cdb.model.company.Company;
+import com.excilys.cdb.model.company.CompanyFactory;
+import com.excilys.cdb.model.computer.ComputerDTO;
+import com.excilys.cdb.model.computer.EmptyNameException;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.ui.Page;
@@ -564,7 +564,7 @@ public class CLIController implements UIController, PageProvider {
 
             try {
                 if (!companyId.equals("")) {
-                    long cId = Long.parseLong(companyId);
+                    Long cId = Long.parseLong(companyId);
                     comp = CompanyFactory.getInstance().create(cId);
                 }
                 companyIsValid = true;

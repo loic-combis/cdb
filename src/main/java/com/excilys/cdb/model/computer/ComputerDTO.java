@@ -1,50 +1,29 @@
-package com.excilys.cdb.model;
+package com.excilys.cdb.model.computer;
 
 public class ComputerDTO {
 
-    private long id;
+    private Long id;
     private String name;
     private String introduction;
     private String discontinuation;
     private String company;
-    private long companyId;
-
-    /**
-     * Constructor.
-     */
-    public ComputerDTO() {
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param name    String
-     * @param intro   String
-     * @param disco   String
-     * @param company String
-     */
-    public ComputerDTO(String name, String intro, String disco, long company) {
-        this.setName(name);
-        this.setIntroduction(intro);
-        this.setDiscontinuation(disco);
-        this.setCompanyId(company);
-    }
+    private Long companyId;
 
     /**
      * Getter.
      *
-     * @return long.
+     * @return Long.
      */
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
     /**
      * Setter.
      *
-     * @param id long
+     * @param id Long
      */
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -123,18 +102,18 @@ public class ComputerDTO {
     /**
      * Getter.
      *
-     * @return long
+     * @return Long
      */
-    public long getCompanyId() {
+    public Long getCompanyId() {
         return companyId;
     }
 
     /**
      * Setter.
      *
-     * @param companyId long
+     * @param companyId Long
      */
-    public void setCompanyId(long companyId) {
+    public void setCompanyId(Long companyId) {
         this.companyId = companyId;
     }
 }

@@ -24,8 +24,8 @@ public interface DAO<T> {
     /**
      * Fetch a specific item from the database.
      *
-     * @param id long - ID of the item in the database.
+     * @param id Long - ID of the item in the database.
      * @return T - An instance of the item.
      */
-    Optional<T> get(long id);
+    Optional<T> get(Long id);
 }

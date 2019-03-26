@@ -6,6 +6,9 @@ import static org.junit.Assert.assertNull;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.excilys.cdb.model.company.Company;
+import com.excilys.cdb.model.company.CompanyFactory;
+
 public class CompanyTest {
 
     private Company company;
@@ -14,7 +17,7 @@ public class CompanyTest {
 
     private static final String NAME = "Apple";
     private static final String NEW_NAME = "Microsoft";
-    private static final long ID = 21L;
+    private static final Long ID = 21L;
 
     @Before
     public void setUp() {
@@ -30,7 +33,7 @@ public class CompanyTest {
 
     @Test
     public void getIdWhenNoIdTest() {
-        assertEquals(companyWithoutId.getId(), 0L);
+        assertNull(companyWithoutId.getId());
     }
 
     @Test

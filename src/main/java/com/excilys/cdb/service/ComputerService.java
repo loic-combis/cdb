@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Optional;
 
 import com.excilys.cdb.mapper.ComputerDTOMapper;
-import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.model.ComputerDTO;
-import com.excilys.cdb.model.EmptyNameException;
+import com.excilys.cdb.model.computer.Computer;
+import com.excilys.cdb.model.computer.ComputerDTO;
+import com.excilys.cdb.model.computer.EmptyNameException;
 import com.excilys.cdb.persistence.dao.ComputerDAO;
 import com.excilys.cdb.persistence.dao.DAOFactory;
 
@@ -66,10 +66,10 @@ public class ComputerService {
     /**
      * Fetches a specific computer.
      *
-     * @param id long
+     * @param id Long
      * @return Optional<ComputerDTO>
      */
-    public Optional<ComputerDTO> get(long id) {
+    public Optional<ComputerDTO> get(Long id) {
         ComputerDTO dto = null;
         Optional<Computer> opt = computerDAO.get(id);
         if (opt.isPresent()) {
@@ -89,7 +89,7 @@ public class ComputerService {
      */
     public Optional<ComputerDTO> create(ComputerDTO c)
             throws NumberFormatException, EmptyNameException, ParseException {
-        Optional<ComputerDTO> dto = null;
+        Optional<ComputerDTO> dto = Optional.ofNullable(null);
         Optional<Computer> opt = computerDAO.create(mapper.toComputer(c));
         if (opt.isPresent()) {
             dto = Optional.of(mapper.toDTO(opt.get()));
@@ -114,10 +114,10 @@ public class ComputerService {
     /**
      * Delete a specific computer.
      *
-     * @param id long
+     * @param id Long
      * @return boolean
      */
-    public boolean delete(long id) {
+    public boolean delete(Long id) {
         return computerDAO.delete(id);
     }
 

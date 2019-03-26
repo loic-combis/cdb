@@ -2,8 +2,8 @@ package com.excilys.cdb.ui;
 
 import java.util.List;
 
-import com.excilys.cdb.model.Company;
-import com.excilys.cdb.model.ComputerDTO;
+import com.excilys.cdb.model.company.Company;
+import com.excilys.cdb.model.computer.ComputerDTO;
 
 /**
  * Abstract Responsible for defining the contract a Presenter must respect

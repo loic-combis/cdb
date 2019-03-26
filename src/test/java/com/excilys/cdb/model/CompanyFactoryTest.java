@@ -6,10 +6,12 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.excilys.cdb.model.company.CompanyFactory;
+
 public class CompanyFactoryTest {
 
     private CompanyFactory companyFactory;
-    private static final long ID = 21L;
+    private static final Long ID = 21L;
     private static final String NAME = "Apple";
 
     @Before

@@ -1,4 +1,4 @@
-package com.excilys.cdb.model;
+package com.excilys.cdb.model.computer;
 
 /**
  * Responsible for defining a custom exception when a computer is created with

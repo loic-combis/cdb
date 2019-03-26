@@ -4,10 +4,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
-import com.excilys.cdb.model.Company;
-import com.excilys.cdb.model.CompanyFactory;
-import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.model.ComputerFactory;
+import com.excilys.cdb.model.company.Company;
+import com.excilys.cdb.model.company.CompanyFactory;
+import com.excilys.cdb.model.computer.Computer;
+import com.excilys.cdb.model.computer.ComputerFactory;
 
 /**
  * Concrete implementation of SQLMapper for computers.
@@ -24,12 +24,12 @@ public class ComputerSQLMapper extends SqlMapper<Computer> {
 
         if (result != null) {
 
-            int computerId = result.getInt(1);
+            Long computerId = result.getLong(1);
             String computerName = result.getString(2);
             Date introduction = getDateValue(result.getTimestamp(3));
             Date discontinuation = getDateValue(result.getTimestamp(4));
 
-            int companyId = result.getInt(5);
+            Long companyId = result.getLong(5);
             String companyName = result.getString(7);
             Company company = CompanyFactory.getInstance().create(companyId, companyName);
 

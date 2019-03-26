@@ -1,4 +1,4 @@
-package com.excilys.cdb.model;
+package com.excilys.cdb.model.company;
 
 /**
  * Class managing the company entity within the application.
@@ -8,9 +8,9 @@ package com.excilys.cdb.model;
 public class Company {
 
     /**
-     * id long - The unique id of a company in the database.
+     * id Long - The unique id of a company in the database.
      */
-    private long id;
+    private Long id;
 
     /**
      * name String - The name of the company.
@@ -44,9 +44,9 @@ public class Company {
      *
      * {@link Company#id}
      *
-     * @return long
+     * @return Long
      */
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -55,9 +55,9 @@ public class Company {
      *
      * {@link Company#id}
      *
-     * @param id long - The id to be set.
+     * @param id Long - The id to be set.
      */
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

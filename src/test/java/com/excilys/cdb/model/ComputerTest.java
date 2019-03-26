@@ -11,6 +11,11 @@ import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.excilys.cdb.model.company.CompanyFactory;
+import com.excilys.cdb.model.computer.Computer;
+import com.excilys.cdb.model.computer.ComputerFactory;
+import com.excilys.cdb.model.computer.EmptyNameException;
+
 public class ComputerTest {
 
     private Computer computerWithName;
@@ -18,9 +23,9 @@ public class ComputerTest {
 
     private static final String NAME = "Macbook Air";
     private static final String NEW_NAME = "Macbook Pro";
-    private static final long ID = 21L;
-    private static final long NEW_ID = 10L;
-    private static final long COMPANY_ID = 1L;
+    private static final Long ID = 21L;
+    private static final Long NEW_ID = 10L;
+    private static final Long COMPANY_ID = 1L;
     private static final String COMPANY_NAME = "Apple";
 
     private static final Date NOW = new Date();
@@ -45,7 +50,7 @@ public class ComputerTest {
 
     @Test
     public void getIdWhenNoIdTest() {
-        assertEquals(computerWithName.getId(), 0L);
+        assertNull(computerWithName.getId());
     }
 
     @Test

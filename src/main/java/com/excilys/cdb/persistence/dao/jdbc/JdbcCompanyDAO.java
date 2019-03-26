@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.mapper.CompanySQLMapper;
-import com.excilys.cdb.model.Company;
+import com.excilys.cdb.model.company.Company;
 import com.excilys.cdb.persistence.dao.CompanyDAO;
 import com.excilys.cdb.persistence.dao.DAOFactory;
 
@@ -70,7 +70,7 @@ public class JdbcCompanyDAO implements CompanyDAO {
     }
 
     @Override
-    public Optional<Company> get(long id) {
+    public Optional<Company> get(Long id) {
         // TODO Auto-generated method stub
         Company company = null;
         try (Connection conn = DAOFactory.getConnection()) {

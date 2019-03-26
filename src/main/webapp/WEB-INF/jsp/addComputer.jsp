@@ -30,11 +30,11 @@
 		        			</c:if>
 		        		</div>
                 	</div>
-                    <form action="add-computer" method="POST">
+                    <form id="addComputer" action="add-computer" method="POST">
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" name="name" id="computerName" placeholder="Computer name">
+                                <input type="text" class="form-control" name="name" id="computerName" placeholder="Computer name" required>
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
@@ -47,6 +47,7 @@
                             <div class="form-group">
                                 <label for="companyId">Company</label>
                                 <select name="company" class="form-control" id="companyId" >
+                                	<option value="-1">No company chosen.</option>
                                 	<c:forEach items="${companies}" var="company">
 									    <option value="${company.getId()}">${company.getName()}</option>
 									</c:forEach>
@@ -63,5 +64,7 @@
             </div>
         </div>
     </section>
+    <script src="${contextPath}/assets/js/jquery.min.js"></script>
+    <script src="${contextPath}/assets/js/addComputer.js"></script>
 </body>
 </html>

@@ -2,7 +2,7 @@ package com.excilys.cdb.persistence.dao;
 
 import java.util.Optional;
 
-import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.model.computer.Computer;
 
 /**
  * Interface responsible for defining the contract a DAO managing Computer
@@ -16,10 +16,10 @@ public interface ComputerDAO extends DAO<Computer> {
     /**
      * Deletes the computer with the specified id.
      *
-     * @param id long
+     * @param id Long
      * @return Boolean - True if the deletion is successful, false otherwise.
      */
-    boolean delete(long id);
+    boolean delete(Long id);
 
     /**
      * Updates the specified computer.

@@ -1,4 +1,4 @@
-package com.excilys.cdb.model;
+package com.excilys.cdb.model.company;
 
 /**
  * Singleton Class responsible for instantiating the Company object.
@@ -36,11 +36,11 @@ public class CompanyFactory {
     /**
      * Creates a new instance of Company.
      *
-     * @param id   long - the id to be set.
+     * @param id   Long - the id to be set.
      * @param name String - the name to be set.
      * @return Company
      */
-    public Company create(long id, String name) {
+    public Company create(Long id, String name) {
         Company company = new Company();
         company.setId(id);
         company.setName(name);
@@ -51,10 +51,10 @@ public class CompanyFactory {
     /**
      * Creates a new instance of Company with only the id.
      *
-     * @param id long - the id to be set.
+     * @param id Long - the id to be set.
      * @return Company
      */
-    public Company create(long id) {
+    public Company create(Long id) {
         Company company = new Company();
         company.setId(id);
         return company;

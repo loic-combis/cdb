@@ -11,7 +11,7 @@ import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.model.computer.Computer;
 
 public class JdbcComputerDAOTest {
 
@@ -56,7 +56,7 @@ public class JdbcComputerDAOTest {
 
     @Test
     public void deleteWithNonExistingIdTest() {
-        assertFalse(dao.delete(-1));
+        assertFalse(dao.delete(-1L));
     }
 
     @Test

@@ -1,6 +1,8 @@
-package com.excilys.cdb.model;
+package com.excilys.cdb.model.computer;
 
 import java.util.Date;
+
+import com.excilys.cdb.model.company.Company;
 
 /**
  * Singleton Responsible for instantiating Computer objects within the
@@ -50,14 +52,14 @@ public class ComputerFactory {
      * Creates a new Computer object with all its fields. All the fields except name
      * might be null.
      *
-     * @param id              long
+     * @param id              Long
      * @param name            String
      * @param introduction    Date
      * @param discontinuation Date
      * @param company         Company
      * @return Computer
      */
-    public Computer createWithAll(long id, String name, Date introduction, Date discontinuation, Company company) {
+    public Computer createWithAll(Long id, String name, Date introduction, Date discontinuation, Company company) {
         Computer c = this.createWithName(name);
         if (c == null) {
             return c;
