@@ -52,7 +52,7 @@
 			$.fn.addFeedback($("#introduced").parent(), true);
 			$("#discontinued").parent().find("small").css("visibility", "visible");
 
-		}
+		}		
 	});
 }(jQuery));
 

@@ -59,6 +59,8 @@ public class AddComputerServlet extends HttpServlet {
         String status = "success";
         String message = ComputerService.ADD_COMPUTER_SUCCESS;
         try {
+            System.out.println(request.getParameter("introduced"));
+            System.out.println(request.getParameter("discontinued"));
             ComputerDTOBuilder builder = new ComputerDTOBuilder();
             builder.setName(request.getParameter("name")).setIntroduction(request.getParameter("introduced"))
                     .setDiscontinuation(request.getParameter("discontinued"));

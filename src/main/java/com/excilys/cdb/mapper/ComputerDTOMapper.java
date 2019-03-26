@@ -56,11 +56,12 @@ public class ComputerDTOMapper {
      * @throws ParseException        pe
      */
     public Computer toComputer(ComputerDTO dto) throws ParseException, NumberFormatException, EmptyNameException {
-        Date introduction = dto.getIntroduction() == null || dto.getIntroduction() == "" ? null
-                : df.parse(dto.getIntroduction());
-        Date discontinuation = dto.getDiscontinuation() == null || dto.getIntroduction() == "" ? null
-                : df.parse(dto.getDiscontinuation());
+
+        Date introduction = "".equals(dto.getIntroduction()) ? null : df.parse(dto.getIntroduction());
+        Date discontinuation = "".equals(dto.getDiscontinuation()) ? null : df.parse(dto.getDiscontinuation());
+
         Company company = CompanyFactory.getInstance().create(dto.getCompanyId(), dto.getCompany());
+
         return ComputerFactory.getInstance().createWithAll(dto.getId(), dto.getName(), introduction, discontinuation,
                 company);
     }
