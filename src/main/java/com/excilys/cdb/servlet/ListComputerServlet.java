@@ -38,20 +38,24 @@ public class ListComputerServlet extends HttpServlet {
         } catch (NumberFormatException nfe) {
             itemPerPage = 10;
         }
+        request.setAttribute("contextPath", request.getContextPath());
         request.setAttribute("feedbackStyle", request.getParameter("feedback"));
         request.setAttribute("message", request.getParameter("message"));
-        int computerCount = computerService.count();
+
         request.setAttribute("sizes", new int[]{10, 20, 50, 100});
-        request.setAttribute("computerCount", computerCount);
         request.setAttribute("itemPerPage", itemPerPage);
         request.setAttribute("currentPage", page);
+        request.setAttribute("computers", computerService.list(page, itemPerPage));
+
+        int computerCount = computerService.count();
+        request.setAttribute("computerCount", computerCount);
         request.setAttribute("firstPage", Math.max(page - 1, 2));
+
         int maxPage = (computerCount % itemPerPage == 0) ? computerCount / itemPerPage
                 : computerCount / itemPerPage + 1;
         request.setAttribute("lastPage", Math.min(page + 1, maxPage - 1));
         request.setAttribute("maxPage", maxPage);
-        request.setAttribute("computers", computerService.list(page, itemPerPage));
-        request.setAttribute("contextPath", request.getContextPath());
+
         request.getRequestDispatcher("/WEB-INF/jsp/dashboard.jsp").forward(request, response);
     }
 
@@ -61,13 +65,16 @@ public class ListComputerServlet extends HttpServlet {
 
         String[] selection = request.getParameter("selection").split(",");
         boolean success = computerService.deleteMany(selection);
-
+        String message, status;
         if (success) {
-            response.sendRedirect(request.getContextPath() + "/list-computers?feedback=success&message="
-                    + ComputerService.DELETE_MANY_SUCCESS);
+            status = "success";
+            message = ComputerService.DELETE_MANY_SUCCESS;
         } else {
-            response.sendRedirect(request.getContextPath() + "/list-computers?feedback=danger&message="
-                    + ComputerService.DELETE_MANY_FAILURE);
+            status = "danger";
+            message = ComputerService.DELETE_MANY_FAILURE;
         }
+
+        response.sendRedirect(request.getContextPath() + "/list-computers?feedback=" + status + "&message=" + message);
+
     }
 }
