@@ -65,7 +65,7 @@ public class AddComputerServlet extends HttpServlet {
                 .setIntroduction(request.getParameter("introduced"))
                 .setDiscontinuation(request.getParameter("discontinued"));
 
-            Long companyId = Long.parseLong(request.getParameter("company"));
+            Long companyId = Long.valueOf(request.getParameter("company"));
             if(companyId != -1) {
                 builder.setCompanyId(companyId);
             }

@@ -34,20 +34,28 @@
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" name="name" id="computerName" placeholder="Computer name" required>
+                                <input type="text" class="form-control" name="name" id="computerName" placeholder="Computer name">
+                                <small class="text-danger">Name can't be empty.</small>
+                                <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                                <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
                                 <input type="date" class="form-control" name="introduced" id="introduced" placeholder="Introduced date">
+                            	<span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                                <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
                                 <input type="date" class="form-control" name="discontinued" id="discontinued" placeholder="Discontinued date">
+                            	<small class="text-danger">If both are set, discontinuation date must be after introduction date.</small>
+                            	<span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                                <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>
                                 <select name="company" class="form-control" id="companyId" >
-                                	<option value="-1">No company chosen.</option>
+                                	<option value="-1">No company</option>
                                 	<c:forEach items="${companies}" var="company">
 									    <option value="${company.getId()}">${company.getName()}</option>
 									</c:forEach>

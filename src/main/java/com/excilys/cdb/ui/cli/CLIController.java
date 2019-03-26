@@ -477,7 +477,7 @@ public class CLIController implements UIController, PageProvider {
             }
 
             try {
-                id = Long.parseLong(inputID);
+                id = Long.valueOf(inputID);
                 idIsValid = true;
             } catch (NumberFormatException nfe) {
                 presenter.notify("<ID> must be a number");
@@ -564,7 +564,7 @@ public class CLIController implements UIController, PageProvider {
 
             try {
                 if (!companyId.equals("")) {
-                    Long cId = Long.parseLong(companyId);
+                    Long cId = Long.valueOf(companyId);
                     comp = CompanyFactory.getInstance().create(cId);
                 }
                 companyIsValid = true;
