@@ -111,7 +111,7 @@ public class ComputerDAO {
      * @return Optional<Computer>
      */
     public Optional<Computer> create(Computer c) {
-        Optional<Computer> savedComputer = Optional.ofNullable(null);
+        Optional<Computer> savedComputer = Optional.empty();
 
         if (c == null) {
             return savedComputer;

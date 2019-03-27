@@ -385,7 +385,7 @@ public class CLIController implements UIController, PageProvider {
             c.setCompanyId(comp.getId());
         }
 
-        Optional<ComputerDTO> computer = Optional.ofNullable(null);
+        Optional<ComputerDTO> computer = Optional.empty();
 
         try {
             computer = computerService.create(c);

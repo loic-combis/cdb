@@ -115,7 +115,7 @@ public class ComputerService {
      */
     public Optional<ComputerDTO> create(ComputerDTO c)
             throws NumberFormatException, EmptyNameException, ParseException, UnconsistentDatesException {
-        Optional<ComputerDTO> dto = Optional.ofNullable(null);
+        Optional<ComputerDTO> dto = Optional.empty();
         Optional<Computer> opt = computerDAO.create(mapper.toComputer(c));
         if (opt.isPresent()) {
             dto = Optional.of(mapper.toDTO(opt.get()));
