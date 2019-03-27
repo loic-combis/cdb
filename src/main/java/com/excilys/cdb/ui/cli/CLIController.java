@@ -1,7 +1,9 @@
 package com.excilys.cdb.ui.cli;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -395,7 +397,7 @@ public class CLIController implements UIController, PageProvider {
         } catch (EmptyNameException e) {
             // TODO Auto-generated catch block
             logger.error(e.getMessage());
-        } catch (ParseException e) {
+        } catch (DateTimeParseException e) {
             // TODO Auto-generated catch block
             logger.error(e.getMessage());
         } catch (UnconsistentDatesException e) {
@@ -463,7 +465,7 @@ public class CLIController implements UIController, PageProvider {
                 // TODO Auto-generated catch block
                 logger.error(e.getMessage());
 
-            } catch (ParseException e) {
+            } catch (DateTimeParseException e) {
                 // TODO Auto-generated catch block
                 logger.error(e.getMessage());
 
@@ -567,17 +569,17 @@ public class CLIController implements UIController, PageProvider {
             if (inputDate == null) {
                 break;
             }
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+            DateTimeFormatter df = DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(ResolverStyle.STRICT);
             try {
                 if (!inputDate.equals("")) {
-                    df.parse(inputDate);
+                    LocalDate.parse(inputDate, df);
                 }
                 dateIsValid = true;
-            } catch (ParseException e) {
-                // TODO Auto-generated catch block
+            } catch (DateTimeParseException dtpe) {
                 presenter.notify("Wrong date format.");
-                logger.info(e.getMessage());
             }
+
+
         } while (!dateIsValid);
 
         return date;

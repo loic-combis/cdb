@@ -1,6 +1,7 @@
 package com.excilys.cdb.service;
 
 import java.text.ParseException;
+import java.time.format.DateTimeParseException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -114,7 +115,7 @@ public class ComputerService {
      * @throws UnconsistentDatesException
      */
     public Optional<ComputerDTO> create(ComputerDTO computerDto)
-            throws NumberFormatException, EmptyNameException, ParseException, UnconsistentDatesException {
+            throws NumberFormatException, EmptyNameException, DateTimeParseException, UnconsistentDatesException {
         Optional<ComputerDTO> dto = Optional.empty();
         Optional<Computer> opt = computerDAO.create(mapper.toComputer(computerDto));
         if (opt.isPresent()) {
@@ -133,7 +134,7 @@ public class ComputerService {
      * @throws NumberFormatException nfe
      * @throws UnconsistentDatesException ude
      */
-    public boolean update(ComputerDTO computerDto) throws NumberFormatException, EmptyNameException, ParseException, UnconsistentDatesException {
+    public boolean update(ComputerDTO computerDto) throws NumberFormatException, EmptyNameException, DateTimeParseException, UnconsistentDatesException {
 
         return computerDAO.update(mapper.toComputer(computerDto));
     }

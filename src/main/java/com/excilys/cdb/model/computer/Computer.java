@@ -1,6 +1,6 @@
 package com.excilys.cdb.model.computer;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import com.excilys.cdb.exception.EmptyNameException;
 import com.excilys.cdb.exception.UnconsistentDatesException;
@@ -24,14 +24,14 @@ public class Computer {
     private String name;
 
     /**
-     * introductionDate Date - Date the computer was introduced.
+     * introductionDate LocalDate - Date the computer was introduced.
      */
-    private Date introductionDate;
+    private LocalDate introductionDate;
 
     /**
-     * discontinuationDate Date - Date the computer was discontinued.
+     * discontinuationDate LocalDate - Date the computer was discontinued.
      */
-    private Date discontinuationDate;
+    private LocalDate discontinuationDate;
 
     /**
      * company Company - Company manufacturing the computer.
@@ -83,9 +83,9 @@ public class Computer {
      *
      * {@link Computer#introductionDate}
      *
-     * @return Date
+     * @return LocalDate
      */
-    public Date getIntroductionDate() {
+    public LocalDate getIntroductionDate() {
         return introductionDate;
     }
 
@@ -97,9 +97,9 @@ public class Computer {
      * @param introduction Date - Introduction date of the computer.
      * @throws UnconsistentDatesException ude
      */
-    public void setIntroductionDate(Date introduction) throws UnconsistentDatesException {
+    public void setIntroductionDate(LocalDate introduction) throws UnconsistentDatesException {
         if (getDiscontinuationDate() == null || introduction == null
-                || (getDiscontinuationDate().getTime() - introduction.getTime()) > 0) {
+                || getDiscontinuationDate().isAfter(introduction)) {
             introductionDate = introduction;
         }
         else {
@@ -114,7 +114,7 @@ public class Computer {
      *
      * @return Date
      */
-    public Date getDiscontinuationDate() {
+    public LocalDate getDiscontinuationDate() {
         return discontinuationDate;
     }
 
@@ -123,12 +123,12 @@ public class Computer {
      *
      * {@link Computer#discontinuationDate}
      *
-     * @param discontinued Date - Discontinuation date of the computer.
+     * @param discontinued LocalDate - Discontinuation date of the computer.
      * @throws UnconsistentDatesException ude
      */
-    public void setDiscontinuationDate(Date discontinued) throws UnconsistentDatesException{
+    public void setDiscontinuationDate(LocalDate discontinued) throws UnconsistentDatesException{
         if (getIntroductionDate() == null || discontinued == null
-                || (getIntroductionDate().getTime() - discontinued.getTime()) < 0) {
+                || discontinued.isAfter(getIntroductionDate())) {
             discontinuationDate = discontinued;
         }
         else {

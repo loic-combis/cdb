@@ -5,8 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,16 +28,13 @@ public class ComputerTest {
     private static final Long COMPANY_ID = 1L;
     private static final String COMPANY_NAME = "Apple";
 
-    private static final Date NOW = new Date();
-    private static Date TOMORROW;
+    private static final LocalDate NOW = LocalDate.now();
+    private static LocalDate TOMORROW;
 
     @Before
     public void setUp() {
         computerWithName = new Computer(NAME);
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(NOW);
-        cal.add(Calendar.DATE, 1);
-        TOMORROW = cal.getTime();
+        TOMORROW = NOW.plusDays(1);
 
         try {
             computerWithAll = ComputerFactory.getInstance().createWithAll(ID, NAME, NOW, TOMORROW,

@@ -1,7 +1,7 @@
 package com.excilys.cdb.servlet;
 
 import java.io.IOException;
-import java.text.ParseException;
+import java.time.format.DateTimeParseException;
 import java.util.Optional;
 
 import javax.servlet.ServletException;
@@ -79,7 +79,7 @@ public class AddComputerServlet extends HttpServlet {
                 message = ComputerService.ADD_COMPUTER_SUCCESS;
             }
 
-        } catch (ParseException e) {
+        } catch (DateTimeParseException e) {
             // TODO Auto-generated catch block
             logger.warn(e.getMessage());
             message = ComputerService.WRONG_DATE_FORMAT;

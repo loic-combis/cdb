@@ -3,7 +3,7 @@ package com.excilys.cdb.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.Date;
+import java.time.LocalDate;
 
 import com.excilys.cdb.exception.UnconsistentDatesException;
 
@@ -27,22 +27,22 @@ public abstract class SqlMapper<T> {
     public abstract T queryResultToObject(ResultSet result) throws SQLException, UnconsistentDatesException;
 
     /**
-     * Format a java.util.Date to java.sql.Timestamp.
+     * Format a LocalDate to java.sql.Timestamp.
      *
-     * @param date Date
+     * @param date LocalDate
      * @return Timestamp
      */
-    public Timestamp getSqlTimestampValue(Date date) {
-        return (date != null ? new Timestamp(date.getTime()) : null);
+    public Timestamp getSqlTimestampValue(LocalDate date) {
+        return (date != null ? Timestamp.valueOf(date.atStartOfDay()) : null);
     }
 
     /**
-     * Format a java.sql.Timestamp to a java.util.Date.
+     * Format a java.sql.Timestamp to a LocalDate.
      *
      * @param timestamp Timestamp
-     * @return Date
+     * @return LocalDate
      */
-    public Date getDateValue(Timestamp timestamp) {
-        return (timestamp != null ? new Date(timestamp.getTime()) : null);
+    public LocalDate getDateValue(Timestamp timestamp) {
+        return (timestamp != null ? timestamp.toLocalDateTime().toLocalDate() : null);
     }
 }

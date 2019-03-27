@@ -1,6 +1,6 @@
 package com.excilys.cdb.model.computer;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import com.excilys.cdb.exception.EmptyNameException;
 import com.excilys.cdb.exception.UnconsistentDatesException;
@@ -56,14 +56,14 @@ public class ComputerFactory {
      *
      * @param id              Long
      * @param name            String
-     * @param introduction    Date
-     * @param discontinuation Date
+     * @param introduction    LocalDate
+     * @param discontinuation LocalDate
      * @param company         Company
      * @return Computer
      * @throws EmptyNameException ene
      * @throws UnconsistentDatesException ude
      */
-    public Computer createWithAll(Long id, String name, Date introduction, Date discontinuation, Company company) throws EmptyNameException, UnconsistentDatesException {
+    public Computer createWithAll(Long id, String name, LocalDate introduction, LocalDate discontinuation, Company company) throws EmptyNameException, UnconsistentDatesException {
         Computer computer = this.createWithName(name);
         computer.setId(id);
         computer.setIntroductionDate(introduction);

@@ -2,7 +2,7 @@ package com.excilys.cdb.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
+import java.time.LocalDate;
 
 import com.excilys.cdb.exception.EmptyNameException;
 import com.excilys.cdb.exception.UnconsistentDatesException;
@@ -28,8 +28,8 @@ public class ComputerSQLMapper extends SqlMapper<Computer> {
 
             Long computerId = result.getLong(1);
             String computerName = result.getString(2);
-            Date introduction = getDateValue(result.getTimestamp(3));
-            Date discontinuation = getDateValue(result.getTimestamp(4));
+            LocalDate introduction = getDateValue(result.getTimestamp(3));
+            LocalDate discontinuation = getDateValue(result.getTimestamp(4));
 
             Long companyId = result.getLong(5);
             String companyName = result.getString(7);

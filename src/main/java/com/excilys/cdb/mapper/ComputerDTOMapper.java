@@ -1,8 +1,9 @@
 package com.excilys.cdb.mapper;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 
 import com.excilys.cdb.exception.EmptyNameException;
 import com.excilys.cdb.exception.UnconsistentDatesException;
@@ -16,15 +17,15 @@ import com.excilys.cdb.model.computer.ComputerFactory;
 public class ComputerDTOMapper {
 
     /**
-     * df SimpleDateFormat.
+     * df DateTimeFormatter.
      */
-    private SimpleDateFormat df;
+    private DateTimeFormatter df;
 
     /**
      * Constructor.
      */
     public ComputerDTOMapper() {
-        df = new SimpleDateFormat("yyyy-mm-dd");
+        df = DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(ResolverStyle.STRICT);
     }
 
     /**
@@ -37,10 +38,10 @@ public class ComputerDTOMapper {
         ComputerDTOBuilder builder = new ComputerDTOBuilder();
 
         builder.setId(computer.getId()).setName(computer.getName())
-                .setIntroduction(
-                        computer.getIntroductionDate() == null ? null : df.format(computer.getIntroductionDate()))
-                .setDiscontinuation(
-                        computer.getDiscontinuationDate() == null ? null : df.format(computer.getDiscontinuationDate()))
+                .setIntroduction(computer.getIntroductionDate() == null ? null
+                        : df.format(computer.getIntroductionDate()))
+                .setDiscontinuation(computer.getDiscontinuationDate() == null ? null
+                        : df.format(computer.getDiscontinuationDate()))
                 .setCompanyName(computer.getCompany() != null ? computer.getCompany().getName() : null)
                 .setCompanyId(computer.getCompany() != null ? computer.getCompany().getId() : null);
 
@@ -52,15 +53,21 @@ public class ComputerDTOMapper {
      *
      * @param dto ComputerDTO
      * @return Computer
-     * @throws EmptyNameException    ene
-     * @throws NumberFormatException nfe
-     * @throws ParseException        pe
+     * @throws EmptyNameException         ene
+     * @throws NumberFormatException      nfe
+     * @throws DateTimeParseException     dtpe
      * @throws UnconsistentDatesException ude
      */
-    public Computer toComputer(ComputerDTO dto) throws ParseException, NumberFormatException, EmptyNameException, UnconsistentDatesException {
+    public Computer toComputer(ComputerDTO dto)
+            throws DateTimeParseException, NumberFormatException, EmptyNameException, UnconsistentDatesException {
 
-        Date introduction = "".equals(dto.getIntroduction()) ? null : df.parse(dto.getIntroduction());
-        Date discontinuation = "".equals(dto.getDiscontinuation()) ? null : df.parse(dto.getDiscontinuation());
+        String intro = dto.getIntroduction();
+        LocalDate introduction = intro == null || intro.isEmpty() ? null
+                : LocalDate.parse(dto.getIntroduction(), df);
+
+        String disco = dto.getDiscontinuation();
+        LocalDate discontinuation = disco == null || disco.isEmpty() ? null
+                : LocalDate.parse(dto.getDiscontinuation(), df);
 
         Company company = CompanyFactory.getInstance().create(dto.getCompanyId(), dto.getCompany());
 
