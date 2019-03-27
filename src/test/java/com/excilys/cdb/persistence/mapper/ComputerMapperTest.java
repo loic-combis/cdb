@@ -5,8 +5,8 @@ import static org.junit.Assert.fail;
 
 import java.sql.SQLException;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
 import com.excilys.cdb.exception.EmptyNameException;
 import com.excilys.cdb.exception.UnconsistentDatesException;
@@ -16,7 +16,7 @@ public class ComputerMapperTest {
 
     private ComputerSQLMapper mapper;
 
-    @Before
+    @BeforeTest
     public void setUp() {
         mapper = new ComputerSQLMapper();
     }

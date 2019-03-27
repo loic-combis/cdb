@@ -1,4 +1,4 @@
-package com.excilys.cdb.persistence.dao.jdbc;
+package com.excilys.cdb.persistence.dao;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -7,17 +7,16 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
 import com.excilys.cdb.model.company.Company;
-import com.excilys.cdb.persistence.dao.CompanyDAO;
 
 public class JdbcCompanyDAOTest {
 
     private CompanyDAO jdbcCompanyDAO;
 
-    @Before
+    @BeforeTest
     public void setUp() {
         jdbcCompanyDAO = CompanyDAO.getInstance();
     }

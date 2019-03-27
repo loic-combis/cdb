@@ -44,3 +44,6 @@ buildNumber.properties
 
 # Properties
 config.properties
+
+#Selenium
+test-output

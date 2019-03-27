@@ -7,8 +7,8 @@ import static org.junit.Assert.fail;
 
 import java.time.LocalDate;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
 import com.excilys.cdb.exception.EmptyNameException;
 import com.excilys.cdb.exception.UnconsistentDatesException;
@@ -31,7 +31,7 @@ public class ComputerTest {
     private static final LocalDate NOW = LocalDate.now();
     private static LocalDate TOMORROW;
 
-    @Before
+    @BeforeTest
     public void setUp() {
         computerWithName = new Computer(NAME);
         TOMORROW = NOW.plusDays(1);

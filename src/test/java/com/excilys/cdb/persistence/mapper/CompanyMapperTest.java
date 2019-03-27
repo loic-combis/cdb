@@ -5,8 +5,8 @@ import static org.junit.Assert.fail;
 
 import java.sql.SQLException;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
 import com.excilys.cdb.mapper.CompanySQLMapper;
 
@@ -14,7 +14,7 @@ public class CompanyMapperTest {
 
     private CompanySQLMapper mapper;
 
-    @Before
+    @BeforeTest
     public void setUp() {
         mapper = new CompanySQLMapper();
     }

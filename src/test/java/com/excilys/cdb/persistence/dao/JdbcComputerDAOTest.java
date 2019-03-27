@@ -1,4 +1,4 @@
-package com.excilys.cdb.persistence.dao.jdbc;
+package com.excilys.cdb.persistence.dao;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -9,13 +9,12 @@ import static org.junit.Assert.fail;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
 import com.excilys.cdb.exception.EmptyNameException;
 import com.excilys.cdb.exception.UnconsistentDatesException;
 import com.excilys.cdb.model.computer.Computer;
-import com.excilys.cdb.persistence.dao.ComputerDAO;
 
 public class JdbcComputerDAOTest {
 
@@ -24,7 +23,7 @@ public class JdbcComputerDAOTest {
     private static final String NEW_NAME = "Macbook Pro";
 
     // TODO : Use In-Memory Database.
-    @Before
+    @BeforeTest
     public void setUp() {
         dao = ComputerDAO.getInstance();
     }

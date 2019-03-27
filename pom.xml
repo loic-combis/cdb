@@ -15,6 +15,8 @@
     <mockito.version>1.9.5</mockito.version>
     <slf4j.version>1.7.26</slf4j.version>
     <logback.version>1.0.13</logback.version>
+    <selenium.version>3.141.59</selenium.version>
+    <testng.version>6.14.3</testng.version>
   </properties>
   <url>http://maven.apache.org</url>
   <dependencies>
@@ -63,10 +65,25 @@
 	  <artifactId>logback-classic</artifactId>
 	  <version>${logback.version}</version>
 	</dependency>
+	
+	<dependency>
+	    <groupId>org.seleniumhq.selenium</groupId>
+	    <artifactId>selenium-java</artifactId>
+	    <version>${selenium.version}</version>
+	</dependency>
+	
+	 <dependency>				
+            <groupId>org.testng</groupId>								
+            <artifactId>testng</artifactId>								
+            <version>${testng.version}</version>								
+            <scope>test</scope>							  			
+       </dependency>	
+	
   </dependencies>
   
   <build>
   	<plugins>
+  	
   	<plugin>            
 	  <groupId>org.apache.maven.plugins</groupId>
 	  <artifactId>maven-war-plugin</artifactId>
@@ -75,6 +92,7 @@
 	    <webXml>src/main/webapp/WEB-INF/web.xml</webXml>        
 	  </configuration>
 	</plugin>
+	
 	 <plugin>
 	   <groupId>org.apache.maven.plugins</groupId>
 	   <artifactId>maven-compiler-plugin</artifactId>
@@ -84,6 +102,7 @@
 	    <target>1.8</target>
 	   </configuration>
 	 </plugin>
+	 
 	 <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
@@ -92,6 +111,7 @@
           <configLocation>src/main/resources/checkstyle/checkstyle.xml</configLocation>
         </configuration>
       </plugin>
+      
       <plugin>
    		<groupId>org.apache.tomcat.maven</groupId>
    		<artifactId>tomcat7-maven-plugin</artifactId>
@@ -104,6 +124,7 @@
       		<password>tomcat</password>
    		</configuration>
 	   </plugin>
+	   
 	   <plugin>
 		  <groupId>org.apache.maven.plugins</groupId>
 		  <artifactId>maven-surefire-plugin</artifactId>

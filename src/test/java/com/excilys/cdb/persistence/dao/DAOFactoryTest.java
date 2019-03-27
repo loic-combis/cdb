@@ -8,9 +8,9 @@ import static org.junit.Assert.fail;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
 public class DAOFactoryTest {
 
@@ -18,7 +18,7 @@ public class DAOFactoryTest {
 
     private Connection connection;
 
-    @Before
+    @BeforeTest
     public void setUp() {
         factory = DAOFactory.getInstance();
     }
@@ -66,7 +66,7 @@ public class DAOFactoryTest {
         }
     }
 
-    @After
+    @AfterTest
     public void terminate() {
         if (connection != null) {
             try {

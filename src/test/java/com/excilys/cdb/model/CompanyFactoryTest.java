@@ -3,8 +3,8 @@ package com.excilys.cdb.model;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
 import com.excilys.cdb.model.company.CompanyFactory;
 
@@ -14,7 +14,7 @@ public class CompanyFactoryTest {
     private static final Long ID = 21L;
     private static final String NAME = "Apple";
 
-    @Before
+    @BeforeTest
     public void setUp() {
         companyFactory = CompanyFactory.getInstance();
     }
