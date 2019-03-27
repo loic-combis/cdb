@@ -31,8 +31,8 @@ public class ListComputerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html");
 
+        response.setContentType("text/html");
         request.setAttribute("feedback", new Feedback(request.getParameter("status"), request.getParameter("message")));
 
         int page, itemPerPage;
@@ -60,7 +60,6 @@ public class ListComputerServlet extends HttpServlet {
             // TODO Auto-generated catch block
             logger.error(e.getMessage());
             response.sendError(500);
-
         }
 
     }
