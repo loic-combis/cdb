@@ -4,12 +4,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class PropertyReader {
 
     /**
      * prop Properties.
      */
     Properties prop;
+
+    /**
+     * LOGGER Logger
+     */
+    private final Logger LOGGER = LoggerFactory.getLogger(PropertyReader.class);
 
     /**
      * Constructor.
@@ -21,8 +29,7 @@ public class PropertyReader {
             InputStream inputStream = PropertyReader.class.getResourceAsStream("/config.properties");
             prop.load(inputStream);
         } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(1);
+            LOGGER.error(e.getMessage());
         }
 
     }

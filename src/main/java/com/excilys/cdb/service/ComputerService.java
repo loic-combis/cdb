@@ -113,10 +113,10 @@ public class ComputerService {
      * @throws NumberFormatException nfe
      * @throws UnconsistentDatesException
      */
-    public Optional<ComputerDTO> create(ComputerDTO c)
+    public Optional<ComputerDTO> create(ComputerDTO computerDto)
             throws NumberFormatException, EmptyNameException, ParseException, UnconsistentDatesException {
         Optional<ComputerDTO> dto = Optional.empty();
-        Optional<Computer> opt = computerDAO.create(mapper.toComputer(c));
+        Optional<Computer> opt = computerDAO.create(mapper.toComputer(computerDto));
         if (opt.isPresent()) {
             dto = Optional.of(mapper.toDTO(opt.get()));
         }
@@ -133,9 +133,9 @@ public class ComputerService {
      * @throws NumberFormatException nfe
      * @throws UnconsistentDatesException ude
      */
-    public boolean update(ComputerDTO c) throws NumberFormatException, EmptyNameException, ParseException, UnconsistentDatesException {
+    public boolean update(ComputerDTO computerDto) throws NumberFormatException, EmptyNameException, ParseException, UnconsistentDatesException {
 
-        return computerDAO.update(mapper.toComputer(c));
+        return computerDAO.update(mapper.toComputer(computerDto));
     }
 
     /**

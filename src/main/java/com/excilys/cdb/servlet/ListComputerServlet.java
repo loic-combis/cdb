@@ -25,6 +25,7 @@ public class ListComputerServlet extends HttpServlet {
     private static final long serialVersionUID = 4009417829257782424L;
 
     private final Logger logger = LoggerFactory.getLogger(ListComputerServlet.class);
+
     private ComputerService computerService = new ComputerService();
 
     @Override

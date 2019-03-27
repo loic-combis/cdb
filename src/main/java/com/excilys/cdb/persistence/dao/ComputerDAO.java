@@ -110,21 +110,21 @@ public class ComputerDAO {
      * @param c Computer
      * @return Optional<Computer>
      */
-    public Optional<Computer> create(Computer c) {
+    public Optional<Computer> create(Computer computer) {
         Optional<Computer> savedComputer = Optional.empty();
 
-        if (c == null) {
+        if (computer == null) {
             return savedComputer;
         }
         // TODO Auto-generated method stub
-        Long companyId = (c.getCompany() != null ? c.getCompany().getId() : null);
+        Long companyId = (computer.getCompany() != null ? computer.getCompany().getId() : null);
 
-        Timestamp introductionDate = mapper.getSqlTimestampValue(c.getIntroductionDate());
-        Timestamp discontinuationDate = mapper.getSqlTimestampValue(c.getDiscontinuationDate());
+        Timestamp introductionDate = mapper.getSqlTimestampValue(computer.getIntroductionDate());
+        Timestamp discontinuationDate = mapper.getSqlTimestampValue(computer.getDiscontinuationDate());
 
         try (Connection conn = DAOFactory.getConnection()) {
 
-            PreparedStatement state = conn.prepareStatement(String.format(CREATE_ONE, c.getName()),
+            PreparedStatement state = conn.prepareStatement(String.format(CREATE_ONE, computer.getName()),
                     Statement.RETURN_GENERATED_KEYS);
 
             state.setTimestamp(1, introductionDate);
@@ -140,8 +140,8 @@ public class ComputerDAO {
 
             ResultSet generatedKeys = state.getGeneratedKeys();
             generatedKeys.next();
-            c.setId(generatedKeys.getLong(1));
-            savedComputer = Optional.ofNullable(c);
+            computer.setId(generatedKeys.getLong(1));
+            savedComputer = Optional.ofNullable(computer);
             LOGGER.info("Computer created with id : " + generatedKeys.getLong(1));
 
         } catch (SQLException e) {
