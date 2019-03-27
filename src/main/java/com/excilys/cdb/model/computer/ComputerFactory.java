@@ -60,15 +60,14 @@ public class ComputerFactory {
      * @param discontinuation LocalDate
      * @param company         Company
      * @return Computer
-     * @throws EmptyNameException ene
+     * @throws EmptyNameException         ene
      * @throws UnconsistentDatesException ude
      */
-    public Computer createWithAll(Long id, String name, LocalDate introduction, LocalDate discontinuation, Company company) throws EmptyNameException, UnconsistentDatesException {
-        Computer computer = this.createWithName(name);
-        computer.setId(id);
-        computer.setIntroductionDate(introduction);
-        computer.setDiscontinuationDate(discontinuation);
-        computer.setCompany(company);
-        return computer;
+    public Computer createWithAll(Long id, String name, LocalDate introduction, LocalDate discontinuation,
+            Company company) throws EmptyNameException, UnconsistentDatesException {
+        ComputerBuilder computerBuilder = new ComputerBuilder(name);
+
+        return computerBuilder.setId(id).setIntroduction(introduction).setDiscontinuation(discontinuation)
+                .setCompany(company).get();
     }
 }
