@@ -97,10 +97,8 @@ public class ComputerDAO {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             LOGGER.error(e.getMessage());
-        } catch (ClassNotFoundException e1) {
-            // TODO Auto-generated catch block
-            LOGGER.error(e1.getMessage());
         }
+
         return Optional.ofNullable(computer);
     }
 
@@ -146,10 +144,6 @@ public class ComputerDAO {
 
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
-
-        } catch (ClassNotFoundException e1) {
-            // TODO Auto-generated catch block
-            LOGGER.error(e1.getMessage());
         }
 
         return savedComputer;
@@ -179,10 +173,6 @@ public class ComputerDAO {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             LOGGER.error(e.getMessage());
-
-        } catch (ClassNotFoundException e1) {
-            // TODO Auto-generated catch block
-            LOGGER.error(e1.getMessage());
         }
 
         return isSuccess;
@@ -220,9 +210,6 @@ public class ComputerDAO {
 
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
-        } catch (ClassNotFoundException e1) {
-            // TODO Auto-generated catch block
-            LOGGER.error(e1.getMessage());
         }
 
         return isSuccess;
@@ -260,11 +247,8 @@ public class ComputerDAO {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             LOGGER.error(e.getMessage());
-
-        } catch (ClassNotFoundException e1) {
-            // TODO Auto-generated catch block
-            LOGGER.error(e1.getMessage());
         }
+
         return computers;
     }
 
@@ -289,10 +273,6 @@ public class ComputerDAO {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             LOGGER.error(e.getMessage());
-
-        } catch (ClassNotFoundException e1) {
-            // TODO Auto-generated catch block
-            LOGGER.error(e1.getMessage());
         }
 
         return count;
@@ -329,10 +309,6 @@ public class ComputerDAO {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             LOGGER.error(e.getMessage());
-
-        } catch (ClassNotFoundException e1) {
-            // TODO Auto-generated catch block
-            LOGGER.error(e1.getMessage());
         }
 
         return isSuccess;

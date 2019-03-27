@@ -1,13 +1,13 @@
 package com.excilys.cdb.persistence.dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.cdb.util.PropertyReader;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 
 /**
  * Singleton Responsible for instantiating the DAO among the application.
@@ -16,6 +16,10 @@ import com.excilys.cdb.util.PropertyReader;
  *
  */
 public class DAOFactory {
+
+
+    private static HikariConfig config = new HikariConfig("/config.properties");
+    private static HikariDataSource dataSource;
 
     /**
      * instance DAOFactory - Unique instance of DAOFactory.
@@ -27,6 +31,15 @@ public class DAOFactory {
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(DAOFactory.class);
 
+
+    static {
+        //PropertyReader prop = new PropertyReader();
+        //config.setJdbcUrl(prop.get("dbName"));
+        //config.setUsername(prop.get("dbUser"));
+        //config.setPassword(prop.get("dbPassword"));
+        //config.setDataSourceClassName(prop.get("driver"));
+        dataSource = new HikariDataSource(config);
+    }
     /**
      * Constructor Prevent from being instantiated outside the class.
      */
@@ -55,16 +68,9 @@ public class DAOFactory {
      * @throws SQLException           sqle
      * @throws ClassNotFoundException cnfe
      */
-    public static Connection getConnection() throws SQLException, ClassNotFoundException {
+    public static Connection getConnection() throws SQLException {
 
-        PropertyReader prop = new PropertyReader();
-
-        String dbURL = prop.get("dbName");
-        String dbUser = prop.get("dbUser");
-        String dbPassword = prop.get("dbPassword");
-        Class.forName(prop.get("driver"));
-
-        return DriverManager.getConnection(dbURL, dbUser, dbPassword);
+        return dataSource.getConnection();
     }
 
     /**

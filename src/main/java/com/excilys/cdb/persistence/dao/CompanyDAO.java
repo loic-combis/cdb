@@ -85,10 +85,8 @@ public class CompanyDAO {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             LOGGER.error(e.getMessage());
-        } catch (ClassNotFoundException e1) {
-            // TODO Auto-generated catch block
-            LOGGER.error(e1.getMessage());
         }
+
         return Optional.ofNullable(company);
     }
 
@@ -121,10 +119,8 @@ public class CompanyDAO {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             LOGGER.error(e.getMessage());
-        } catch (ClassNotFoundException e1) {
-            // TODO Auto-generated catch block
-            LOGGER.error(e1.getMessage());
         }
+
         return companies;
     }
 }

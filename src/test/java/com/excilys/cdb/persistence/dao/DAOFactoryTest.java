@@ -61,8 +61,6 @@ public class DAOFactoryTest {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             fail("Couldn't connect to the DB.");
-        } catch (ClassNotFoundException cnfe) {
-            fail("Couldn't connect to the DB.");
         }
     }
 
