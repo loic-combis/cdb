@@ -8,6 +8,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.excilys.cdb.exception.UnsuccessfulTreatmentException;
 import com.excilys.cdb.model.Feedback;
 import com.excilys.cdb.model.Pagination;
 import com.excilys.cdb.service.ComputerService;
@@ -20,6 +24,7 @@ public class ListComputerServlet extends HttpServlet {
      */
     private static final long serialVersionUID = 4009417829257782424L;
 
+    private final Logger logger = LoggerFactory.getLogger(ListComputerServlet.class);
     private ComputerService computerService = new ComputerService();
 
     @Override
@@ -46,7 +51,16 @@ public class ListComputerServlet extends HttpServlet {
         int computerCount = computerService.count();
 
         request.setAttribute("pagination", new Pagination(page, itemPerPage, computerCount));
-        request.setAttribute("computers", computerService.list(page, itemPerPage));
-        request.getRequestDispatcher("/WEB-INF/jsp/dashboard.jsp").forward(request, response);
+        try {
+            request.setAttribute("computers", computerService.list(page, itemPerPage));
+            request.getRequestDispatcher("/WEB-INF/jsp/dashboard.jsp").forward(request, response);
+
+        } catch (UnsuccessfulTreatmentException e) {
+            // TODO Auto-generated catch block
+            logger.error(e.getMessage());
+            response.sendError(500);
+
+        }
+
     }
 }

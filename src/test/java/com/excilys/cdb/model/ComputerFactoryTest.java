@@ -2,6 +2,7 @@ package com.excilys.cdb.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -9,10 +10,11 @@ import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.excilys.cdb.exception.EmptyNameException;
+import com.excilys.cdb.exception.UnconsistentDatesException;
 import com.excilys.cdb.model.company.CompanyFactory;
 import com.excilys.cdb.model.computer.Computer;
 import com.excilys.cdb.model.computer.ComputerFactory;
-import com.excilys.cdb.model.computer.EmptyNameException;
 
 public class ComputerFactoryTest {
 
@@ -62,19 +64,48 @@ public class ComputerFactoryTest {
 
     @Test(expected = EmptyNameException.class)
     public void createWithAllToNullTest() {
-        computerFactory.createWithAll(ID, null, null, null, null);
+        try {
+            computerFactory.createWithAll(ID, null, null, null, null);
+        } catch (UnconsistentDatesException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
     }
 
     @Test
     public void createWithAllToNullExceptNameTest() {
-        Computer computer = computerFactory.createWithAll(ID, NAME, null, null, null);
-        assertNotNull(computer);
+        Computer computer;
+        try {
+            computer = computerFactory.createWithAll(ID, NAME, null, null, null);
+            assertNotNull(computer);
+
+        } catch (EmptyNameException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            fail(e.getMessage());
+        } catch (UnconsistentDatesException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
     }
 
     @Test
     public void createWithAllTest() {
-        Computer computer = computerFactory.createWithAll(ID, NAME, NOW, TOMORROW,
-                CompanyFactory.getInstance().create(COMPANY_ID, COMPANY_NAME));
-        assertNotNull(computer);
+        Computer computer;
+        try {
+            computer = computerFactory.createWithAll(ID, NAME, NOW, TOMORROW,
+                    CompanyFactory.getInstance().create(COMPANY_ID, COMPANY_NAME));
+            assertNotNull(computer);
+        } catch (EmptyNameException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            fail(e.getMessage());
+        } catch (UnconsistentDatesException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
     }
 }

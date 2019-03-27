@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
+import com.excilys.cdb.exception.EmptyNameException;
+import com.excilys.cdb.exception.UnconsistentDatesException;
 import com.excilys.cdb.model.company.Company;
 import com.excilys.cdb.model.company.CompanyFactory;
 import com.excilys.cdb.model.computer.Computer;
@@ -18,7 +20,7 @@ import com.excilys.cdb.model.computer.ComputerFactory;
 public class ComputerSQLMapper extends SqlMapper<Computer> {
 
     @Override
-    public Computer queryResultToObject(ResultSet result) throws SQLException {
+    public Computer queryResultToObject(ResultSet result) throws SQLException, EmptyNameException, UnconsistentDatesException {
 
         Computer computer = null;
 

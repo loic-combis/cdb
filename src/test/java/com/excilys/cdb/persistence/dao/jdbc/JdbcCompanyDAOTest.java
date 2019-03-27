@@ -11,14 +11,15 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.excilys.cdb.model.company.Company;
+import com.excilys.cdb.persistence.dao.CompanyDAO;
 
 public class JdbcCompanyDAOTest {
 
-    private JdbcCompanyDAO jdbcCompanyDAO;
+    private CompanyDAO jdbcCompanyDAO;
 
     @Before
     public void setUp() {
-        jdbcCompanyDAO = JdbcCompanyDAO.getInstance();
+        jdbcCompanyDAO = CompanyDAO.getInstance();
     }
 
     @Test
@@ -28,7 +29,7 @@ public class JdbcCompanyDAOTest {
 
     @Test
     public void sharedInstanceTest() {
-        assertEquals(jdbcCompanyDAO, JdbcCompanyDAO.getInstance());
+        assertEquals(jdbcCompanyDAO, CompanyDAO.getInstance());
     }
 
     @Test

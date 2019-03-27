@@ -1,4 +1,4 @@
-package com.excilys.cdb.model.computer;
+package com.excilys.cdb.exception;
 
 /**
  * Responsible for defining a custom exception when a computer is created with
@@ -17,8 +17,8 @@ public class EmptyNameException extends IllegalArgumentException {
     /**
      * Constructor.
      */
-    EmptyNameException() {
-        super();
+    public EmptyNameException(String message) {
+        super(message);
     }
 
 }

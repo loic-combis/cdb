@@ -5,10 +5,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.excilys.cdb.exception.EmptyNameException;
+import com.excilys.cdb.exception.UnconsistentDatesException;
+import com.excilys.cdb.exception.UnsuccessfulTreatmentException;
 import com.excilys.cdb.mapper.ComputerDTOMapper;
 import com.excilys.cdb.model.computer.Computer;
 import com.excilys.cdb.model.computer.ComputerDTO;
-import com.excilys.cdb.model.computer.EmptyNameException;
 import com.excilys.cdb.persistence.dao.ComputerDAO;
 import com.excilys.cdb.persistence.dao.DAOFactory;
 
@@ -30,6 +35,7 @@ public class ComputerService {
     public static final String WRONG_DATE_FORMAT = "Wrong date format.";
     public static final String EMPTY_NAME = "Name cannot be empty.";
     public static final String INVALID_COMPANY = "Provided company is invalid";
+    public static final String UNCONSISTANT_DATES = "Introduction and discontinuation dates are unconsistent.";
 
     /**
      * computerDAO ComputerDAO.
@@ -40,6 +46,11 @@ public class ComputerService {
      * mapper ComputerDTOMapper.
      */
     private ComputerDTOMapper mapper;
+
+    /**
+     * logger Logger.
+     */
+    private Logger logger = LoggerFactory.getLogger(ComputerService.class);
 
     /**
      * Constructor.
@@ -54,12 +65,24 @@ public class ComputerService {
      * @param page        int
      * @param itemPerPage int
      * @return List<ComputerDTO>
+     * @throws UnsuccessfulTreatmentException  ute
      */
-    public List<ComputerDTO> list(int page, int itemPerPage) {
+    public List<ComputerDTO> list(int page, int itemPerPage) throws UnsuccessfulTreatmentException {
         LinkedList<ComputerDTO> computers = new LinkedList<ComputerDTO>();
-        computerDAO.list(page, itemPerPage).stream().forEach(c -> {
-            computers.add(mapper.toDTO(c));
-        });
+        try {
+            computerDAO.list(page, itemPerPage).stream().forEach(c -> {
+                computers.add(mapper.toDTO(c));
+            });
+        } catch (EmptyNameException ene) {
+            // TODO Auto-generated catch block
+            logger.error(ene.getMessage());
+            throw new UnsuccessfulTreatmentException("Fetched computer with empty name from persistence.");
+
+        } catch (UnconsistentDatesException ude) {
+            // TODO Auto-generated catch block
+           logger.error(ude.getMessage());
+           throw new UnsuccessfulTreatmentException("Fetched computer with unconsistent dates from persistence.");
+        }
         return computers;
     }
 
@@ -68,8 +91,10 @@ public class ComputerService {
      *
      * @param id Long
      * @return Optional<ComputerDTO>
+     * @throws UnconsistentDatesException
+     * @throws EmptyNameException
      */
-    public Optional<ComputerDTO> get(Long id) {
+    public Optional<ComputerDTO> get(Long id) throws EmptyNameException, UnconsistentDatesException {
         ComputerDTO dto = null;
         Optional<Computer> opt = computerDAO.get(id);
         if (opt.isPresent()) {
@@ -86,9 +111,10 @@ public class ComputerService {
      * @throws ParseException        pe
      * @throws EmptyNameException    ene
      * @throws NumberFormatException nfe
+     * @throws UnconsistentDatesException
      */
     public Optional<ComputerDTO> create(ComputerDTO c)
-            throws NumberFormatException, EmptyNameException, ParseException {
+            throws NumberFormatException, EmptyNameException, ParseException, UnconsistentDatesException {
         Optional<ComputerDTO> dto = Optional.ofNullable(null);
         Optional<Computer> opt = computerDAO.create(mapper.toComputer(c));
         if (opt.isPresent()) {
@@ -105,8 +131,9 @@ public class ComputerService {
      * @throws ParseException        pe
      * @throws EmptyNameException    ene
      * @throws NumberFormatException nfe
+     * @throws UnconsistentDatesException ude
      */
-    public boolean update(ComputerDTO c) throws NumberFormatException, EmptyNameException, ParseException {
+    public boolean update(ComputerDTO c) throws NumberFormatException, EmptyNameException, ParseException, UnconsistentDatesException {
 
         return computerDAO.update(mapper.toComputer(c));
     }

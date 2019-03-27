@@ -7,8 +7,6 @@ import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.cdb.persistence.dao.jdbc.JdbcCompanyDAO;
-import com.excilys.cdb.persistence.dao.jdbc.JdbcComputerDAO;
 import com.excilys.cdb.util.PropertyReader;
 
 /**
@@ -75,7 +73,7 @@ public class DAOFactory {
      * @return ComputerDAO
      */
     public ComputerDAO getComputerDAO() {
-        return JdbcComputerDAO.getInstance();
+        return ComputerDAO.getInstance();
     }
 
     /**
@@ -84,6 +82,6 @@ public class DAOFactory {
      * @return CompanyDAO
      */
     public CompanyDAO getCompanyDAO() {
-        return JdbcCompanyDAO.getInstance();
+        return CompanyDAO.getInstance();
     }
 }

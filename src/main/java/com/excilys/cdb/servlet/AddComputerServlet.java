@@ -13,9 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.cdb.exception.EmptyNameException;
+import com.excilys.cdb.exception.UnconsistentDatesException;
+import com.excilys.cdb.model.Feedback;
 import com.excilys.cdb.model.computer.ComputerDTO;
 import com.excilys.cdb.model.computer.ComputerDTOBuilder;
-import com.excilys.cdb.model.computer.EmptyNameException;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 
@@ -46,21 +48,20 @@ public class AddComputerServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html");
-        request.setAttribute("feedbackStyle", request.getParameter("feedback"));
-        request.setAttribute("message", request.getParameter("message"));
+
+        request.setAttribute("feedback", new Feedback(request.getParameter("feedback"), request.getParameter("message")));
         request.setAttribute("contextPath", request.getContextPath());
         request.setAttribute("companies", companyService.list(0, 0));
+
         request.getRequestDispatcher("/WEB-INF/jsp/addComputer.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String status = "success";
-        String message = ComputerService.ADD_COMPUTER_SUCCESS;
+        String status = "danger";
+        String message = "";
         try {
-            System.out.println(request.getParameter("introduced"));
-            System.out.println(request.getParameter("discontinued"));
             ComputerDTOBuilder builder = new ComputerDTOBuilder();
             builder.setName(request.getParameter("name")).setIntroduction(request.getParameter("introduced"))
                     .setDiscontinuation(request.getParameter("discontinued"));
@@ -72,25 +73,29 @@ public class AddComputerServlet extends HttpServlet {
 
             Optional<ComputerDTO> opt = computerService.create(builder.get());
             if (!opt.isPresent()) {
-                status = "danger";
                 message = ComputerService.ADD_COMPUTER_FAILURE;
+            } else {
+                status = "success";
+                message = ComputerService.ADD_COMPUTER_SUCCESS;
             }
 
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             logger.warn(e.getMessage());
-            status = "danger";
             message = ComputerService.WRONG_DATE_FORMAT;
 
         } catch (EmptyNameException ene) {
             logger.warn(ene.getMessage());
-            status = "danger";
             message = ComputerService.EMPTY_NAME;
 
         } catch (NumberFormatException nfe) {
             logger.warn(nfe.getMessage());
-            status = "danger";
             message = ComputerService.INVALID_COMPANY;
+
+        } catch (UnconsistentDatesException ude) {
+            logger.warn(ude.getMessage());
+            message = ComputerService.UNCONSISTANT_DATES;
+
         } finally {
             response.sendRedirect(
                     request.getContextPath() + "/add-computer?feedback=" + status + "&message=" + message);

@@ -10,10 +10,12 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.cdb.exception.EmptyNameException;
+import com.excilys.cdb.exception.UnconsistentDatesException;
+import com.excilys.cdb.exception.UnsuccessfulTreatmentException;
 import com.excilys.cdb.model.company.Company;
 import com.excilys.cdb.model.company.CompanyFactory;
 import com.excilys.cdb.model.computer.ComputerDTO;
-import com.excilys.cdb.model.computer.EmptyNameException;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.ui.Page;
@@ -196,7 +198,13 @@ public class CLIController implements UIController, PageProvider {
     public List<?> fetchDataFor(Class<?> c, int page) {
         // TODO Auto-generated method stub
         if (c == ComputerDTO.class) {
-            List<ComputerDTO> computers = computerService.list(page, itemPerPage);
+            List<ComputerDTO> computers = null;
+            try {
+                computers = computerService.list(page, itemPerPage);
+            } catch (UnsuccessfulTreatmentException e) {
+                // TODO Auto-generated catch block
+               presenter.notify(Presenter.UNSUCCESSFUL_TREATMENT);
+            }
             return computers;
         }
 
@@ -324,13 +332,23 @@ public class CLIController implements UIController, PageProvider {
             return;
         }
 
-        Optional<ComputerDTO> computer = computerService.get(id);
+        Optional<ComputerDTO> computer;
+        try {
+            computer = computerService.get(id);
+            if (computer.isPresent()) {
+                presenter.present(computer.get());
 
-        if (computer.isPresent()) {
-            presenter.present(computer.get());
-
-        } else {
-            presenter.notify(Presenter.COMPUTER_NOT_FOUND);
+            } else {
+                presenter.notify(Presenter.COMPUTER_NOT_FOUND);
+            }
+        } catch (EmptyNameException e) {
+            // TODO Auto-generated catch block
+            logger.error(e.getMessage());
+            presenter.notify(Presenter.UNSUCCESSFUL_TREATMENT);
+        } catch (UnconsistentDatesException e) {
+            // TODO Auto-generated catch block
+            logger.error(e.getMessage());
+            presenter.notify(Presenter.UNSUCCESSFUL_TREATMENT);
         }
     }
 
@@ -380,6 +398,9 @@ public class CLIController implements UIController, PageProvider {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             logger.error(e.getMessage());
+        } catch (UnconsistentDatesException e) {
+            // TODO Auto-generated catch block
+            logger.error(e.getMessage());
         } finally {
             if (computer.isPresent()) {
                 presenter.present(computer.get());
@@ -398,54 +419,70 @@ public class CLIController implements UIController, PageProvider {
         if (id == null) {
             return;
         }
-        Optional<ComputerDTO> opt = computerService.get(id);
-        if (!opt.isPresent()) {
-            presenter.notify(Presenter.COMPUTER_NOT_FOUND);
-            return;
-        }
-        ComputerDTO c = opt.get();
+        Optional<ComputerDTO> opt;
 
-        String name = requestValidName();
-        if (name == null) {
-            return;
-        }
-
-        String intro = requestValidDate("Introduction");
-        if (intro == null && (shouldStop || shouldShowMenu)) {
-            return;
-        }
-        c.setIntroduction(intro);
-
-        String disco = requestValidDate("Discontinuation");
-        if (disco == null && (shouldStop || shouldShowMenu)) {
-            return;
-        }
-        c.setDiscontinuation(disco);
-
-        Company comp = requestValidCompany();
-        if (comp == null && (shouldStop || shouldShowMenu)) {
-            return;
-        }
-        if (comp != null) {
-            c.setCompany(comp.getName());
-            c.setCompanyId(comp.getId());
-        }
-
-        boolean success = false;
         try {
-            success = computerService.update(c);
-        } catch (NumberFormatException e) {
+            opt = computerService.get(id);
+
+            if (!opt.isPresent()) {
+                presenter.notify(Presenter.COMPUTER_NOT_FOUND);
+                return;
+            }
+            ComputerDTO c = opt.get();
+
+            String name = requestValidName();
+            if (name == null) {
+                return;
+            }
+
+            String intro = requestValidDate("Introduction");
+            if (intro == null && (shouldStop || shouldShowMenu)) {
+                return;
+            }
+            c.setIntroduction(intro);
+
+            String disco = requestValidDate("Discontinuation");
+            if (disco == null && (shouldStop || shouldShowMenu)) {
+                return;
+            }
+            c.setDiscontinuation(disco);
+
+            Company comp = requestValidCompany();
+            if (comp == null && (shouldStop || shouldShowMenu)) {
+                return;
+            }
+            if (comp != null) {
+                c.setCompany(comp.getName());
+                c.setCompanyId(comp.getId());
+            }
+
+            boolean success = false;
+            try {
+                success = computerService.update(c);
+            } catch (NumberFormatException e) {
+                // TODO Auto-generated catch block
+                logger.error(e.getMessage());
+
+            } catch (ParseException e) {
+                // TODO Auto-generated catch block
+                logger.error(e.getMessage());
+
+            } finally {
+                presenter.notify(success ? Presenter.UPDATE_SUCCESS : Presenter.UPDATE_FAIL);
+            }
+        } catch (EmptyNameException e1) {
             // TODO Auto-generated catch block
-            logger.error(e.getMessage());
-        } catch (EmptyNameException e) {
+            logger.error(e1.getMessage());
+            presenter.notify(Presenter.UNSUCCESSFUL_TREATMENT);
+
+        } catch (UnconsistentDatesException e1) {
             // TODO Auto-generated catch block
-            logger.error(e.getMessage());
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            logger.error(e.getMessage());
-        } finally {
-            presenter.notify(success ? Presenter.UPDATE_SUCCESS : Presenter.UPDATE_FAIL);
+            logger.error(e1.getMessage());
+            presenter.notify(Presenter.UNSUCCESSFUL_TREATMENT);
         }
+
+
+
     }
 
     /**

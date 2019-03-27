@@ -4,13 +4,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.excilys.cdb.exception.EmptyNameException;
+import com.excilys.cdb.exception.UnconsistentDatesException;
 import com.excilys.cdb.model.company.Company;
 import com.excilys.cdb.model.company.CompanyFactory;
 import com.excilys.cdb.model.computer.Computer;
 import com.excilys.cdb.model.computer.ComputerDTO;
 import com.excilys.cdb.model.computer.ComputerDTOBuilder;
 import com.excilys.cdb.model.computer.ComputerFactory;
-import com.excilys.cdb.model.computer.EmptyNameException;
 
 public class ComputerDTOMapper {
 
@@ -54,8 +55,9 @@ public class ComputerDTOMapper {
      * @throws EmptyNameException    ene
      * @throws NumberFormatException nfe
      * @throws ParseException        pe
+     * @throws UnconsistentDatesException ude
      */
-    public Computer toComputer(ComputerDTO dto) throws ParseException, NumberFormatException, EmptyNameException {
+    public Computer toComputer(ComputerDTO dto) throws ParseException, NumberFormatException, EmptyNameException, UnconsistentDatesException {
 
         Date introduction = "".equals(dto.getIntroduction()) ? null : df.parse(dto.getIntroduction());
         Date discontinuation = "".equals(dto.getDiscontinuation()) ? null : df.parse(dto.getDiscontinuation());

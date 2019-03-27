@@ -2,6 +2,8 @@ package com.excilys.cdb.model.computer;
 
 import java.util.Date;
 
+import com.excilys.cdb.exception.EmptyNameException;
+import com.excilys.cdb.exception.UnconsistentDatesException;
 import com.excilys.cdb.model.company.Company;
 
 /**
@@ -67,11 +69,11 @@ public class Computer {
      */
     public void setName(String name) throws EmptyNameException {
         if(name == null) {
-            throw new EmptyNameException();
+            throw new EmptyNameException("Attempted to set name with a null value.");
         }
         String trimmedName = name.trim();
         if ("".equals(trimmedName)) {
-            throw new EmptyNameException();
+            throw new EmptyNameException("Attempted to set name with an empty value.");
         }
         this.name = trimmedName;
     }
@@ -93,11 +95,15 @@ public class Computer {
      * {@link Computer#introductionDate}
      *
      * @param introduction Date - Introduction date of the computer.
+     * @throws UnconsistentDatesException ude
      */
-    public void setIntroductionDate(Date introduction) {
+    public void setIntroductionDate(Date introduction) throws UnconsistentDatesException {
         if (getDiscontinuationDate() == null || introduction == null
                 || (getDiscontinuationDate().getTime() - introduction.getTime()) > 0) {
             introductionDate = introduction;
+        }
+        else {
+            throw new UnconsistentDatesException("Attempted to set introduction date with more recent date than discontinuation date.");
         }
     }
 
@@ -118,11 +124,15 @@ public class Computer {
      * {@link Computer#discontinuationDate}
      *
      * @param discontinued Date - Discontinuation date of the computer.
+     * @throws UnconsistentDatesException ude
      */
-    public void setDiscontinuationDate(Date discontinued) {
+    public void setDiscontinuationDate(Date discontinued) throws UnconsistentDatesException{
         if (getIntroductionDate() == null || discontinued == null
                 || (getIntroductionDate().getTime() - discontinued.getTime()) < 0) {
             discontinuationDate = discontinued;
+        }
+        else {
+            throw new UnconsistentDatesException("Attempted to set a discontinuation date older than the introduction date.");
         }
     }
 

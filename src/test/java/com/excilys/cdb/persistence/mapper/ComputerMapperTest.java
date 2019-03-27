@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.excilys.cdb.exception.EmptyNameException;
+import com.excilys.cdb.exception.UnconsistentDatesException;
 import com.excilys.cdb.mapper.ComputerSQLMapper;
 
 public class ComputerMapperTest {
@@ -22,13 +24,19 @@ public class ComputerMapperTest {
     @Test
     public void resultToObjectTest() {
         try {
-
-            System.out.println(mapper.queryResultToObject(null));
             assertNull(mapper.queryResultToObject(null));
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
             fail("Not handling null parameter.");
+        } catch (EmptyNameException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            fail(e.getMessage());
+        } catch (UnconsistentDatesException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            fail(e.getMessage());
         }
     }
 }

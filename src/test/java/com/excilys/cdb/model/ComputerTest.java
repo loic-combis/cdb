@@ -11,10 +11,11 @@ import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.excilys.cdb.exception.EmptyNameException;
+import com.excilys.cdb.exception.UnconsistentDatesException;
 import com.excilys.cdb.model.company.CompanyFactory;
 import com.excilys.cdb.model.computer.Computer;
 import com.excilys.cdb.model.computer.ComputerFactory;
-import com.excilys.cdb.model.computer.EmptyNameException;
 
 public class ComputerTest {
 
@@ -39,8 +40,18 @@ public class ComputerTest {
         cal.add(Calendar.DATE, 1);
         TOMORROW = cal.getTime();
 
-        computerWithAll = ComputerFactory.getInstance().createWithAll(ID, NAME, NOW, TOMORROW,
-                CompanyFactory.getInstance().create(COMPANY_ID, COMPANY_NAME));
+        try {
+            computerWithAll = ComputerFactory.getInstance().createWithAll(ID, NAME, NOW, TOMORROW,
+                    CompanyFactory.getInstance().create(COMPANY_ID, COMPANY_NAME));
+        } catch (EmptyNameException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            fail(e.getMessage());
+        } catch (UnconsistentDatesException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
     }
 
     @Test
@@ -102,44 +113,55 @@ public class ComputerTest {
 
     @Test
     public void setIntroductionDateTest() {
-        computerWithName.setIntroductionDate(TOMORROW);
-        assertEquals(computerWithName.getIntroductionDate(), TOMORROW);
-        computerWithName.setIntroductionDate(null);
+        try {
+            computerWithName.setIntroductionDate(TOMORROW);
+            assertEquals(computerWithName.getIntroductionDate(), TOMORROW);
+            computerWithName.setIntroductionDate(null);
+
+        } catch (UnconsistentDatesException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
     }
 
     @Test
     public void setIntroductionDateWithNullTest() {
-        computerWithAll.setIntroductionDate(null);
-        assertNull(computerWithAll.getIntroductionDate());
+        try {
+            computerWithAll.setIntroductionDate(null);
+            assertNull(computerWithAll.getIntroductionDate());
+
+        } catch (UnconsistentDatesException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
     }
 
     @Test
     public void setDiscontinuationDateWithNullTest() {
-        computerWithAll.setIntroductionDate(null);
-        assertNull(computerWithAll.getIntroductionDate());
+        try {
+            computerWithAll.setIntroductionDate(null);
+            assertNull(computerWithAll.getIntroductionDate());
+
+        } catch (UnconsistentDatesException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
     }
 
     @Test
     public void setDiscontinuationDateTest() {
-        computerWithName.setDiscontinuationDate(NOW);
-        assertEquals(computerWithName.getDiscontinuationDate(), NOW);
-        computerWithName.setDiscontinuationDate(null);
-    }
-
-    @Test
-    public void setDiscoDateOlderThanIntroTest() {
-        computerWithName.setIntroductionDate(TOMORROW);
-        computerWithName.setDiscontinuationDate(NOW);
-        assertNull(computerWithName.getDiscontinuationDate());
-        computerWithName.setIntroductionDate(null);
-        computerWithName.setDiscontinuationDate(null);
-    }
-
-    @Test
-    public void setIntroDateYoungerThanDiscoTest() {
-        computerWithName.setDiscontinuationDate(NOW);
-        computerWithName.setIntroductionDate(TOMORROW);
-        assertNull(computerWithName.getIntroductionDate());
+        try {
+            computerWithName.setDiscontinuationDate(NOW);
+            assertEquals(computerWithName.getDiscontinuationDate(), NOW);
+            computerWithName.setDiscontinuationDate(null);
+        } catch (UnconsistentDatesException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
     }
 
     @Test

@@ -25,8 +25,8 @@
 	                		<h1>Add Computer</h1>
 	                	</div>
 	                    <div class="col-lg-7 col-md-12">
-		        			<c:if test='${message != null}'>
-		        				<p class="alert alert-${feedbackStyle}">${message}</p>
+		        			<c:if test='${feedback.getMessage() != null}'>
+		        				<p class="alert alert-${feedback.getStatus()}">${feedback.getMessage()}</p>
 		        			</c:if>
 		        		</div>
                 	</div>
