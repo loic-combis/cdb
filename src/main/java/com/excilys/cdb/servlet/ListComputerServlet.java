@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.excilys.cdb.exception.UnsuccessfulTreatmentException;
 import com.excilys.cdb.model.Feedback;
 import com.excilys.cdb.model.Pagination;
+import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 
 @WebServlet(name = "List Computers", urlPatterns = { "/list-computers" })
@@ -27,6 +28,8 @@ public class ListComputerServlet extends HttpServlet {
     private final Logger logger = LoggerFactory.getLogger(ListComputerServlet.class);
 
     private ComputerService computerService = new ComputerService();
+
+    private CompanyService companyService = new CompanyService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -50,6 +53,8 @@ public class ListComputerServlet extends HttpServlet {
         }
         request.setAttribute("contextPath", request.getContextPath());
         int computerCount = computerService.count();
+
+        request.setAttribute("companies", companyService.list(0,0));
 
         request.setAttribute("pagination", new Pagination(page, itemPerPage, computerCount));
         try {

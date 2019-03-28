@@ -11,8 +11,8 @@
 
 // On load hide feedback icons.
 (function($){
-	$(".glyphicon").css("visibility", "hidden");
-	$("small").css("visibility", "hidden");
+	$(".glyphicon").hide();
+	$("small").hide();
 }(jQuery));
 
 
@@ -24,13 +24,13 @@
 		if(isError){
 			elt.removeClass("has-success");
 			elt.addClass("has-error");
-			elt.find("span.glyphicon-remove").css("visibility", "visible");
-			elt.find("span.glyphicon-ok").css("visibility", "hidden");
+			elt.find("span.glyphicon-remove").show();
+			elt.find("span.glyphicon-ok").hide();
 		} else{
 			elt.addClass("has-success");
 			elt.removeClass("has-error");
-			elt.find("span.glyphicon-remove").css("visibility", "hidden");
-			elt.find("span.glyphicon-ok").css("visibility", "visible");
+			elt.find("span.glyphicon-remove").hide();
+			elt.find("span.glyphicon-ok").show();
 		}
 	}
 }(jQuery));
@@ -43,14 +43,14 @@
 			event.preventDefault();
 			event.stopPropagation();
 			$.fn.addFeedback(input.parent(), true);
-			input.parent().find("small").css("visibility", "visible");
+			input.parent().find("small").show();
 		}
 		if($.fn.datesAreInvalid()){
 			event.preventDefault();
 			event.stopPropagation();
 			$.fn.addFeedback($("#discontinued").parent(), true);
 			$.fn.addFeedback($("#introduced").parent(), true);
-			$("#discontinued").parent().find("small").css("visibility", "visible");
+			$("#discontinued").parent().find("small").show();
 
 		}		
 	});
@@ -62,10 +62,10 @@
 		input.val(input.val().trim());
 		$.fn.addFeedback(input.parent(), input.val() === "");
 		if(input.val() !== ""){
-			input.parent().find("small").css("visibility", "hidden");
+			input.parent().find("small").hide();
 		}
 		else{
-			input.parent().find("small").css("visibility", "visible");
+			input.parent().find("small").show();
 		}
 	});
 }(jQuery));
@@ -75,12 +75,12 @@
 		if($.fn.datesAreInvalid()){
 			$.fn.addFeedback($("#discontinued").parent(), true);
 			$.fn.addFeedback($("#introduced").parent(), true);
-			$("#discontinued").parent().find("small").css("visibility", "visible");
+			$("#discontinued").parent().find("small").show();
 		}
 		else{
 			$.fn.addFeedback($("#discontinued").parent(), false);
 			$.fn.addFeedback($("#introduced").parent(), false);
-			$("#discontinued").parent().find("small").css("visibility", "hidden");
+			$("#discontinued").parent().find("small").hide();
 
 		}
 	});
@@ -92,12 +92,12 @@
 		if($.fn.datesAreInvalid()){
 			$.fn.addFeedback($("#discontinued").parent(), true);
 			$.fn.addFeedback($("#introduced").parent(), true);
-			$("#discontinued").parent().find("small").css("visibility", "visible");
+			$("#discontinued").parent().find("small").show();
 		}
 		else{
 			$.fn.addFeedback($("#discontinued").parent(), false);
 			$.fn.addFeedback($("#introduced").parent(), false);
-			$("#discontinued").parent().find("small").css("visibility", "hidden");
+			$("#discontinued").parent().find("small").hide();
 		}
 	});
 }(jQuery));

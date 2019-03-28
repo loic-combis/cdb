@@ -33,10 +33,13 @@ public class ComputerService {
     public static final String DELETE_MANY_FAILURE = "Deletion unsuccessfull.";
     public static final String ADD_COMPUTER_SUCCESS = "Computer successfully added.";
     public static final String ADD_COMPUTER_FAILURE = "Couldn't create the computer.";
+    public static final String EDIT_COMPUTER_SUCCESS = "Update successful";
+    public static final String EDIT_COMPUTER_FAILURE = "Couldn't update the computer";
     public static final String WRONG_DATE_FORMAT = "Wrong date format.";
     public static final String EMPTY_NAME = "Name cannot be empty.";
     public static final String INVALID_COMPANY = "Provided company is invalid";
-    public static final String UNCONSISTANT_DATES = "Introduction and discontinuation dates are unconsistent.";
+    public static final String INVALID_COMPUTER_ID = "Provided company id is invalid.";
+    public static final String UNCONSISTENT_DATES = "Introduction and discontinuation dates are unconsistent.";
 
     /**
      * computerDAO ComputerDAO.

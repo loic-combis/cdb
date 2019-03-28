@@ -84,15 +84,53 @@
                 <!-- Browse attribute computers -->
                 <tbody id="results">
                 	<c:forEach items="${computers}" var="computer">
-					    <tr>      
-					        <td class="editMode">
-					       		<input type="checkbox" name="cb" class="cb" value="${computer.getId()}">
-					        </td>
-					        <td>${computer.getName()}</td>
-					        <td>${computer.getIntroduction()}</td>
-					        <td>${computer.getDiscontinuation()}</td>
-					        <td>${computer.getCompany()}</td>  
-					    </tr>
+           				<tr> 
+           					<form method="POST" class="editForm" id="form-${computer.getId()}" action="${contextPath}/edit-computer">
+           						<fieldset>     
+							       	<td class="editMode">
+							       		<input type="checkbox" name="cb" class="cb" value="${computer.getId()}">
+							        </td>
+							        <td class="viewMode">${computer.getName()}</td>
+							        <td class="editMode">
+								        <div class="form-group">
+								        	<input type="hidden" name="computerId" value="${computer.getId()}"/>
+								    		<input type="text" id="name-${computer.getId()}" name="name" class="form-control" value="${computer.getName()}"/>
+								        	<small class="text-danger">Name can't be empty.</small>
+			                                <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+			                                <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+								        </div>
+							        </td>
+							        <td class="viewMode">${computer.getIntroduction()}</td>
+							        <td class="editMode">
+								        <div class="form-group">
+								    		<input type="date" id="introduced-${computer.getId()}" name="introduced" class="form-control" value="${computer.getIntroduction()}"/>
+								        	<small>Both introduction and discontinuation date are optional.</small>
+			                            	<span class="glyphicon glyphicon-remove form-control-feedback"></span>
+			                                <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+								        </div>
+							        </td>
+							        <td class="viewMode">${computer.getDiscontinuation()}</td>
+							        <td class="editMode">
+								        <div class="form-group">
+								    		<input type="date" id="discontinued-${computer.getId()}" name="introduced" class="form-control" value="${computer.getDiscontinuation()}"/>
+									        <small class="text-danger">If both are set, discontinuation date must be after introduction date.</small>
+			                            	<span class="glyphicon glyphicon-remove form-control-feedback"></span>
+			                                <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+								        </div>
+							        </td>
+							        <td class="viewMode">${computer.getCompany()}</td>
+							        <td class="editMode">
+							        	<select class="form-control" name="company" id="company-${computer.getId()}">
+							        		<option value="-1">No company</option>
+		                                	<c:forEach items="${companies}" var="company">
+											    <option ${company.getId() == computer.getCompanyId() ? 'selected' : ''} value="${company.getId()}">${company.getName()}</option>
+											</c:forEach>
+							        	</select>
+							        </td>
+							        <td class="editMode"><input type="submit" value="save"/></td>
+							    </fieldset>
+							</form>
+						</tr>
 					</c:forEach>
                 </tbody>
             </table>

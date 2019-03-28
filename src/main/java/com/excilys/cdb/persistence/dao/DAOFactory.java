@@ -17,7 +17,6 @@ import com.zaxxer.hikari.HikariDataSource;
  */
 public class DAOFactory {
 
-
     private static HikariConfig config = new HikariConfig("/config.properties");
     private static HikariDataSource dataSource;
 
@@ -31,15 +30,13 @@ public class DAOFactory {
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(DAOFactory.class);
 
-
     static {
-        //PropertyReader prop = new PropertyReader();
-        //config.setJdbcUrl(prop.get("dbName"));
-        //config.setUsername(prop.get("dbUser"));
-        //config.setPassword(prop.get("dbPassword"));
-        //config.setDataSourceClassName(prop.get("driver"));
+        config.addDataSourceProperty("cachePrepStmts", "true");
+        config.addDataSourceProperty("prepStmtCacheSize", "250");
+        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
         dataSource = new HikariDataSource(config);
     }
+
     /**
      * Constructor Prevent from being instantiated outside the class.
      */
@@ -66,10 +63,8 @@ public class DAOFactory {
      *
      * @return Connection
      * @throws SQLException           sqle
-     * @throws ClassNotFoundException cnfe
      */
     public static Connection getConnection() throws SQLException {
-
         return dataSource.getConnection();
     }
 

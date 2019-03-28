@@ -200,13 +200,13 @@ public class ComputerDAO {
             state.setObject(3, companyId, java.sql.Types.INTEGER);
 
             int affectedRows = state.executeUpdate();
+            System.out.println(affectedRows);
             if (affectedRows == 1) {
+                isSuccess = true;
                 LOGGER.info("Computer " + computer.getId() + " updated.");
             } else {
                 LOGGER.warn("Computer " + computer.getId() + " might not have been updated. Affected Rows : " + affectedRows);
             }
-
-            isSuccess = affectedRows == 1;
 
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());

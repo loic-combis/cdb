@@ -94,7 +94,7 @@ public class AddComputerServlet extends HttpServlet {
 
         } catch (UnconsistentDatesException ude) {
             logger.warn(ude.getMessage());
-            message = ComputerService.UNCONSISTANT_DATES;
+            message = ComputerService.UNCONSISTENT_DATES;
 
         } finally {
             response.sendRedirect(
