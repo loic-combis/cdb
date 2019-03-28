@@ -45,12 +45,12 @@ public class ComputerDAO {
     /**
      * String base SQL request.
      */
-    private static final String LIST_REQUEST = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id %s";
+    private static final String LIST_REQUEST = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id %s %s";
     private static final String FIND_BY_ID = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.id = %d";
     private static final String DELETE_ONE = "DELETE FROM computer WHERE id = %d";
     private static final String CREATE_ONE = "INSERT INTO computer(name, introduced, discontinued, company_id) VALUES('%s', ?, ?, ?)";
     private static final String UPDATE_ONE = "UPDATE computer SET name='%s', introduced = ?, discontinued = ?, company_id = ? WHERE id = %d";
-    private static final String COUNT_ALL = "SELECT COUNT(*) AS total FROM computer";
+    private static final String COUNT_ALL = "SELECT COUNT(*) AS total FROM computer LEFT JOIN company ON computer.company_id = company.id %s";
     private static final String DELETE_MANY = "DELETE FROM computer WHERE id IN (%s)";
 
     /**
@@ -224,17 +224,21 @@ public class ComputerDAO {
      * @throws EmptyNameException ene
      * @throws UnconsistentDatesException ude
      */
-    public List<Computer> list(int page, int itemPerPage) throws EmptyNameException, UnconsistentDatesException {
+    public List<Computer> list(int page, int itemPerPage, String search) throws EmptyNameException, UnconsistentDatesException {
         // TODO Auto-generated method stub
         LinkedList<Computer> computers = new LinkedList<Computer>();
 
         try (Connection conn = DAOFactory.getConnection()) {
 
             Statement state = conn.createStatement();
+            // Add limit / Offset clause.
             String offsetClause = itemPerPage > 0 ? "LIMIT " + itemPerPage : "";
             offsetClause += (page > 0 && itemPerPage > 0) ? " OFFSET " + ((page - 1) * itemPerPage) : "";
 
-            ResultSet result = state.executeQuery(String.format(LIST_REQUEST, offsetClause));
+            // Add where clause
+            String whereClause = search != null && !search.equals("") ? "WHERE computer.name LIKE '%" + search + "%' OR company.name LIKE '%" + search + "%'" : "";
+
+            ResultSet result = state.executeQuery(String.format(LIST_REQUEST, whereClause, offsetClause));
             while (result.next()) {
                 Computer c = mapper.queryResultToObject(result);
                 if (c != null) {
@@ -257,14 +261,14 @@ public class ComputerDAO {
      *
      * @return int
      */
-    public int count() {
+    public int count(String search) {
         // TODO Auto-generated method stub
         int count = -1;
         try (Connection conn = DAOFactory.getConnection()) {
 
             Statement state = conn.createStatement();
-
-            ResultSet result = state.executeQuery(COUNT_ALL);
+            String whereClause = search != null && !search.equals("") ?  "WHERE computer.name LIKE '%" + search + "%' OR company.name LIKE '%" + search + "%'" : "";
+            ResultSet result = state.executeQuery(String.format(COUNT_ALL, whereClause));
             result.next();
             count = result.getInt("total");
             result.close();

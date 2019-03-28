@@ -71,10 +71,10 @@ public class ComputerService {
      * @return List<ComputerDTO>
      * @throws UnsuccessfulTreatmentException  ute
      */
-    public List<ComputerDTO> list(int page, int itemPerPage) throws UnsuccessfulTreatmentException {
+    public List<ComputerDTO> list(int page, int itemPerPage, String search) throws UnsuccessfulTreatmentException {
         LinkedList<ComputerDTO> computers = new LinkedList<ComputerDTO>();
         try {
-            computerDAO.list(page, itemPerPage).stream().forEach(c -> {
+            computerDAO.list(page, itemPerPage, search).stream().forEach(c -> {
                 computers.add(mapper.toDTO(c));
             });
         } catch (EmptyNameException ene) {
@@ -155,10 +155,11 @@ public class ComputerService {
     /**
      * Count the number of computer stored.
      *
+     *@param search String
      * @return int
      */
-    public int count() {
-        return computerDAO.count();
+    public int count(String search) {
+        return computerDAO.count(search);
     }
 
     /**

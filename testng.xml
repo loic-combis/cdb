@@ -3,7 +3,7 @@
 <suite name="Suite">
   <test thread-count="5" name="UITest">
     <classes>
-      <class name="selenium.TitleTest"/>
+     <!--  <class name="selenium.TitleTest"/> -->
     </classes>
   </test> <!-- Test -->
   <test name="Model">

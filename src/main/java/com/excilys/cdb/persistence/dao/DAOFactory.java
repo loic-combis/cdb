@@ -31,9 +31,7 @@ public class DAOFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(DAOFactory.class);
 
     static {
-        config.addDataSourceProperty("cachePrepStmts", "true");
-        config.addDataSourceProperty("prepStmtCacheSize", "250");
-        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+        config.setMaxLifetime(30000);
         dataSource = new HikariDataSource(config);
     }
 

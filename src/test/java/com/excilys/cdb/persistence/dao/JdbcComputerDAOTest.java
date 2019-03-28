@@ -42,7 +42,7 @@ public class JdbcComputerDAOTest {
     public void listComputersTest() {
         List<Computer> computers;
         try {
-            computers = dao.list(0, 10);
+            computers = dao.list(0, 10, null);
             assertTrue(computers.size() <= 10);
 
         } catch (EmptyNameException e) {

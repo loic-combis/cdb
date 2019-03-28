@@ -36,6 +36,7 @@ public class ListComputerServlet extends HttpServlet {
             throws ServletException, IOException {
 
         response.setContentType("text/html");
+        request.setAttribute("contextPath", request.getContextPath());
         request.setAttribute("feedback", new Feedback(request.getParameter("status"), request.getParameter("message")));
 
         int page, itemPerPage;
@@ -51,14 +52,17 @@ public class ListComputerServlet extends HttpServlet {
         } catch (NumberFormatException nfe) {
             itemPerPage = 10;
         }
-        request.setAttribute("contextPath", request.getContextPath());
-        int computerCount = computerService.count();
+
+        String search = request.getParameter("search");
+        request.setAttribute("search", search);
+        int computerCount = computerService.count(search);
+        request.setAttribute("search", search);
+        request.setAttribute("pagination", new Pagination(page, itemPerPage, computerCount));
 
         request.setAttribute("companies", companyService.list(0,0));
 
-        request.setAttribute("pagination", new Pagination(page, itemPerPage, computerCount));
         try {
-            request.setAttribute("computers", computerService.list(page, itemPerPage));
+            request.setAttribute("computers", computerService.list(page, itemPerPage, search));
             request.getRequestDispatcher("/WEB-INF/jsp/dashboard.jsp").forward(request, response);
 
         } catch (UnsuccessfulTreatmentException e) {

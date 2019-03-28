@@ -31,9 +31,8 @@
         	</div>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
-                    <form id="searchForm" action="#" method="GET" class="form-inline">
-
-                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" />
+                    <form id="searchForm" action="${contextPath}/list-computers?page=1&itemPerPage=${pagination.getItemPerPage()}" method="GET" class="form-inline">
+                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${search}"/>
                         <input type="submit" id="searchsubmit" value="Filter by name"
                         class="btn btn-primary" />
                     </form>
@@ -141,12 +140,12 @@
         <div class="container text-center">
             <ul class="pagination">
                 <li>
-                    <a href="${contextPath}/list-computers?page=${pagination.previous()}&itemPerPage=${pagination.getItemPerPage()}" aria-label="Previous">
+                    <a href="${contextPath}/list-computers?page=${pagination.previous()}&itemPerPage=${pagination.getItemPerPage()}&search=${search}" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               </li>
               <li>
-              	<a class="${pagination.compareCurrent(1)}" href="${contextPath}/list-computers?page=1&itemPerPage=${pagination.getItemPerPage()}">1</a>
+              	<a class="${pagination.compareCurrent(1)}" href="${contextPath}/list-computers?page=1&itemPerPage=${pagination.getItemPerPage()}&search=${search}">1</a>
               </li>
               <c:if test="${pagination.currentPageStart() - 1 > 1}">
                 <li><a href="#">...</a></li>
@@ -158,7 +157,7 @@
               	step="1"
               >
               	<li>
-              		<a class="${pagination.compareCurrent(count)}" href="${contextPath}/list-computers?page=${count}&itemPerPage=${pagination.getItemPerPage()}">${count}</a>
+              		<a class="${pagination.compareCurrent(count)}" href="${contextPath}/list-computers?page=${count}&itemPerPage=${pagination.getItemPerPage()}&search=${search}">${count}</a>
               	</li>
               </c:forEach>
               <c:if test="${pagination.currentPageEnd() + 1 < pagination.lastPage()}">
@@ -166,11 +165,11 @@
               </c:if>
               <li>
               	<a 	class="${pagination.compareCurrent(pagination.lastPage())}"
-              		href="${contextPath}/list-computers?page=${pagination.lastPage()}&itemPerPage=${pagination.getItemPerPage()}">${pagination.lastPage()}</a>
+              		href="${contextPath}/list-computers?page=${pagination.lastPage()}&itemPerPage=${pagination.getItemPerPage()}&search=${search}">${pagination.lastPage()}</a>
               </li>
               <li>
                 <a
-                	href="${contextPath}/list-computers?page=${pagination.next()}&itemPerPage=${pagination.getItemPerPage()}" aria-label="Next">
+                	href="${contextPath}/list-computers?page=${pagination.next()}&itemPerPage=${pagination.getItemPerPage()}&search=${search}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
@@ -180,7 +179,7 @@
         	<c:forEach items="${pagination.getSizes()}" var="size" >
         	<a 
         	class="btn ${pagination.compareItemPerPage(size)}"
-        	href="${contextPath}/list-computers?page=1&itemPerPage=${size}" class="btn btn-default">${size}</a>
+        	href="${contextPath}/list-computers?page=1&itemPerPage=${size}&search=${search}" class="btn btn-default">${size}</a>
         	</c:forEach>
         </div>
     </footer>
