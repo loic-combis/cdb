@@ -112,7 +112,7 @@
 							        <td class="viewMode">${computer.getDiscontinuation()}</td>
 							        <td class="editMode">
 								        <div class="form-group">
-								    		<input type="date" id="discontinued-${computer.getId()}" name="introduced" class="form-control" value="${computer.getDiscontinuation()}"/>
+								    		<input type="date" id="discontinued-${computer.getId()}" name="discontinued" class="form-control" value="${computer.getDiscontinuation()}"/>
 									        <small class="text-danger">If both are set, discontinuation date must be after introduction date.</small>
 			                            	<span class="glyphicon glyphicon-remove form-control-feedback"></span>
 			                                <span class="glyphicon glyphicon-ok form-control-feedback"></span>
