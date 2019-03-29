@@ -31,7 +31,10 @@ public class DAOFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(DAOFactory.class);
 
     static {
-        config.setMaxLifetime(30000);
+        config.addDataSourceProperty("cachePrepStmts", "true");
+        config.addDataSourceProperty("prepStmtCacheSize", "250");
+        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+        config.setMaxLifetime(28000);
         dataSource = new HikariDataSource(config);
     }
 
@@ -60,7 +63,7 @@ public class DAOFactory {
      * Creates a new instance of Connection.
      *
      * @return Connection
-     * @throws SQLException           sqle
+     * @throws SQLException sqle
      */
     public static Connection getConnection() throws SQLException {
         return dataSource.getConnection();

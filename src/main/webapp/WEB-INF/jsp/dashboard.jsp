@@ -77,7 +77,9 @@
                         <th>
                             Company
                         </th>
-
+						<th class="editMode">
+							Save
+						</th>
                     </tr>
                 </thead>
                 <!-- Browse attribute computers -->
@@ -126,7 +128,7 @@
 											</c:forEach>
 							        	</select>
 							        </td>
-							        <td class="editMode"><input type="submit" value="save"/></td>
+							        <td class="editMode"><input class="btn btn-success" type="submit" value="Save"/></td>
 							    </fieldset>
 							</form>
 						</tr>
@@ -163,10 +165,12 @@
               <c:if test="${pagination.currentPageEnd() + 1 < pagination.lastPage()}">
                 <li><a href="#">...</a></li>
               </c:if>
-              <li>
-              	<a 	class="${pagination.compareCurrent(pagination.lastPage())}"
-              		href="${contextPath}/list-computers?page=${pagination.lastPage()}&itemPerPage=${pagination.getItemPerPage()}&search=${search}">${pagination.lastPage()}</a>
-              </li>
+              <c:if test="${pagination.lastPage() != 1}">
+	              <li>
+	              	<a 	class="${pagination.compareCurrent(pagination.lastPage())}"
+	              		href="${contextPath}/list-computers?page=${pagination.lastPage()}&itemPerPage=${pagination.getItemPerPage()}&search=${search}">${pagination.lastPage()}</a>
+	              </li>
+              </c:if>
               <li>
                 <a
                 	href="${contextPath}/list-computers?page=${pagination.next()}&itemPerPage=${pagination.getItemPerPage()}&search=${search}" aria-label="Next">

@@ -53,6 +53,7 @@ public class ComputerDAO {
     private static final String COUNT_ALL = "SELECT COUNT(*) AS total FROM computer LEFT JOIN company ON computer.company_id = company.id %s";
     private static final String DELETE_MANY = "DELETE FROM computer WHERE id IN (%s)";
 
+    private static final String SEARCH_WHERE_CLAUSE = "WHERE computer.name LIKE '%%%s%%' OR company.name LIKE '%%%s%%'";
     /**
      * Constructor.
      *
@@ -236,7 +237,7 @@ public class ComputerDAO {
             offsetClause += (page > 0 && itemPerPage > 0) ? " OFFSET " + ((page - 1) * itemPerPage) : "";
 
             // Add where clause
-            String whereClause = search != null && !search.equals("") ? "WHERE computer.name LIKE '%" + search + "%' OR company.name LIKE '%" + search + "%'" : "";
+            String whereClause = search != null && !search.equals("") ? String.format(SEARCH_WHERE_CLAUSE, search, search) : "";
 
             ResultSet result = state.executeQuery(String.format(LIST_REQUEST, whereClause, offsetClause));
             while (result.next()) {
@@ -267,7 +268,7 @@ public class ComputerDAO {
         try (Connection conn = DAOFactory.getConnection()) {
 
             Statement state = conn.createStatement();
-            String whereClause = search != null && !search.equals("") ?  "WHERE computer.name LIKE '%" + search + "%' OR company.name LIKE '%" + search + "%'" : "";
+            String whereClause = search != null && !search.equals("") ? String.format(SEARCH_WHERE_CLAUSE, search, search) : "";
             ResultSet result = state.executeQuery(String.format(COUNT_ALL, whereClause));
             result.next();
             count = result.getInt("total");
