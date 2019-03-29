@@ -38,10 +38,10 @@ public class ComputerDTOMapper {
         ComputerDTOBuilder builder = new ComputerDTOBuilder();
 
         builder.setId(computer.getId()).setName(computer.getName())
-                .setIntroduction(computer.getIntroductionDate() == null ? null
-                        : df.format(computer.getIntroductionDate()))
-                .setDiscontinuation(computer.getDiscontinuationDate() == null ? null
-                        : df.format(computer.getDiscontinuationDate()))
+                .setIntroduction(
+                        computer.getIntroductionDate() == null ? null : df.format(computer.getIntroductionDate()))
+                .setDiscontinuation(
+                        computer.getDiscontinuationDate() == null ? null : df.format(computer.getDiscontinuationDate()))
                 .setCompanyName(computer.getCompany() != null ? computer.getCompany().getName() : null)
                 .setCompanyId(computer.getCompany() != null ? computer.getCompany().getId() : null);
 
@@ -62,8 +62,7 @@ public class ComputerDTOMapper {
             throws DateTimeParseException, NumberFormatException, EmptyNameException, UnconsistentDatesException {
 
         String intro = dto.getIntroduction();
-        LocalDate introduction = intro == null || intro.isEmpty() ? null
-                : LocalDate.parse(dto.getIntroduction(), df);
+        LocalDate introduction = intro == null || intro.isEmpty() ? null : LocalDate.parse(dto.getIntroduction(), df);
 
         String disco = dto.getDiscontinuation();
         LocalDate discontinuation = disco == null || disco.isEmpty() ? null

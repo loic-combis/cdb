@@ -59,7 +59,7 @@ public class ListComputerServlet extends HttpServlet {
         request.setAttribute("search", search);
         request.setAttribute("pagination", new Pagination(page, itemPerPage, computerCount));
 
-        request.setAttribute("companies", companyService.list(0,0));
+        request.setAttribute("companies", companyService.list(0, 0));
 
         try {
             request.setAttribute("computers", computerService.list(page, itemPerPage, search));

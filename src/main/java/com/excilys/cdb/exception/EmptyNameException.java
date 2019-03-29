@@ -16,6 +16,8 @@ public class EmptyNameException extends IllegalArgumentException {
 
     /**
      * Constructor.
+     *
+     * @param message String
      */
     public EmptyNameException(String message) {
         super(message);

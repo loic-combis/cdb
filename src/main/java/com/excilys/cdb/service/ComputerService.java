@@ -1,6 +1,5 @@
 package com.excilys.cdb.service;
 
-import java.text.ParseException;
 import java.time.format.DateTimeParseException;
 import java.util.LinkedList;
 import java.util.List;
@@ -68,8 +67,9 @@ public class ComputerService {
      *
      * @param page        int
      * @param itemPerPage int
+     * @param search      String
      * @return List<ComputerDTO>
-     * @throws UnsuccessfulTreatmentException  ute
+     * @throws UnsuccessfulTreatmentException ute
      */
     public List<ComputerDTO> list(int page, int itemPerPage, String search) throws UnsuccessfulTreatmentException {
         LinkedList<ComputerDTO> computers = new LinkedList<ComputerDTO>();
@@ -84,8 +84,8 @@ public class ComputerService {
 
         } catch (UnconsistentDatesException ude) {
             // TODO Auto-generated catch block
-           logger.error(ude.getMessage());
-           throw new UnsuccessfulTreatmentException("Fetched computer with unconsistent dates from persistence.");
+            logger.error(ude.getMessage());
+            throw new UnsuccessfulTreatmentException("Fetched computer with unconsistent dates from persistence.");
         }
         return computers;
     }
@@ -95,8 +95,8 @@ public class ComputerService {
      *
      * @param id Long
      * @return Optional<ComputerDTO>
-     * @throws UnconsistentDatesException
-     * @throws EmptyNameException
+     * @throws UnconsistentDatesException ude
+     * @throws EmptyNameException         ene
      */
     public Optional<ComputerDTO> get(Long id) throws EmptyNameException, UnconsistentDatesException {
         ComputerDTO dto = null;
@@ -110,12 +110,12 @@ public class ComputerService {
     /**
      * Saves a new Computer.
      *
-     * @param c computer to be saved.
+     * @param computerDto ComputerDTO
      * @return Optional<ComputerDTO>.
-     * @throws ParseException        pe
-     * @throws EmptyNameException    ene
-     * @throws NumberFormatException nfe
-     * @throws UnconsistentDatesException
+     * @throws DateTimeParseException     pe
+     * @throws EmptyNameException         ene
+     * @throws NumberFormatException      nfe
+     * @throws UnconsistentDatesException ude
      */
     public Optional<ComputerDTO> create(ComputerDTO computerDto)
             throws NumberFormatException, EmptyNameException, DateTimeParseException, UnconsistentDatesException {
@@ -130,14 +130,15 @@ public class ComputerService {
     /**
      * Update a specific computer.
      *
-     * @param c Computer
+     * @param computerDto ComputerDTO
      * @return boolean
-     * @throws ParseException        pe
-     * @throws EmptyNameException    ene
-     * @throws NumberFormatException nfe
+     * @throws DateTimeParseException     pe
+     * @throws EmptyNameException         ene
+     * @throws NumberFormatException      nfe
      * @throws UnconsistentDatesException ude
      */
-    public boolean update(ComputerDTO computerDto) throws NumberFormatException, EmptyNameException, DateTimeParseException, UnconsistentDatesException {
+    public boolean update(ComputerDTO computerDto)
+            throws NumberFormatException, EmptyNameException, DateTimeParseException, UnconsistentDatesException {
 
         return computerDAO.update(mapper.toComputer(computerDto));
     }
@@ -155,7 +156,7 @@ public class ComputerService {
     /**
      * Count the number of computer stored.
      *
-     *@param search String
+     * @param search String
      * @return int
      */
     public int count(String search) {

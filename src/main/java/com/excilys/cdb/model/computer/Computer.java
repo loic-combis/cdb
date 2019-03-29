@@ -68,7 +68,7 @@ public class Computer {
      * @throws EmptyNameException ene
      */
     public void setName(String name) throws EmptyNameException {
-        if(name == null) {
+        if (name == null) {
             throw new EmptyNameException("Attempted to set name with a null value.");
         }
         String trimmedName = name.trim();
@@ -101,9 +101,9 @@ public class Computer {
         if (getDiscontinuationDate() == null || introduction == null
                 || getDiscontinuationDate().isAfter(introduction)) {
             introductionDate = introduction;
-        }
-        else {
-            throw new UnconsistentDatesException("Attempted to set introduction date with more recent date than discontinuation date.");
+        } else {
+            throw new UnconsistentDatesException(
+                    "Attempted to set introduction date with more recent date than discontinuation date.");
         }
     }
 
@@ -126,13 +126,12 @@ public class Computer {
      * @param discontinued LocalDate - Discontinuation date of the computer.
      * @throws UnconsistentDatesException ude
      */
-    public void setDiscontinuationDate(LocalDate discontinued) throws UnconsistentDatesException{
-        if (getIntroductionDate() == null || discontinued == null
-                || discontinued.isAfter(getIntroductionDate())) {
+    public void setDiscontinuationDate(LocalDate discontinued) throws UnconsistentDatesException {
+        if (getIntroductionDate() == null || discontinued == null || discontinued.isAfter(getIntroductionDate())) {
             discontinuationDate = discontinued;
-        }
-        else {
-            throw new UnconsistentDatesException("Attempted to set a discontinuation date older than the introduction date.");
+        } else {
+            throw new UnconsistentDatesException(
+                    "Attempted to set a discontinuation date older than the introduction date.");
         }
     }
 

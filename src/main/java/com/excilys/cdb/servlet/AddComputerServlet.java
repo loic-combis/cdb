@@ -49,7 +49,8 @@ public class AddComputerServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html");
 
-        request.setAttribute("feedback", new Feedback(request.getParameter("feedback"), request.getParameter("message")));
+        request.setAttribute("feedback",
+                new Feedback(request.getParameter("feedback"), request.getParameter("message")));
         request.setAttribute("contextPath", request.getContextPath());
         request.setAttribute("companies", companyService.list(0, 0));
 

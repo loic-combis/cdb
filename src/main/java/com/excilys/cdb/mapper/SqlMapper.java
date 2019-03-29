@@ -21,7 +21,7 @@ public abstract class SqlMapper<T> {
      *
      * @param result ResultSet
      * @return T
-     * @throws SQLException sqle
+     * @throws SQLException               sqle
      * @throws UnconsistentDatesException ude
      */
     public abstract T queryResultToObject(ResultSet result) throws SQLException, UnconsistentDatesException;

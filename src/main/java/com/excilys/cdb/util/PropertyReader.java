@@ -15,7 +15,7 @@ public class PropertyReader {
     Properties prop;
 
     /**
-     * LOGGER Logger
+     * LOGGER Logger.
      */
     private final Logger LOGGER = LoggerFactory.getLogger(PropertyReader.class);
 

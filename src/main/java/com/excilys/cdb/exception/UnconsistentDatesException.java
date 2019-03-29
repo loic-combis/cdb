@@ -9,6 +9,8 @@ public class UnconsistentDatesException extends Exception {
 
     /**
      * Constructor.
+     *
+     * @param message String
      */
     public UnconsistentDatesException(String message) {
         super(message);

@@ -48,8 +48,8 @@ public class ComputerBuilder {
      * @throws UnconsistentDatesException ude
      */
     public ComputerBuilder setIntroduction(LocalDate date) throws UnconsistentDatesException {
-       computer.setIntroductionDate(date);
-       return this;
+        computer.setIntroductionDate(date);
+        return this;
     }
 
     /**

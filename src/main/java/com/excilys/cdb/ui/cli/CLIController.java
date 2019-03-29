@@ -205,7 +205,7 @@ public class CLIController implements UIController, PageProvider {
                 computers = computerService.list(page, itemPerPage, null);
             } catch (UnsuccessfulTreatmentException e) {
                 // TODO Auto-generated catch block
-               presenter.notify(Presenter.UNSUCCESSFUL_TREATMENT);
+                presenter.notify(Presenter.UNSUCCESSFUL_TREATMENT);
             }
             return computers;
         }
@@ -483,8 +483,6 @@ public class CLIController implements UIController, PageProvider {
             presenter.notify(Presenter.UNSUCCESSFUL_TREATMENT);
         }
 
-
-
     }
 
     /**
@@ -578,7 +576,6 @@ public class CLIController implements UIController, PageProvider {
             } catch (DateTimeParseException dtpe) {
                 presenter.notify("Wrong date format.");
             }
-
 
         } while (!dateIsValid);
 

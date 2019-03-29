@@ -20,7 +20,8 @@ import com.excilys.cdb.model.computer.ComputerFactory;
 public class ComputerSQLMapper extends SqlMapper<Computer> {
 
     @Override
-    public Computer queryResultToObject(ResultSet result) throws SQLException, EmptyNameException, UnconsistentDatesException {
+    public Computer queryResultToObject(ResultSet result)
+            throws SQLException, EmptyNameException, UnconsistentDatesException {
 
         Computer computer = null;
 

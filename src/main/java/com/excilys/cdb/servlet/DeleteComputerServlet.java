@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.cdb.service.ComputerService;
 
-@WebServlet(name = "Delete Computers", urlPatterns = {"/delete-computers"})
-public class DeleteComputerServlet extends HttpServlet{
+@WebServlet(name = "Delete Computers", urlPatterns = { "/delete-computers" })
+public class DeleteComputerServlet extends HttpServlet {
 
     /**
      * serialVersionUID long.

@@ -7,13 +7,12 @@ public class Pagination {
     private int itemCount;
     private int[] sizes = {10, 20, 50, 100};
 
-
     /**
      * Constructor.
      *
      * @param currentPage int
      * @param itemPerPage int
-     * @param itemCount int
+     * @param itemCount   int
      */
     public Pagination(int currentPage, int itemPerPage, int itemCount) {
         setCurrentPage(currentPage);
@@ -108,8 +107,8 @@ public class Pagination {
      * @return int
      */
     public int lastPage() {
-       int potentialLastPage = getItemCount() / getItemPerPage();
-       return (getItemCount() % getItemPerPage() == 0) ?  potentialLastPage : potentialLastPage + 1;
+        int potentialLastPage = getItemCount() / getItemPerPage();
+        return (getItemCount() % getItemPerPage() == 0) ? potentialLastPage : potentialLastPage + 1;
     }
 
     /**
@@ -141,7 +140,8 @@ public class Pagination {
     }
 
     /**
-     * Return "current" if the specified size corresponds to the number of item per page.
+     * Return "current" if the specified size corresponds to the number of item per
+     * page.
      *
      * @param size int
      * @return String

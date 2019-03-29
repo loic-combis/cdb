@@ -15,7 +15,8 @@ import com.excilys.cdb.mapper.CompanySQLMapper;
 import com.excilys.cdb.model.company.Company;
 
 /**
- * Singleton. Responsible for bonding the application to the database thanks to JDBC.
+ * Singleton. Responsible for bonding the application to the database thanks to
+ * JDBC.
  *
  * @author excilys
  *
@@ -93,7 +94,7 @@ public class CompanyDAO {
     /**
      * Fetch a specific range of companies.
      *
-     * @param page int
+     * @param page        int
      * @param itemPerPage int
      * @return List<Company>
      */

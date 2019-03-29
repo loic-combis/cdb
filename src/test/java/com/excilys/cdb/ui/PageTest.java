@@ -67,7 +67,7 @@ public class PageTest {
     public void computersListFilteringTest() {
         List<?> items;
         try {
-            items = (new ComputerService()).list(1, ITEM_PER_PAGE,null);
+            items = (new ComputerService()).list(1, ITEM_PER_PAGE, null);
             List<Computer> computers = Page.filter(Computer.class, items);
             assertTrue(computers.size() <= ITEM_PER_PAGE);
         } catch (UnsuccessfulTreatmentException e) {

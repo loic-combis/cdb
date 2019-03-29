@@ -17,7 +17,7 @@ import com.excilys.cdb.exception.UnconsistentDatesException;
 import com.excilys.cdb.model.computer.ComputerDTOBuilder;
 import com.excilys.cdb.service.ComputerService;
 
-@WebServlet(name="Edit Computer", urlPatterns={"/edit-computer"})
+@WebServlet(name = "Edit Computer", urlPatterns = { "/edit-computer" })
 public class EditComputerServlet extends HttpServlet {
 
     /**
@@ -30,17 +30,16 @@ public class EditComputerServlet extends HttpServlet {
     private Logger logger = LoggerFactory.getLogger(EditComputerServlet.class);
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
         String status = "danger";
         String message = "";
         ComputerDTOBuilder builder = new ComputerDTOBuilder();
 
         try {
-            builder
-                .setId(Long.valueOf(request.getParameter("computerId")))
-                .setName(request.getParameter("name"))
-                .setIntroduction(request.getParameter("introduced"))
-                .setDiscontinuation(request.getParameter("discontinued"));
+            builder.setId(Long.valueOf(request.getParameter("computerId"))).setName(request.getParameter("name"))
+                    .setIntroduction(request.getParameter("introduced"))
+                    .setDiscontinuation(request.getParameter("discontinued"));
 
             Long companyId = Long.valueOf(request.getParameter("company"));
             if (companyId != -1) {
@@ -65,7 +64,8 @@ public class EditComputerServlet extends HttpServlet {
 
         } catch (NumberFormatException nfe) {
             logger.warn(nfe.getMessage());
-            message = builder.get().getId() == null ? ComputerService.INVALID_COMPUTER_ID : ComputerService.INVALID_COMPANY;
+            message = builder.get().getId() == null ? ComputerService.INVALID_COMPUTER_ID
+                    : ComputerService.INVALID_COMPANY;
 
         } catch (UnconsistentDatesException ude) {
             logger.warn(ude.getMessage());

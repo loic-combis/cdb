@@ -5,7 +5,12 @@ public class Feedback {
     private String status;
     private String message;
 
-
+    /**
+     * Constructor.
+     *
+     * @param status  String
+     * @param message String
+     */
     public Feedback(String status, String message) {
         setStatus(status);
         setMessage(message);

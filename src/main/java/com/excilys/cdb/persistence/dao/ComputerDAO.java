@@ -54,6 +54,7 @@ public class ComputerDAO {
     private static final String DELETE_MANY = "DELETE FROM computer WHERE id IN (%s)";
 
     private static final String SEARCH_WHERE_CLAUSE = "WHERE computer.name LIKE '%%%s%%' OR company.name LIKE '%%%s%%'";
+
     /**
      * Constructor.
      *
@@ -82,7 +83,7 @@ public class ComputerDAO {
      *
      * @param id Long
      * @return Optional<Computer>
-     * @throws EmptyNameException ene
+     * @throws EmptyNameException         ene
      * @throws UnconsistentDatesException ude
      */
     public Optional<Computer> get(Long id) throws EmptyNameException, UnconsistentDatesException {
@@ -106,7 +107,7 @@ public class ComputerDAO {
     /**
      * Create a new computer.
      *
-     * @param c Computer
+     * @param computer Computer
      * @return Optional<Computer>
      */
     public Optional<Computer> create(Computer computer) {
@@ -183,7 +184,7 @@ public class ComputerDAO {
      * Update a specific computer.
      *
      * @param computer Computer
-     * @return
+     * @return boolean
      */
     public boolean update(Computer computer) {
         // TODO Auto-generated method stub
@@ -194,7 +195,8 @@ public class ComputerDAO {
 
         try (Connection conn = DAOFactory.getConnection()) {
 
-            PreparedStatement state = conn.prepareStatement(String.format(UPDATE_ONE, computer.getName(), computer.getId()));
+            PreparedStatement state = conn
+                    .prepareStatement(String.format(UPDATE_ONE, computer.getName(), computer.getId()));
 
             state.setTimestamp(1, introductionDate);
             state.setTimestamp(2, discontinuationDate);
@@ -206,7 +208,8 @@ public class ComputerDAO {
                 isSuccess = true;
                 LOGGER.info("Computer " + computer.getId() + " updated.");
             } else {
-                LOGGER.warn("Computer " + computer.getId() + " might not have been updated. Affected Rows : " + affectedRows);
+                LOGGER.warn("Computer " + computer.getId() + " might not have been updated. Affected Rows : "
+                        + affectedRows);
             }
 
         } catch (SQLException e) {
@@ -219,13 +222,15 @@ public class ComputerDAO {
     /**
      * List a specific range of computers.
      *
-     * @param page int
+     * @param page        int
      * @param itemPerPage int
+     * @param search      String
      * @return List<Computer>
-     * @throws EmptyNameException ene
+     * @throws EmptyNameException         ene
      * @throws UnconsistentDatesException ude
      */
-    public List<Computer> list(int page, int itemPerPage, String search) throws EmptyNameException, UnconsistentDatesException {
+    public List<Computer> list(int page, int itemPerPage, String search)
+            throws EmptyNameException, UnconsistentDatesException {
         // TODO Auto-generated method stub
         LinkedList<Computer> computers = new LinkedList<Computer>();
 
@@ -237,7 +242,9 @@ public class ComputerDAO {
             offsetClause += (page > 0 && itemPerPage > 0) ? " OFFSET " + ((page - 1) * itemPerPage) : "";
 
             // Add where clause
-            String whereClause = search != null && !search.equals("") ? String.format(SEARCH_WHERE_CLAUSE, search, search) : "";
+            String whereClause = search != null && !search.equals("")
+                    ? String.format(SEARCH_WHERE_CLAUSE, search, search)
+                    : "";
 
             ResultSet result = state.executeQuery(String.format(LIST_REQUEST, whereClause, offsetClause));
             while (result.next()) {
@@ -260,6 +267,7 @@ public class ComputerDAO {
     /**
      * Count the number of computers.
      *
+     * @param search String
      * @return int
      */
     public int count(String search) {
@@ -268,7 +276,9 @@ public class ComputerDAO {
         try (Connection conn = DAOFactory.getConnection()) {
 
             Statement state = conn.createStatement();
-            String whereClause = search != null && !search.equals("") ? String.format(SEARCH_WHERE_CLAUSE, search, search) : "";
+            String whereClause = search != null && !search.equals("")
+                    ? String.format(SEARCH_WHERE_CLAUSE, search, search)
+                    : "";
             ResultSet result = state.executeQuery(String.format(COUNT_ALL, whereClause));
             result.next();
             count = result.getInt("total");
