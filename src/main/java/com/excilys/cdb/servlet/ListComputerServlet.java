@@ -55,14 +55,15 @@ public class ListComputerServlet extends HttpServlet {
 
         String search = request.getParameter("search");
         request.setAttribute("search", search);
+        request.setAttribute("orderBy", request.getParameter("orderby"));
+
         int computerCount = computerService.count(search);
-        request.setAttribute("search", search);
         request.setAttribute("pagination", new Pagination(page, itemPerPage, computerCount));
 
         request.setAttribute("companies", companyService.list(0, 0));
 
         try {
-            request.setAttribute("computers", computerService.list(page, itemPerPage, search));
+            request.setAttribute("computers", computerService.list(page, itemPerPage, search, request.getParameter("orderby")));
             request.getRequestDispatcher("/WEB-INF/jsp/dashboard.jsp").forward(request, response);
 
         } catch (UnsuccessfulTreatmentException e) {

@@ -32,7 +32,7 @@ public class PageTest {
                 // TODO Auto-generated method stub
                 List<?> list = new ArrayList<>();
                 try {
-                    list = (new ComputerService()).list(page, ITEM_PER_PAGE, null);
+                    list = (new ComputerService()).list(page, ITEM_PER_PAGE, null, null);
                 } catch (UnsuccessfulTreatmentException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -67,7 +67,7 @@ public class PageTest {
     public void computersListFilteringTest() {
         List<?> items;
         try {
-            items = (new ComputerService()).list(1, ITEM_PER_PAGE, null);
+            items = (new ComputerService()).list(1, ITEM_PER_PAGE, null, null);
             List<Computer> computers = Page.filter(Computer.class, items);
             assertTrue(computers.size() <= ITEM_PER_PAGE);
         } catch (UnsuccessfulTreatmentException e) {
@@ -95,7 +95,7 @@ public class PageTest {
     public void companiesFilteringWithWrongClassTest() {
         List<?> items;
         try {
-            items = (new ComputerService()).list(1, ITEM_PER_PAGE, null);
+            items = (new ComputerService()).list(1, ITEM_PER_PAGE, null, null);
             List<Company> companies = Page.filter(Company.class, items);
             assertEquals(companies.size(), 0);
 

@@ -35,7 +35,6 @@ public class ComputerSQLMapper extends SqlMapper<Computer> {
             Long companyId = result.getLong(5);
             String companyName = result.getString(7);
             Company company = CompanyFactory.getInstance().create(companyId, companyName);
-
             computer = ComputerFactory.getInstance().createWithAll(computerId, computerName, introduction,
                     discontinuation, company);
         }

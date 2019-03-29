@@ -66,7 +66,7 @@ public class ComputerFactory {
     public Computer createWithAll(Long id, String name, LocalDate introduction, LocalDate discontinuation,
             Company company) throws EmptyNameException, UnconsistentDatesException {
         ComputerBuilder computerBuilder = new ComputerBuilder(name);
-
+        System.out.println(id +  " " + introduction + " " + discontinuation);
         return computerBuilder.setId(id).setIntroduction(introduction).setDiscontinuation(discontinuation)
                 .setCompany(company).get();
     }

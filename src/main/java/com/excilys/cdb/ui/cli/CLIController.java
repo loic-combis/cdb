@@ -202,7 +202,7 @@ public class CLIController implements UIController, PageProvider {
         if (c == ComputerDTO.class) {
             List<ComputerDTO> computers = null;
             try {
-                computers = computerService.list(page, itemPerPage, null);
+                computers = computerService.list(page, itemPerPage, null, null);
             } catch (UnsuccessfulTreatmentException e) {
                 // TODO Auto-generated catch block
                 presenter.notify(Presenter.UNSUCCESSFUL_TREATMENT);

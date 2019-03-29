@@ -99,7 +99,7 @@ public class Computer {
      */
     public void setIntroductionDate(LocalDate introduction) throws UnconsistentDatesException {
         if (getDiscontinuationDate() == null || introduction == null
-                || getDiscontinuationDate().isAfter(introduction)) {
+                || !getDiscontinuationDate().isBefore(introduction)) {
             introductionDate = introduction;
         } else {
             throw new UnconsistentDatesException(
@@ -127,7 +127,7 @@ public class Computer {
      * @throws UnconsistentDatesException ude
      */
     public void setDiscontinuationDate(LocalDate discontinued) throws UnconsistentDatesException {
-        if (getIntroductionDate() == null || discontinued == null || discontinued.isAfter(getIntroductionDate())) {
+        if (getIntroductionDate() == null || discontinued == null || !discontinued.isBefore(getIntroductionDate())) {
             discontinuationDate = discontinued;
         } else {
             throw new UnconsistentDatesException(

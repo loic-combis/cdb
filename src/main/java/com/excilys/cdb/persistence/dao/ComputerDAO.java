@@ -45,7 +45,7 @@ public class ComputerDAO {
     /**
      * String base SQL request.
      */
-    private static final String LIST_REQUEST = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id %s %s";
+    private static final String LIST_REQUEST = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id %s %s %s";
     private static final String FIND_BY_ID = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.id = %d";
     private static final String DELETE_ONE = "DELETE FROM computer WHERE id = %d";
     private static final String CREATE_ONE = "INSERT INTO computer(name, introduced, discontinued, company_id) VALUES('%s', ?, ?, ?)";
@@ -54,6 +54,7 @@ public class ComputerDAO {
     private static final String DELETE_MANY = "DELETE FROM computer WHERE id IN (%s)";
 
     private static final String SEARCH_WHERE_CLAUSE = "WHERE computer.name LIKE '%%%s%%' OR company.name LIKE '%%%s%%'";
+    private static final String ORDER_BY_CLAUSE = "ORDER BY %s";
 
     /**
      * Constructor.
@@ -225,11 +226,12 @@ public class ComputerDAO {
      * @param page        int
      * @param itemPerPage int
      * @param search      String
+     * @param orderBy String
      * @return List<Computer>
      * @throws EmptyNameException         ene
      * @throws UnconsistentDatesException ude
      */
-    public List<Computer> list(int page, int itemPerPage, String search)
+    public List<Computer> list(int page, int itemPerPage, String search, String orderBy)
             throws EmptyNameException, UnconsistentDatesException {
         // TODO Auto-generated method stub
         LinkedList<Computer> computers = new LinkedList<Computer>();
@@ -246,7 +248,17 @@ public class ComputerDAO {
                     ? String.format(SEARCH_WHERE_CLAUSE, search, search)
                     : "";
 
-            ResultSet result = state.executeQuery(String.format(LIST_REQUEST, whereClause, offsetClause));
+            String orderByClause = "";
+            if(orderBy != null && !orderBy.equals("")) {
+               switch(orderBy) {
+                  case "name" : orderByClause = String.format(ORDER_BY_CLAUSE, "computer.name"); break;
+                  case "introduced" : orderByClause = String.format(ORDER_BY_CLAUSE, "computer.introduced");break;
+                  case "discontinued" : orderByClause = String.format(ORDER_BY_CLAUSE, "computer.discontinued"); break;
+                  case "company" : orderByClause = String.format(ORDER_BY_CLAUSE, "company.name"); break;
+               }
+            }
+
+            ResultSet result = state.executeQuery(String.format(LIST_REQUEST, whereClause, orderByClause, offsetClause));
             while (result.next()) {
                 Computer c = mapper.queryResultToObject(result);
                 if (c != null) {
