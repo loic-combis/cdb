@@ -116,4 +116,22 @@ public class ComputerDTO {
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
     }
+
+    /**
+     * Describe the computer object in a string.
+     *
+     * @return String
+     */
+    @Override
+    public String toString() {
+
+        StringBuilder sb = new StringBuilder(100);
+        sb.append(id).append("\t|\t").append(name).append("\t|\t")
+                .append(introduction != null ? introduction.toString() : "null").append("\t|\t")
+                .append(discontinuation != null ? discontinuation.toString() : "null").append("\t|\t")
+                .append(companyId + " : " + company);
+
+        return sb.toString();
+
+    }
 }

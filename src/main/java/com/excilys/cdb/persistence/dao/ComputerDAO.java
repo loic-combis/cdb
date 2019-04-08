@@ -46,10 +46,10 @@ public class ComputerDAO {
      * String base SQL request.
      */
     private static final String LIST_REQUEST = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id %s %s %s";
-    private static final String FIND_BY_ID = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.id = %d";
-    private static final String DELETE_ONE = "DELETE FROM computer WHERE id = %d";
-    private static final String CREATE_ONE = "INSERT INTO computer(name, introduced, discontinued, company_id) VALUES('%s', ?, ?, ?)";
-    private static final String UPDATE_ONE = "UPDATE computer SET name='%s', introduced = ?, discontinued = ?, company_id = ? WHERE id = %d";
+    private static final String FIND_BY_ID = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.id = ?";
+    private static final String DELETE_ONE = "DELETE FROM computer WHERE id = ?";
+    private static final String CREATE_ONE = "INSERT INTO computer(name, introduced, discontinued, company_id) VALUES(?, ?, ?, ?)";
+    private static final String UPDATE_ONE = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
     private static final String COUNT_ALL = "SELECT COUNT(*) AS total FROM computer LEFT JOIN company ON computer.company_id = company.id %s";
     private static final String DELETE_MANY = "DELETE FROM computer WHERE id IN (%s)";
 
@@ -91,8 +91,9 @@ public class ComputerDAO {
         Computer computer = null;
         try (Connection conn = DAOFactory.getConnection()) {
 
-            Statement state = conn.createStatement();
-            ResultSet result = state.executeQuery(String.format(FIND_BY_ID, id));
+            PreparedStatement state = conn.prepareStatement(FIND_BY_ID);
+            state.setLong(1, id);
+            ResultSet result = state.executeQuery();
             computer = result.next() ? mapper.queryResultToObject(result) : null;
 
             result.close();
@@ -125,13 +126,13 @@ public class ComputerDAO {
 
         try (Connection conn = DAOFactory.getConnection()) {
 
-            PreparedStatement state = conn.prepareStatement(String.format(CREATE_ONE, computer.getName()),
-                    Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement state = conn.prepareStatement(CREATE_ONE, Statement.RETURN_GENERATED_KEYS);
 
-            state.setTimestamp(1, introductionDate);
-            state.setTimestamp(2, discontinuationDate);
+            state.setString(1, computer.getName());
+            state.setTimestamp(2, introductionDate);
+            state.setTimestamp(3, discontinuationDate);
 
-            state.setObject(3, companyId, java.sql.Types.INTEGER);
+            state.setObject(4, companyId, java.sql.Types.INTEGER);
 
             int affectedRows = state.executeUpdate();
             if (affectedRows == 0) {
@@ -163,8 +164,9 @@ public class ComputerDAO {
         boolean isSuccess = false;
         try (Connection conn = DAOFactory.getConnection()) {
 
-            Statement state = conn.createStatement();
-            int result = state.executeUpdate(String.format(DELETE_ONE, id));
+            PreparedStatement state = conn.prepareStatement(DELETE_ONE);
+            state.setLong(1, id);
+            int result = state.executeUpdate();
             state.close();
             if (result == 1) {
                 LOGGER.info("Computer " + id + " deleted.");
@@ -196,15 +198,16 @@ public class ComputerDAO {
 
         try (Connection conn = DAOFactory.getConnection()) {
 
-            PreparedStatement state = conn
-                    .prepareStatement(String.format(UPDATE_ONE, computer.getName(), computer.getId()));
+            PreparedStatement state = conn.prepareStatement(UPDATE_ONE);
 
-            state.setTimestamp(1, introductionDate);
-            state.setTimestamp(2, discontinuationDate);
-            state.setObject(3, companyId, java.sql.Types.INTEGER);
+            state.setString(1, computer.getName());
+            state.setTimestamp(2, introductionDate);
+            state.setTimestamp(3, discontinuationDate);
+            state.setObject(4, companyId, java.sql.Types.INTEGER);
+            state.setLong(5, computer.getId());
 
             int affectedRows = state.executeUpdate();
-            System.out.println(affectedRows);
+
             if (affectedRows == 1) {
                 isSuccess = true;
                 LOGGER.info("Computer " + computer.getId() + " updated.");

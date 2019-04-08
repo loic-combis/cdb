@@ -43,7 +43,7 @@ public class CompanyDAO {
      * String base SQL request.
      */
     private static final String LIST_REQUEST = "SELECT * FROM company %s";
-    private static final String FIND_BY_ID = "SELECT * FROM company WHERE id = %d";
+    private static final String FIND_BY_ID = "SELECT * FROM company WHERE id = ?";
     private static final String DELETE = "DELETE FROM company WHERE id = ?";
     private static final String DELETE_RELATED_COMPUTERS = "DELETE FROM computer WHERE company_id = ?";
 
@@ -81,8 +81,9 @@ public class CompanyDAO {
         Company company = null;
         try (Connection conn = DAOFactory.getConnection()) {
 
-            Statement state = conn.createStatement();
-            ResultSet result = state.executeQuery(String.format(FIND_BY_ID, id));
+            PreparedStatement state = conn.prepareStatement(FIND_BY_ID);
+            state.setLong(1, id);
+            ResultSet result = state.executeQuery();
             company = result.next() ? mapper.queryResultToObject(result) : null;
             result.close();
             state.close();
