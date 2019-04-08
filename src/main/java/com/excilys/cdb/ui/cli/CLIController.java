@@ -333,14 +333,14 @@ public class CLIController implements UIController, PageProvider {
      * Handles show command.
      */
     private void handleShowCommand() {
-        Long id = requestValidId();
-        if (id == null) {
+        Optional<Long> id = requestValidId();
+        if (!id.isPresent()) {
             return;
         }
 
         Optional<ComputerDTO> computer;
         try {
-            computer = computerService.get(id);
+            computer = computerService.get(id.get());
             if (computer.isPresent()) {
                 presenter.present(computer.get());
 
@@ -362,33 +362,33 @@ public class CLIController implements UIController, PageProvider {
      * Handles computer creation command.
      */
     private void handleCreateCommand() {
-        String name = requestValidName();
-        if (name == null) {
+        Optional<String> name = requestValidName();
+        if (!name.isPresent()) {
             return;
         }
         ComputerDTO c = new ComputerDTO();
-        c.setName(name);
+        c.setName(name.get());
 
-        String intro = requestValidDate("Introduction");
-        if (intro == null && (shouldStop || shouldShowMenu)) {
+        Optional<String> intro = requestValidDate("Introduction");
+        if (!intro.isPresent() && (shouldStop || shouldShowMenu)) {
             return;
         }
-        c.setIntroduction(intro);
+        c.setIntroduction(intro.get());
 
-        String disco = requestValidDate("Discontinuation");
-        if (disco == null && (shouldStop || shouldShowMenu)) {
+        Optional<String> disco = requestValidDate("Discontinuation");
+        if (!disco.isPresent() && (shouldStop || shouldShowMenu)) {
             return;
         }
-        c.setDiscontinuation(disco);
+        c.setDiscontinuation(disco.get());
 
-        Company comp = requestValidCompany();
-        if (comp == null && (shouldStop || shouldShowMenu)) {
+        Optional<Company> comp = requestValidCompany();
+        if (!comp.isPresent() && (shouldStop || shouldShowMenu)) {
             return;
         }
 
-        if (comp != null) {
-            c.setCompany(comp.getName());
-            c.setCompanyId(comp.getId());
+        if (comp.isPresent()) {
+            c.setCompany(comp.get().getName());
+            c.setCompanyId(comp.get().getId());
         }
 
         Optional<ComputerDTO> computer = Optional.empty();
@@ -421,14 +421,14 @@ public class CLIController implements UIController, PageProvider {
      * Handles computer update command.
      */
     private void handleUpdateCommand() {
-        Long id = requestValidId();
-        if (id == null) {
+        Optional<Long> id = requestValidId();
+        if (!id.isPresent()) {
             return;
         }
         Optional<ComputerDTO> opt;
 
         try {
-            opt = computerService.get(id);
+            opt = computerService.get(id.get());
 
             if (!opt.isPresent()) {
                 presenter.notify(Presenter.COMPUTER_NOT_FOUND);
@@ -436,30 +436,30 @@ public class CLIController implements UIController, PageProvider {
             }
             ComputerDTO c = opt.get();
 
-            String name = requestValidName();
-            if (name == null) {
+            Optional<String> name = requestValidName();
+            if (!name.isPresent()) {
                 return;
             }
 
-            String intro = requestValidDate("Introduction");
-            if (intro == null && (shouldStop || shouldShowMenu)) {
+            Optional<String> intro = requestValidDate("Introduction");
+            if (!intro.isPresent() && (shouldStop || shouldShowMenu)) {
                 return;
             }
-            c.setIntroduction(intro);
+            c.setIntroduction(intro.get());
 
-            String disco = requestValidDate("Discontinuation");
-            if (disco == null && (shouldStop || shouldShowMenu)) {
+            Optional<String> disco = requestValidDate("Discontinuation");
+            if (!disco.isPresent() && (shouldStop || shouldShowMenu)) {
                 return;
             }
-            c.setDiscontinuation(disco);
+            c.setDiscontinuation(disco.get());
 
-            Company comp = requestValidCompany();
-            if (comp == null && (shouldStop || shouldShowMenu)) {
+            Optional<Company> comp = requestValidCompany();
+            if (!comp.isPresent() && (shouldStop || shouldShowMenu)) {
                 return;
             }
             if (comp != null) {
-                c.setCompany(comp.getName());
-                c.setCompanyId(comp.getId());
+                c.setCompany(comp.get().getName());
+                c.setCompanyId(comp.get().getId());
             }
 
             boolean success = false;
@@ -493,21 +493,21 @@ public class CLIController implements UIController, PageProvider {
      * Handles computer deletion command.
      */
     private void handleDeleteCommand() {
-        Long id = requestValidId();
-        if (id == null) {
+        Optional<Long> id = requestValidId();
+        if (!id.isPresent()) {
             return;
         }
 
-        presenter.notify(computerService.delete(id) ? Presenter.DELETE_SUCCESS : Presenter.UPDATE_FAIL);
+        presenter.notify(computerService.delete(id.get()) ? Presenter.DELETE_SUCCESS : Presenter.UPDATE_FAIL);
     }
 
     private void handleDeleteCompanyCommand() {
-        Long id = requestValidId();
-        if(id == null) {
+        Optional<Long> id = requestValidId();
+        if(!id.isPresent()) {
             return;
         }
 
-        presenter.notify(companyService.delete(id) ? Presenter.DELETE_COMPANY_SUCCESS : Presenter.DELETE_COMPANY_FAIL);
+        presenter.notify(companyService.delete(id.get()) ? Presenter.DELETE_COMPANY_SUCCESS : Presenter.DELETE_COMPANY_FAIL);
     }
 
     /**
@@ -515,7 +515,7 @@ public class CLIController implements UIController, PageProvider {
      *
      * @return Long
      */
-    private Long requestValidId() {
+    private Optional<Long> requestValidId() {
         Long id = null;
         boolean idIsValid = false;
         do {
@@ -535,7 +535,7 @@ public class CLIController implements UIController, PageProvider {
             }
         } while (!idIsValid);
 
-        return id;
+        return Optional.ofNullable(id);
     }
 
     /**
@@ -543,7 +543,7 @@ public class CLIController implements UIController, PageProvider {
      *
      * @return String
      */
-    private String requestValidName() {
+    private Optional<String> requestValidName() {
         String name;
         boolean nameIsValid = false;
         do {
@@ -561,7 +561,7 @@ public class CLIController implements UIController, PageProvider {
             }
         } while (!nameIsValid);
 
-        return name;
+        return Optional.ofNullable(name);
     }
 
     /**
@@ -570,7 +570,7 @@ public class CLIController implements UIController, PageProvider {
      * @param type String (type of date).
      * @return String
      */
-    private String requestValidDate(String type) {
+    private Optional<String> requestValidDate(String type) {
         String date = null;
         boolean dateIsValid = false;
         do {
@@ -592,7 +592,7 @@ public class CLIController implements UIController, PageProvider {
 
         } while (!dateIsValid);
 
-        return date;
+        return Optional.ofNullable(date);
     }
 
     /**
@@ -600,7 +600,7 @@ public class CLIController implements UIController, PageProvider {
      *
      * @return Company
      */
-    private Company requestValidCompany() {
+    private Optional<Company> requestValidCompany() {
         Company comp = null;
         boolean companyIsValid = false;
         do {
@@ -623,6 +623,6 @@ public class CLIController implements UIController, PageProvider {
             }
         } while (!companyIsValid);
 
-        return comp;
+        return Optional.ofNullable(comp);
     }
 }
