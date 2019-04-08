@@ -98,7 +98,7 @@ public class Pagination {
      * @return int
      */
     public int currentPageEnd() {
-        return Math.min(getCurrentPage() + 1, lastPage() - 1);
+        return Math.max(Math.min(getCurrentPage() + 1, lastPage() - 1), 1);
     }
 
     /**
@@ -126,11 +126,11 @@ public class Pagination {
      * @return int
      */
     public int next() {
-        return getCurrentPage() == lastPage() ? getCurrentPage() : getCurrentPage() + 1;
+        return getCurrentPage() >= lastPage() ? getCurrentPage() : getCurrentPage() + 1;
     }
 
     /**
-     * Return Strin containing 'current' if the specified page is the current page.
+     * Return String containing 'current' if the specified page is the current page.
      *
      * @param page int
      * @return String

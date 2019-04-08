@@ -185,7 +185,7 @@
               <c:if test="${pagination.currentPageEnd() + 1 < pagination.lastPage()}">
                 <li><a href="#">...</a></li>
               </c:if>
-              <c:if test="${pagination.lastPage() != 1}">
+              <c:if test="${pagination.lastPage() > 1}">
 	              <li>
 	              	<a 	class="${pagination.compareCurrent(pagination.lastPage())}"
 	              		href="${contextPath}/list-computers?page=${pagination.lastPage()}&itemPerPage=${pagination.getItemPerPage()}&search=${search}&orderby=${orderBy}">${pagination.lastPage()}</a>
@@ -198,6 +198,7 @@
                 </a>
             </li>
         	</ul>
+		
 		</div>
         <div  class="btn-group btn-group-sm pull-right" role="group" style="transform:translateY(-50px);">
         	<c:forEach items="${pagination.getSizes()}" var="size" >
