@@ -137,16 +137,16 @@ public class CompanyDAO {
      */
     public boolean delete(Long id) {
         boolean isSuccess = false;
-        try(Connection conn  = DAOFactory.getConnection()){
+        try (Connection conn = DAOFactory.getConnection()) {
 
             conn.setAutoCommit(false);
 
-            //Delete all the related computers.
+            // Delete all the related computers.
             PreparedStatement deleteRelatedComputersStatement = conn.prepareStatement(DELETE_RELATED_COMPUTERS);
             deleteRelatedComputersStatement.setLong(1, id);
             deleteRelatedComputersStatement.executeUpdate();
 
-            //Delete the company
+            // Delete the company
             PreparedStatement deleteCompanyStatement = conn.prepareStatement(DELETE);
             deleteCompanyStatement.setLong(1, id);
             deleteCompanyStatement.executeUpdate();
@@ -154,7 +154,7 @@ public class CompanyDAO {
             conn.commit();
             isSuccess = true;
 
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             LOGGER.error(e.getMessage());
         }
         return isSuccess;

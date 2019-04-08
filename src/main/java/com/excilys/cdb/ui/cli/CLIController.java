@@ -501,13 +501,17 @@ public class CLIController implements UIController, PageProvider {
         presenter.notify(computerService.delete(id.get()) ? Presenter.DELETE_SUCCESS : Presenter.UPDATE_FAIL);
     }
 
+    /**
+     * Handle the deletion of a company and all the related computers.
+     */
     private void handleDeleteCompanyCommand() {
         Optional<Long> id = requestValidId();
-        if(!id.isPresent()) {
+        if (!id.isPresent()) {
             return;
         }
 
-        presenter.notify(companyService.delete(id.get()) ? Presenter.DELETE_COMPANY_SUCCESS : Presenter.DELETE_COMPANY_FAIL);
+        presenter.notify(
+                companyService.delete(id.get()) ? Presenter.DELETE_COMPANY_SUCCESS : Presenter.DELETE_COMPANY_FAIL);
     }
 
     /**

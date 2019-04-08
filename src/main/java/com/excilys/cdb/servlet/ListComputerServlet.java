@@ -63,7 +63,8 @@ public class ListComputerServlet extends HttpServlet {
         request.setAttribute("companies", companyService.list(0, 0));
 
         try {
-            request.setAttribute("computers", computerService.list(page, itemPerPage, search, request.getParameter("orderby")));
+            request.setAttribute("computers",
+                    computerService.list(page, itemPerPage, search, request.getParameter("orderby")));
             request.getRequestDispatcher("/WEB-INF/jsp/dashboard.jsp").forward(request, response);
 
         } catch (UnsuccessfulTreatmentException e) {

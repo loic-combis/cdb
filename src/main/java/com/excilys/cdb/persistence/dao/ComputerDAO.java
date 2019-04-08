@@ -229,7 +229,7 @@ public class ComputerDAO {
      * @param page        int
      * @param itemPerPage int
      * @param search      String
-     * @param orderBy String
+     * @param orderBy     String
      * @return List<Computer>
      * @throws EmptyNameException         ene
      * @throws UnconsistentDatesException ude
@@ -252,16 +252,25 @@ public class ComputerDAO {
                     : "";
 
             String orderByClause = "";
-            if(orderBy != null && !orderBy.equals("")) {
-               switch(orderBy) {
-                  case "name" : orderByClause = String.format(ORDER_BY_CLAUSE, "computer.name"); break;
-                  case "introduced" : orderByClause = String.format(ORDER_BY_CLAUSE, "computer.introduced");break;
-                  case "discontinued" : orderByClause = String.format(ORDER_BY_CLAUSE, "computer.discontinued"); break;
-                  case "company" : orderByClause = String.format(ORDER_BY_CLAUSE, "company.name"); break;
-               }
+            if (orderBy != null && !orderBy.equals("")) {
+                switch (orderBy) {
+                case "name":
+                    orderByClause = String.format(ORDER_BY_CLAUSE, "computer.name");
+                    break;
+                case "introduced":
+                    orderByClause = String.format(ORDER_BY_CLAUSE, "computer.introduced");
+                    break;
+                case "discontinued":
+                    orderByClause = String.format(ORDER_BY_CLAUSE, "computer.discontinued");
+                    break;
+                case "company":
+                    orderByClause = String.format(ORDER_BY_CLAUSE, "company.name");
+                    break;
+                }
             }
 
-            ResultSet result = state.executeQuery(String.format(LIST_REQUEST, whereClause, orderByClause, offsetClause));
+            ResultSet result = state
+                    .executeQuery(String.format(LIST_REQUEST, whereClause, orderByClause, offsetClause));
             while (result.next()) {
                 Computer c = mapper.queryResultToObject(result);
                 if (c != null) {
