@@ -19,6 +19,9 @@ public abstract class Presenter {
     public static final String DELETE_FAIL = "Deletion unsuccessful";
     public static final String UPDATE_SUCCESS = "Update successful";
     public static final String UPDATE_FAIL = "Update unsuccessful";
+    public static final String DELETE_COMPANY_SUCCESS = "Company successfully deleted.";
+    public static final String DELETE_COMPANY_FAIL = "Company couldn't be deleted.";
+    public static final String COMPANY_NOT_FOUND = "Company not found.";
     public static final String COMPUTER_NOT_FOUND = "Computer not found.";
     public static final String UNSUCCESSFUL_TREATMENT = "Something wrong happened.";
 

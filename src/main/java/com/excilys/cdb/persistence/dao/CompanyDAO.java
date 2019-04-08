@@ -1,6 +1,7 @@
 package com.excilys.cdb.persistence.dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -43,6 +44,8 @@ public class CompanyDAO {
      */
     private static final String LIST_REQUEST = "SELECT * FROM company %s";
     private static final String FIND_BY_ID = "SELECT * FROM company WHERE id = %d";
+    private static final String DELETE = "DELETE FROM company WHERE id = ?";
+    private static final String DELETE_RELATED_COMPUTERS = "DELETE FROM computer WHERE company_id = ?";
 
     /**
      * Constructor.
@@ -123,5 +126,36 @@ public class CompanyDAO {
         }
 
         return companies;
+    }
+
+    /**
+     * Delete the specified company and all the related computers.
+     *
+     * @param id Long
+     * @return boolean
+     */
+    public boolean delete(Long id) {
+        boolean isSuccess = false;
+        try(Connection conn  = DAOFactory.getConnection()){
+
+            conn.setAutoCommit(false);
+
+            //Delete all the related computers.
+            PreparedStatement deleteRelatedComputersStatement = conn.prepareStatement(DELETE_RELATED_COMPUTERS);
+            deleteRelatedComputersStatement.setLong(1, id);
+            deleteRelatedComputersStatement.executeUpdate();
+
+            //Delete the company
+            PreparedStatement deleteCompanyStatement = conn.prepareStatement(DELETE);
+            deleteCompanyStatement.setLong(1, id);
+            deleteCompanyStatement.executeUpdate();
+
+            conn.commit();
+            isSuccess = true;
+
+        } catch(SQLException e) {
+            LOGGER.error(e.getMessage());
+        }
+        return isSuccess;
     }
 }

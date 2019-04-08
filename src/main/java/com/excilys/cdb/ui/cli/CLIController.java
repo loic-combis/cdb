@@ -37,6 +37,7 @@ enum Command {
     SHOW("SHOW", "Show a specific computer."), CREATE("CREATE", "Create a new computer."),
     UPDATE("UPDATE", "Update an existing computer."), DELETE("DELETE", "Delete an existing computer"),
     NEXT("NEXT", "Go to next page."), PREVIOUS("PREVIOUS", "Go to previous page."),
+    DELETE_COMPANY("DELETE_COMPANY", "Delete the specified company and all the related fields."),
     MENU("MENU", "Go back to the main menu."), QUIT("QUIT", "Quit the application.");
 
     /**
@@ -279,6 +280,9 @@ public class CLIController implements UIController, PageProvider {
         case DELETE:
             handleDeleteCommand();
             break;
+        case DELETE_COMPANY:
+            handleDeleteCompanyCommand();
+            break;
         default:
             presenter.notify(UNKNOWN_ACTION);
             logger.info("Unkown action : " + cmd.getName());
@@ -495,6 +499,15 @@ public class CLIController implements UIController, PageProvider {
         }
 
         presenter.notify(computerService.delete(id) ? Presenter.DELETE_SUCCESS : Presenter.UPDATE_FAIL);
+    }
+
+    private void handleDeleteCompanyCommand() {
+        Long id = requestValidId();
+        if(id == null) {
+            return;
+        }
+
+        presenter.notify(companyService.delete(id) ? Presenter.DELETE_COMPANY_SUCCESS : Presenter.DELETE_COMPANY_FAIL);
     }
 
     /**

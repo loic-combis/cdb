@@ -30,4 +30,14 @@ public class CompanyService {
     public List<Company> list(int page, int itemPerPage) {
         return companyDAO.list(page, itemPerPage);
     }
+
+    /**
+     * Delete the specified company and all the related computers.
+     *
+     * @param id Long
+     * @return boolean
+     */
+    public boolean delete(Long id) {
+        return companyDAO.delete(id);
+    }
 }
