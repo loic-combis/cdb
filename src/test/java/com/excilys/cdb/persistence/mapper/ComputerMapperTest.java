@@ -5,6 +5,11 @@ import static org.junit.Assert.fail;
 
 import java.sql.SQLException;
 
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -12,13 +17,20 @@ import com.excilys.cdb.exception.EmptyNameException;
 import com.excilys.cdb.exception.UnconsistentDatesException;
 import com.excilys.cdb.mapper.ComputerSQLMapper;
 
+@RunWith(SpringRunner.class)
 public class ComputerMapperTest {
 
+    @Autowired
     private ComputerSQLMapper mapper;
+
+    private AnnotationConfigApplicationContext ctx;
 
     @BeforeTest
     public void setUp() {
-        mapper = new ComputerSQLMapper();
+        ctx = new AnnotationConfigApplicationContext();
+        ctx.scan("com.excilys.cdb");
+        ctx.refresh();
+        mapper = ctx.getBean(ComputerSQLMapper.class);
     }
 
     @Test
@@ -38,5 +50,10 @@ public class ComputerMapperTest {
             e.printStackTrace();
             fail(e.getMessage());
         }
+    }
+
+    @AfterTest
+    public void end() {
+        ctx.close();
     }
 }

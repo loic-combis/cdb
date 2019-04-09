@@ -6,6 +6,8 @@ import static org.junit.Assert.fail;
 
 import java.time.LocalDate;
 
+import org.junit.runner.RunWith;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -15,6 +17,7 @@ import com.excilys.cdb.model.company.CompanyFactory;
 import com.excilys.cdb.model.computer.Computer;
 import com.excilys.cdb.model.computer.ComputerFactory;
 
+@RunWith(SpringRunner.class)
 public class ComputerFactoryTest {
 
     private ComputerFactory computerFactory;

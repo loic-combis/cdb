@@ -2,6 +2,7 @@ package com.excilys.cdb.servlet;
 
 import java.io.IOException;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.cdb.exception.UnsuccessfulTreatmentException;
 import com.excilys.cdb.model.Feedback;
@@ -27,9 +30,17 @@ public class ListComputerServlet extends HttpServlet {
 
     private final Logger logger = LoggerFactory.getLogger(ListComputerServlet.class);
 
-    private ComputerService computerService = new ComputerService();
+    @Autowired
+    private ComputerService computerService;
 
-    private CompanyService companyService = new CompanyService();
+    @Autowired
+    private CompanyService companyService;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

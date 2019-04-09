@@ -3,8 +3,9 @@ package com.excilys.cdb.persistence.dao;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -15,20 +16,18 @@ import com.zaxxer.hikari.HikariDataSource;
  * @author excilys
  *
  */
+@Lazy
+@Component("daoFactory")
 public class DAOFactory {
 
     private static HikariConfig config = new HikariConfig("/config.properties");
     private static HikariDataSource dataSource;
 
-    /**
-     * instance DAOFactory - Unique instance of DAOFactory.
-     */
-    private static DAOFactory instance;
+    @Autowired
+    ComputerDAO computerDAO;
 
-    /**
-     * logger Logger.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(DAOFactory.class);
+    @Autowired
+    CompanyDAO companyDAO;
 
     static {
         config.addDataSourceProperty("cachePrepStmts", "true");
@@ -36,27 +35,6 @@ public class DAOFactory {
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
         config.setMaxLifetime(28000);
         dataSource = new HikariDataSource(config);
-    }
-
-    /**
-     * Constructor Prevent from being instantiated outside the class.
-     */
-    private DAOFactory() {
-    }
-
-    /**
-     * Creates or return the unique instance of DAOFactory.
-     *
-     * {@link DAOFactory#instance}
-     *
-     * @return DAOFactory
-     */
-    public static DAOFactory getInstance() {
-        if (instance == null) {
-            instance = new DAOFactory();
-            LOGGER.debug("DAOFactory instantiated.");
-        }
-        return instance;
     }
 
     /**
@@ -75,7 +53,7 @@ public class DAOFactory {
      * @return ComputerDAO
      */
     public ComputerDAO getComputerDAO() {
-        return ComputerDAO.getInstance();
+        return computerDAO;
     }
 
     /**
@@ -84,6 +62,6 @@ public class DAOFactory {
      * @return CompanyDAO
      */
     public CompanyDAO getCompanyDAO() {
-        return CompanyDAO.getInstance();
+        return companyDAO;
     }
 }

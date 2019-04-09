@@ -11,6 +11,9 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.cdb.mapper.CompanySQLMapper;
 import com.excilys.cdb.model.company.Company;
@@ -22,17 +25,15 @@ import com.excilys.cdb.model.company.Company;
  * @author excilys
  *
  */
+@Lazy
+@Repository("companyDAO")
 public class CompanyDAO {
-
-    /**
-     * instance JdbcCompanyDAO - Unique instance of JdbcCompanyDAO.
-     */
-    private static CompanyDAO instance;
 
     /**
      * mapper CompanyMapper.
      */
-    private CompanySQLMapper mapper = new CompanySQLMapper();
+    @Autowired
+    private CompanySQLMapper mapper;
 
     /**
      * LOGGER Logger.
@@ -46,29 +47,6 @@ public class CompanyDAO {
     private static final String FIND_BY_ID = "SELECT * FROM company WHERE id = ?";
     private static final String DELETE = "DELETE FROM company WHERE id = ?";
     private static final String DELETE_RELATED_COMPUTERS = "DELETE FROM computer WHERE company_id = ?";
-
-    /**
-     * Constructor.
-     *
-     * Prevents from being instantiated outside the class.
-     */
-    private CompanyDAO() {
-    }
-
-    /**
-     * Creates or returns the unique instance of JdbcCompanyDAO.
-     *
-     * {@link CompanyDAO#instance}
-     *
-     * @return JdbcCompanyDAO
-     */
-    public static CompanyDAO getInstance() {
-        if (instance == null) {
-            instance = new CompanyDAO();
-            LOGGER.debug("JdbcComputerDAO instantiated.");
-        }
-        return instance;
-    }
 
     /**
      * Fetch the specified computer from the persistence.

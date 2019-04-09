@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.format.DateTimeParseException;
 import java.util.Optional;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,6 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.cdb.exception.EmptyNameException;
 import com.excilys.cdb.exception.UnconsistentDatesException;
@@ -21,6 +25,7 @@ import com.excilys.cdb.model.computer.ComputerDTOBuilder;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 
+@Configurable
 @WebServlet(name = "Add Computer", urlPatterns = "/add-computer")
 public class AddComputerServlet extends HttpServlet {
 
@@ -32,17 +37,25 @@ public class AddComputerServlet extends HttpServlet {
     /**
      * companyService CompanyService.
      */
-    private CompanyService companyService = new CompanyService();
+    @Autowired
+    private CompanyService companyService;
 
     /**
      * computerService ComputerService.
      */
-    private ComputerService computerService = new ComputerService();
+    @Autowired
+    private ComputerService computerService;
 
     /**
      * logger Logger.
      */
     private Logger logger = LoggerFactory.getLogger(AddComputerServlet.class);
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

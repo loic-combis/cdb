@@ -2,9 +2,12 @@ package com.excilys.cdb.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
+
 import com.excilys.cdb.model.company.Company;
 import com.excilys.cdb.persistence.dao.CompanyDAO;
-import com.excilys.cdb.persistence.dao.DAOFactory;
 
 /**
  * Manage the business logic of companies.
@@ -12,12 +15,15 @@ import com.excilys.cdb.persistence.dao.DAOFactory;
  * @author excilys
  *
  */
+@Lazy
+@Service("companyService")
 public class CompanyService {
 
     /**
      * companyDAO CompanyDAO.
      */
-    CompanyDAO companyDAO = DAOFactory.getInstance().getCompanyDAO();
+    @Autowired
+    CompanyDAO companyDAO;
 
     /**
      * List a specific range of companies according to the page and the number of

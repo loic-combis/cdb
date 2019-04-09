@@ -12,6 +12,9 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.cdb.exception.EmptyNameException;
 import com.excilys.cdb.exception.UnconsistentDatesException;
@@ -25,17 +28,15 @@ import com.excilys.cdb.model.computer.Computer;
  * @author excilys
  *
  */
+@Lazy
+@Repository("computerDAO")
 public class ComputerDAO {
 
     /**
      * mapper ComputerMapper.
      */
-    private ComputerSQLMapper mapper = new ComputerSQLMapper();
-
-    /**
-     * instance JdbcComputerDAO - Unique instance of JdbcComputerDAO.
-     */
-    private static ComputerDAO instance;
+    @Autowired
+    private ComputerSQLMapper mapper;
 
     /**
      * LOGGER Logger.
@@ -55,29 +56,6 @@ public class ComputerDAO {
 
     private static final String SEARCH_WHERE_CLAUSE = "WHERE computer.name LIKE '%%%s%%' OR company.name LIKE '%%%s%%'";
     private static final String ORDER_BY_CLAUSE = "ORDER BY %s";
-
-    /**
-     * Constructor.
-     *
-     * Prevents from being instantiated outside the class.
-     *
-     * {@link ComputerDAO#instance}
-     */
-    private ComputerDAO() {
-    }
-
-    /**
-     * Creates or returns the unique instance of JdbcComputerDAO.
-     *
-     * @return JdbcComputerDAO
-     */
-    public static ComputerDAO getInstance() {
-        if (instance == null) {
-            instance = new ComputerDAO();
-            LOGGER.debug("JdbcComputerDAO instantiated");
-        }
-        return instance;
-    }
 
     /**
      * Fetch a specific computer.

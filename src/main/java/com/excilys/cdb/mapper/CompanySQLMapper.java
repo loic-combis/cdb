@@ -3,6 +3,9 @@ package com.excilys.cdb.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
+
 import com.excilys.cdb.model.company.Company;
 import com.excilys.cdb.model.company.CompanyFactory;
 
@@ -13,6 +16,8 @@ import com.excilys.cdb.model.company.CompanyFactory;
  * @author excilys
  *
  */
+@Lazy
+@Component("companySQLMapper")
 public class CompanySQLMapper extends SqlMapper<Company> {
 
     @Override

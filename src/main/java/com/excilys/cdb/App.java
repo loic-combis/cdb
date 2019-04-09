@@ -1,5 +1,7 @@
 package com.excilys.cdb;
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
 import com.excilys.cdb.ui.cli.CLIController;
 
 /**
@@ -14,7 +16,13 @@ public class App {
      * @param args String[]
      */
     public static void main(String[] args) {
-        CLIController cli = new CLIController();
+
+        AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
+        ctx.scan("com.excilys.cdb");
+        ctx.refresh();
+
+        CLIController cli = ctx.getBean(CLIController.class);
         cli.start();
+        ctx.close();
     }
 }

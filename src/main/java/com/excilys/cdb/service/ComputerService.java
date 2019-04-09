@@ -7,6 +7,9 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
 
 import com.excilys.cdb.exception.EmptyNameException;
 import com.excilys.cdb.exception.UnconsistentDatesException;
@@ -15,7 +18,6 @@ import com.excilys.cdb.mapper.ComputerDTOMapper;
 import com.excilys.cdb.model.computer.Computer;
 import com.excilys.cdb.model.computer.ComputerDTO;
 import com.excilys.cdb.persistence.dao.ComputerDAO;
-import com.excilys.cdb.persistence.dao.DAOFactory;
 
 /**
  * Manage the business logic for computers.
@@ -23,6 +25,8 @@ import com.excilys.cdb.persistence.dao.DAOFactory;
  * @author excilys
  *
  */
+@Lazy
+@Service("computerService")
 public class ComputerService {
 
     /**
@@ -43,24 +47,19 @@ public class ComputerService {
     /**
      * computerDAO ComputerDAO.
      */
-    private ComputerDAO computerDAO = DAOFactory.getInstance().getComputerDAO();
+    @Autowired
+    private ComputerDAO computerDAO;
 
     /**
      * mapper ComputerDTOMapper.
      */
+    @Autowired
     private ComputerDTOMapper mapper;
 
     /**
      * logger Logger.
      */
     private Logger logger = LoggerFactory.getLogger(ComputerService.class);
-
-    /**
-     * Constructor.
-     */
-    public ComputerService() {
-        mapper = new ComputerDTOMapper();
-    }
 
     /**
      * List a specific range of computers.

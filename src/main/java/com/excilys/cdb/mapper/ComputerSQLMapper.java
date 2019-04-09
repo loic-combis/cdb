@@ -4,6 +4,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
+
 import com.excilys.cdb.exception.EmptyNameException;
 import com.excilys.cdb.exception.UnconsistentDatesException;
 import com.excilys.cdb.model.company.Company;
@@ -17,6 +20,8 @@ import com.excilys.cdb.model.computer.ComputerFactory;
  * @author excilys
  *
  */
+@Lazy
+@Component("computerSQLMapper")
 public class ComputerSQLMapper extends SqlMapper<Computer> {
 
     @Override

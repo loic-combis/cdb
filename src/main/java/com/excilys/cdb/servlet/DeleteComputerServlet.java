@@ -2,14 +2,19 @@ package com.excilys.cdb.servlet;
 
 import java.io.IOException;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 import com.excilys.cdb.service.ComputerService;
 
+@Configurable
 @WebServlet(name = "Delete Computers", urlPatterns = { "/delete-computers" })
 public class DeleteComputerServlet extends HttpServlet {
 
@@ -22,6 +27,12 @@ public class DeleteComputerServlet extends HttpServlet {
      * computerService ComputerService.
      */
     private ComputerService computerService = new ComputerService();
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

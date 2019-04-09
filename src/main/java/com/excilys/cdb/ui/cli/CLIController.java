@@ -11,6 +11,8 @@ import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.excilys.cdb.exception.EmptyNameException;
 import com.excilys.cdb.exception.UnconsistentDatesException;
@@ -108,6 +110,7 @@ enum Command {
  * @author excilys
  *
  */
+@Component("cliController")
 public class CLIController implements UIController, PageProvider {
 
     /**
@@ -124,11 +127,13 @@ public class CLIController implements UIController, PageProvider {
     /**
      * computerService ComputerService - Fetches computer data from persistence.
      */
+    @Autowired
     private ComputerService computerService;
 
     /**
      * companyService CompanyService - Fetches company data from persistence.
      */
+    @Autowired
     private CompanyService companyService;
 
     /**
@@ -373,13 +378,17 @@ public class CLIController implements UIController, PageProvider {
         if (!intro.isPresent() && (shouldStop || shouldShowMenu)) {
             return;
         }
-        c.setIntroduction(intro.get());
+        if(intro.isPresent()) {
+            c.setIntroduction(intro.get());
+        }
 
         Optional<String> disco = requestValidDate("Discontinuation");
         if (!disco.isPresent() && (shouldStop || shouldShowMenu)) {
             return;
         }
-        c.setDiscontinuation(disco.get());
+        if(disco.isPresent()) {
+            c.setDiscontinuation(disco.get());
+        }
 
         Optional<Company> comp = requestValidCompany();
         if (!comp.isPresent() && (shouldStop || shouldShowMenu)) {
@@ -440,24 +449,29 @@ public class CLIController implements UIController, PageProvider {
             if (!name.isPresent()) {
                 return;
             }
+            c.setName(name.get());
 
             Optional<String> intro = requestValidDate("Introduction");
             if (!intro.isPresent() && (shouldStop || shouldShowMenu)) {
                 return;
             }
-            c.setIntroduction(intro.get());
+            if(intro.isPresent()) {
+                c.setIntroduction(intro.get());
+            }
 
             Optional<String> disco = requestValidDate("Discontinuation");
             if (!disco.isPresent() && (shouldStop || shouldShowMenu)) {
                 return;
             }
-            c.setDiscontinuation(disco.get());
+            if(disco.isPresent()) {
+                c.setDiscontinuation(disco.get());
+            }
 
             Optional<Company> comp = requestValidCompany();
             if (!comp.isPresent() && (shouldStop || shouldShowMenu)) {
                 return;
             }
-            if (comp != null) {
+            if (comp.isPresent()) {
                 c.setCompany(comp.get().getName());
                 c.setCompanyId(comp.get().getId());
             }

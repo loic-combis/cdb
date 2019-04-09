@@ -3,11 +3,14 @@ package com.excilys.cdb.model;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import org.junit.runner.RunWith;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.excilys.cdb.model.company.CompanyFactory;
 
+@RunWith(SpringRunner.class)
 public class CompanyFactoryTest {
 
     private CompanyFactory companyFactory;
@@ -16,7 +19,7 @@ public class CompanyFactoryTest {
 
     @BeforeTest
     public void setUp() {
-        companyFactory = CompanyFactory.getInstance();
+       companyFactory = CompanyFactory.getInstance();
     }
 
     @Test

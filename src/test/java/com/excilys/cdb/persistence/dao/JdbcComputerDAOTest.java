@@ -9,6 +9,11 @@ import static org.junit.Assert.fail;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -16,26 +21,27 @@ import com.excilys.cdb.exception.EmptyNameException;
 import com.excilys.cdb.exception.UnconsistentDatesException;
 import com.excilys.cdb.model.computer.Computer;
 
+@RunWith(SpringRunner.class)
 public class JdbcComputerDAOTest {
 
+    @Autowired
     private ComputerDAO dao;
     private static final String NAME = "Macbook Air";
     private static final String NEW_NAME = "Macbook Pro";
 
-    // TODO : Use In-Memory Database.
+    private AnnotationConfigApplicationContext ctx;
+
     @BeforeTest
     public void setUp() {
-        dao = ComputerDAO.getInstance();
+        ctx = new AnnotationConfigApplicationContext();
+        ctx.scan("com.excilys.cdb");
+        ctx.refresh();
+        dao = ctx.getBean(ComputerDAO.class);
     }
 
     @Test
     public void notNullInstanceTest() {
         assertNotNull(dao);
-    }
-
-    @Test
-    public void sharedInstanceTest() {
-        assertEquals(dao, ComputerDAO.getInstance());
     }
 
     @Test
@@ -94,5 +100,10 @@ public class JdbcComputerDAOTest {
         }
         assertTrue(dao.delete(c.getId()));
 
+    }
+
+    @AfterTest
+    public void end() {
+        ctx.close();
     }
 }
