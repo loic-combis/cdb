@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -26,7 +27,8 @@ public class DeleteComputerServlet extends HttpServlet {
     /**
      * computerService ComputerService.
      */
-    private ComputerService computerService = new ComputerService();
+    @Autowired
+    private ComputerService computerService;
 
     @Override
     public void init(ServletConfig config) throws ServletException {

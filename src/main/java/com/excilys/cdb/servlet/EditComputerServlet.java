@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -29,14 +30,14 @@ public class EditComputerServlet extends HttpServlet {
      */
     private static final long serialVersionUID = 3345158907466408519L;
 
-    private ComputerService computerService = new ComputerService();
+    @Autowired
+    private ComputerService computerService;
 
     private Logger logger = LoggerFactory.getLogger(EditComputerServlet.class);
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        logger.error("CONTEXT INITIALIZATION.....");
         SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
     }
 
