@@ -16,11 +16,7 @@ public class App {
      * @param args String[]
      */
     public static void main(String[] args) {
-
-        AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
-        ctx.scan("com.excilys.cdb");
-        ctx.refresh();
-
+        AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfig.class);
         CLIController cli = ctx.getBean(CLIController.class);
         cli.start();
         ctx.close();

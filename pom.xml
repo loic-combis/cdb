@@ -109,6 +109,24 @@
 	</dependency>
 	
 	<dependency>
+	    <groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-starter</artifactId>
+	    <version>${spring-boot.version}</version>
+	</dependency>
+	
+	<dependency>
+    	<groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-jdbc</artifactId>
+        <version>${spring-boot.version}</version>
+        <exclusions>
+        	<exclusion>
+            	<groupId>org.apache.tomcat</groupId>
+                <artifactId>tomcat-jdbc</artifactId>
+            </exclusion>
+        </exclusions>            
+    </dependency>
+	
+	<dependency>
 	    <groupId>org.assertj</groupId>
 	    <artifactId>assertj-core</artifactId>
 	    <version>${assertj.version}</version>

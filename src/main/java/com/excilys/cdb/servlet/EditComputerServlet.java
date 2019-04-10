@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.cdb.exception.EmptyNameException;
@@ -21,7 +20,6 @@ import com.excilys.cdb.exception.UnconsistentDatesException;
 import com.excilys.cdb.model.computer.ComputerDTOBuilder;
 import com.excilys.cdb.service.ComputerService;
 
-@Configurable
 @WebServlet(name = "Edit Computer", urlPatterns = { "/edit-computer" })
 public class EditComputerServlet extends HttpServlet {
 

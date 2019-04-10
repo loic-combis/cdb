@@ -9,6 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,9 @@ public class CompanyDAO {
     @Autowired
     private CompanySQLMapper mapper;
 
+    @Autowired
+    private DataSource dataSource;
+
     /**
      * LOGGER Logger.
      */
@@ -57,7 +62,7 @@ public class CompanyDAO {
     public Optional<Company> get(Long id) {
         // TODO Auto-generated method stub
         Company company = null;
-        try (Connection conn = DAOFactory.getConnection()) {
+        try (Connection conn = dataSource.getConnection()) {
 
             PreparedStatement state = conn.prepareStatement(FIND_BY_ID);
             state.setLong(1, id);
@@ -84,7 +89,7 @@ public class CompanyDAO {
         // TODO Auto-generated method stub
         LinkedList<Company> companies = new LinkedList<Company>();
 
-        try (Connection conn = DAOFactory.getConnection()) {
+        try (Connection conn = dataSource.getConnection()) {
             Statement state = conn.createStatement();
             String offsetClause = itemPerPage > 0 ? "LIMIT " + itemPerPage : "";
             offsetClause += (page > 1 && itemPerPage > 0) ? " OFFSET " + ((page - 1) * itemPerPage) : "";
@@ -115,7 +120,7 @@ public class CompanyDAO {
      */
     public boolean delete(Long id) {
         boolean isSuccess = false;
-        try (Connection conn = DAOFactory.getConnection()) {
+        try (Connection conn = dataSource.getConnection()) {
 
             conn.setAutoCommit(false);
 

@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.cdb.exception.EmptyNameException;
@@ -25,7 +24,6 @@ import com.excilys.cdb.model.computer.ComputerDTOBuilder;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 
-@Configurable
 @WebServlet(name = "Add Computer", urlPatterns = "/add-computer")
 public class AddComputerServlet extends HttpServlet {
 

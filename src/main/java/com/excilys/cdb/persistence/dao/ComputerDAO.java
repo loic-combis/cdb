@@ -10,6 +10,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,9 @@ public class ComputerDAO {
      */
     @Autowired
     private ComputerSQLMapper mapper;
+
+    @Autowired
+    private DataSource dataSource;
 
     /**
      * LOGGER Logger.
@@ -67,7 +72,7 @@ public class ComputerDAO {
      */
     public Optional<Computer> get(Long id) throws EmptyNameException, UnconsistentDatesException {
         Computer computer = null;
-        try (Connection conn = DAOFactory.getConnection()) {
+        try (Connection conn = dataSource.getConnection()) {
 
             PreparedStatement state = conn.prepareStatement(FIND_BY_ID);
             state.setLong(1, id);
@@ -102,7 +107,7 @@ public class ComputerDAO {
         Timestamp introductionDate = mapper.getSqlTimestampValue(computer.getIntroductionDate());
         Timestamp discontinuationDate = mapper.getSqlTimestampValue(computer.getDiscontinuationDate());
 
-        try (Connection conn = DAOFactory.getConnection()) {
+        try (Connection conn = dataSource.getConnection()) {
 
             PreparedStatement state = conn.prepareStatement(CREATE_ONE, Statement.RETURN_GENERATED_KEYS);
 
@@ -140,7 +145,7 @@ public class ComputerDAO {
     public boolean delete(Long id) {
         // TODO Auto-generated method stub
         boolean isSuccess = false;
-        try (Connection conn = DAOFactory.getConnection()) {
+        try (Connection conn = dataSource.getConnection()) {
 
             PreparedStatement state = conn.prepareStatement(DELETE_ONE);
             state.setLong(1, id);
@@ -174,7 +179,7 @@ public class ComputerDAO {
         Timestamp introductionDate = mapper.getSqlTimestampValue(computer.getIntroductionDate());
         Timestamp discontinuationDate = mapper.getSqlTimestampValue(computer.getDiscontinuationDate());
 
-        try (Connection conn = DAOFactory.getConnection()) {
+        try (Connection conn = dataSource.getConnection()) {
 
             PreparedStatement state = conn.prepareStatement(UPDATE_ONE);
 
@@ -217,7 +222,7 @@ public class ComputerDAO {
         // TODO Auto-generated method stub
         LinkedList<Computer> computers = new LinkedList<Computer>();
 
-        try (Connection conn = DAOFactory.getConnection()) {
+        try (Connection conn = dataSource.getConnection()) {
 
             Statement state = conn.createStatement();
             // Add limit / Offset clause.
@@ -275,7 +280,7 @@ public class ComputerDAO {
     public int count(String search) {
         // TODO Auto-generated method stub
         int count = -1;
-        try (Connection conn = DAOFactory.getConnection()) {
+        try (Connection conn = dataSource.getConnection()) {
 
             Statement state = conn.createStatement();
             String whereClause = search != null && !search.equals("")
@@ -304,7 +309,7 @@ public class ComputerDAO {
     public boolean deleteMany(String[] ids) {
         // TODO Auto-generated method stub
         boolean isSuccess = false;
-        try (Connection conn = DAOFactory.getConnection()) {
+        try (Connection conn = dataSource.getConnection()) {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < ids.length; i++) {
                 if (i != 0) {
