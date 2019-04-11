@@ -438,13 +438,12 @@ public class CLIController implements UIController, PageProvider {
 
         try {
             opt = computerService.get(id.get());
-
+           
             if (!opt.isPresent()) {
                 presenter.notify(Presenter.COMPUTER_NOT_FOUND);
                 return;
             }
             ComputerDTO c = opt.get();
-
             Optional<String> name = requestValidName();
             if (!name.isPresent()) {
                 return;

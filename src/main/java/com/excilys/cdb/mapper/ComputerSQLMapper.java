@@ -37,7 +37,7 @@ public class ComputerSQLMapper extends SqlMapper<Computer> {
             LocalDate introduction = getDateValue(result.getTimestamp(3));
             LocalDate discontinuation = getDateValue(result.getTimestamp(4));
 
-            Long companyId = result.getLong(5);
+            Long companyId = result.getLong(5) == 0L ? null : result.getLong(5);
             String companyName = result.getString(7);
             Company company = CompanyFactory.getInstance().create(companyId, companyName);
             computer = ComputerFactory.getInstance().createWithAll(computerId, computerName, introduction,

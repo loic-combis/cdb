@@ -52,7 +52,7 @@ public class EditComputerServlet extends HttpServlet {
                     .setDiscontinuation(request.getParameter("discontinued"));
 
             Long companyId = Long.valueOf(request.getParameter("company"));
-            if (companyId != -1) {
+            if (companyId != -1L) {
                 builder.setCompanyId(companyId);
             }
 

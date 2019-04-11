@@ -87,7 +87,7 @@ public class ComputerDTOBuilder {
     /**
      * Setter.
      *
-     * @param id long
+     * @param id Long
      * @return ComputerDTOBuilder
      */
     public ComputerDTOBuilder setCompanyId(Long id) {

@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.cdb.mapper.CompanySQLMapper;
 import com.excilys.cdb.model.company.Company;
@@ -59,6 +60,7 @@ public class CompanyDAO {
      * @param id Long.
      * @return Optional<Company>
      */
+    @Transactional(readOnly = true)
     public Optional<Company> get(Long id) {
         // TODO Auto-generated method stub
         Company company = null;
@@ -85,6 +87,7 @@ public class CompanyDAO {
      * @param itemPerPage int
      * @return List<Company>
      */
+    @Transactional(readOnly = true)
     public List<Company> list(int page, int itemPerPage) {
         // TODO Auto-generated method stub
         LinkedList<Company> companies = new LinkedList<Company>();
@@ -118,6 +121,7 @@ public class CompanyDAO {
      * @param id Long
      * @return boolean
      */
+    @Transactional(readOnly = false)
     public boolean delete(Long id) {
         boolean isSuccess = false;
         try (Connection conn = dataSource.getConnection()) {

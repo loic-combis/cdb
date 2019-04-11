@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.cdb.exception.EmptyNameException;
 import com.excilys.cdb.exception.UnconsistentDatesException;
@@ -70,6 +71,7 @@ public class ComputerDAO {
      * @throws EmptyNameException         ene
      * @throws UnconsistentDatesException ude
      */
+    @Transactional(readOnly = true)
     public Optional<Computer> get(Long id) throws EmptyNameException, UnconsistentDatesException {
         Computer computer = null;
         try (Connection conn = dataSource.getConnection()) {
@@ -95,6 +97,7 @@ public class ComputerDAO {
      * @param computer Computer
      * @return Optional<Computer>
      */
+    @Transactional(readOnly = false)
     public Optional<Computer> create(Computer computer) {
         Optional<Computer> savedComputer = Optional.empty();
 
@@ -142,6 +145,7 @@ public class ComputerDAO {
      * @param id Long
      * @return boolean
      */
+    @Transactional(readOnly = false)
     public boolean delete(Long id) {
         // TODO Auto-generated method stub
         boolean isSuccess = false;
@@ -172,6 +176,7 @@ public class ComputerDAO {
      * @param computer Computer
      * @return boolean
      */
+    @Transactional(readOnly = false)
     public boolean update(Computer computer) {
         // TODO Auto-generated method stub
         boolean isSuccess = false;
@@ -217,6 +222,7 @@ public class ComputerDAO {
      * @throws EmptyNameException         ene
      * @throws UnconsistentDatesException ude
      */
+    @Transactional(readOnly = true)
     public List<Computer> list(int page, int itemPerPage, String search, String orderBy)
             throws EmptyNameException, UnconsistentDatesException {
         // TODO Auto-generated method stub
@@ -277,6 +283,7 @@ public class ComputerDAO {
      * @param search String
      * @return int
      */
+    @Transactional(readOnly = true)
     public int count(String search) {
         // TODO Auto-generated method stub
         int count = -1;
@@ -306,6 +313,7 @@ public class ComputerDAO {
      * @param ids String[]
      * @return boolean
      */
+    @Transactional(readOnly = false)
     public boolean deleteMany(String[] ids) {
         // TODO Auto-generated method stub
         boolean isSuccess = false;
