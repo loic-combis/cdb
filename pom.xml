@@ -6,22 +6,19 @@
   <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
   <name>cdb</name>
+  
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jstl.version>1.2</jstl.version>
     <javax.servlet.api.version>4.0.1</javax.servlet.api.version>
     <junit.version>4.12</junit.version>
     <mysql.connector.version>8.0.15</mysql.connector.version>
-    <mockito.version>1.9.5</mockito.version>
-    <slf4j.version>1.7.26</slf4j.version>
-    <logback.version>1.0.13</logback.version>
     <selenium.version>3.141.59</selenium.version>
     <testng.version>6.14.3</testng.version>
-    <hikari.version>3.3.1</hikari.version>
     <spring.version>5.1.6.RELEASE</spring.version>
     <spring-boot.version>2.1.4.RELEASE</spring-boot.version>
-    <assertj.version>1.5.0</assertj.version>
   </properties>
+  
   <url>http://maven.apache.org</url>
   <dependencies>
   
@@ -52,25 +49,6 @@
 	</dependency>
 	
 	<dependency>
-	  <groupId>org.mockito</groupId>
-	  <artifactId>mockito-all</artifactId>
-	  <version>${mockito.version}</version>
-	  <scope>test</scope>
-	</dependency>
-	
-	<dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>${slf4j.version}</version>
-	</dependency>
-	
-	<dependency> 
-	  <groupId>ch.qos.logback</groupId>
-	  <artifactId>logback-classic</artifactId>
-	  <version>${logback.version}</version>
-	</dependency>
-	
-	<dependency>
 	    <groupId>org.seleniumhq.selenium</groupId>
 	    <artifactId>selenium-java</artifactId>
 	    <version>${selenium.version}</version>
@@ -82,18 +60,6 @@
         <version>${testng.version}</version>								
         <scope>test</scope>							  			
      </dependency>	
-	
-	<dependency>
-	    <groupId>com.zaxxer</groupId>
-	    <artifactId>HikariCP</artifactId>
-	    <version>${hikari.version}</version>
-	</dependency>
-	
-	<dependency>
-	    <groupId>org.springframework</groupId>
-	    <artifactId>spring-context</artifactId>
-	    <version>${spring.version}</version>
-	</dependency>
 	
 	<dependency>
 	    <groupId>org.springframework</groupId>
@@ -109,12 +75,6 @@
 	</dependency>
 	
 	<dependency>
-	    <groupId>org.springframework.boot</groupId>
-	    <artifactId>spring-boot-starter</artifactId>
-	    <version>${spring-boot.version}</version>
-	</dependency>
-	
-	<dependency>
     	<groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-jdbc</artifactId>
         <version>${spring-boot.version}</version>
@@ -125,14 +85,6 @@
             </exclusion>
         </exclusions>            
     </dependency>
-	
-	<dependency>
-	    <groupId>org.assertj</groupId>
-	    <artifactId>assertj-core</artifactId>
-	    <version>${assertj.version}</version>
-	    <scope>test</scope>
-	</dependency>
-	
 	
   </dependencies>
   

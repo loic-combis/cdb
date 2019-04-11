@@ -26,7 +26,7 @@ public class PropertyReader {
         prop = new Properties();
 
         try {
-            InputStream inputStream = PropertyReader.class.getResourceAsStream("/config.properties");
+            InputStream inputStream = PropertyReader.class.getResourceAsStream("/application.properties");
             prop.load(inputStream);
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
