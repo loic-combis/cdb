@@ -16,7 +16,6 @@
   </test>
   <test name="Dao">
   	<classes>
-  		<class name="com.excilys.cdb.persistence.dao.DAOFactoryTest" />
   		<class name="com.excilys.cdb.persistence.dao.JdbcCompanyDAOTest" />
   		<class name="com.excilys.cdb.persistence.dao.JdbcComputerDAOTest" />
   	</classes>
