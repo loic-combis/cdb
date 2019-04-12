@@ -11,7 +11,6 @@ import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.excilys.cdb.exception.EmptyNameException;
@@ -127,13 +126,11 @@ public class CLIController implements UIController, PageProvider {
     /**
      * computerService ComputerService - Fetches computer data from persistence.
      */
-    @Autowired
     private ComputerService computerService;
 
     /**
      * companyService CompanyService - Fetches company data from persistence.
      */
-    @Autowired
     private CompanyService companyService;
 
     /**
@@ -166,9 +163,9 @@ public class CLIController implements UIController, PageProvider {
      * Constructor. {@link CLIController#persistence}
      * {@link CLIController#presenter} {@link CLIController#scanner}
      */
-    public CLIController() {
-        computerService = new ComputerService();
-        companyService = new CompanyService();
+    public CLIController(ComputerService computerService, CompanyService companyService) {
+        this.computerService = computerService;
+        this.companyService = companyService;
         presenter = new CLIPresenter();
         scanner = new Scanner(System.in);
     }

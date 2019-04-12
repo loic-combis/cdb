@@ -22,9 +22,17 @@ public class CompanyService {
     /**
      * companyDAO CompanyDAO.
      */
-    @Autowired
     CompanyDAO companyDAO;
 
+    /**
+     * Constructor.
+     * 
+     * @param dao CompanyDAO
+     */
+    public CompanyService(CompanyDAO dao) {
+    	companyDAO = dao;
+    }
+    
     /**
      * List a specific range of companies according to the page and the number of
      * items.

@@ -14,7 +14,6 @@ import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,10 +37,8 @@ public class ComputerDAO {
     /**
      * mapper ComputerMapper.
      */
-    @Autowired
     private ComputerSQLMapper mapper;
 
-    @Autowired
     private DataSource dataSource;
 
     /**
@@ -63,6 +60,18 @@ public class ComputerDAO {
     private static final String SEARCH_WHERE_CLAUSE = "WHERE computer.name LIKE '%%%s%%' OR company.name LIKE '%%%s%%'";
     private static final String ORDER_BY_CLAUSE = "ORDER BY %s";
 
+    /**
+     * Constructor.
+     * 
+     * @param ds DataSource
+     * @param sqlMapper ComputerSQLMapper
+     */
+    public ComputerDAO(DataSource ds, ComputerSQLMapper sqlMapper) {
+    	dataSource = ds;
+    	mapper = sqlMapper;
+    	
+    }
+    
     /**
      * Fetch a specific computer.
      *

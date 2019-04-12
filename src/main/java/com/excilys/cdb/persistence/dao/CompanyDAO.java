@@ -13,7 +13,6 @@ import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,12 +34,11 @@ public class CompanyDAO {
     /**
      * mapper CompanyMapper.
      */
-    @Autowired
     private CompanySQLMapper mapper;
 
-    @Autowired
     private DataSource dataSource;
 
+    
     /**
      * LOGGER Logger.
      */
@@ -54,6 +52,18 @@ public class CompanyDAO {
     private static final String DELETE = "DELETE FROM company WHERE id = ?";
     private static final String DELETE_RELATED_COMPUTERS = "DELETE FROM computer WHERE company_id = ?";
 
+    /**
+     * Constructor.
+     * 
+     * @param ds DataSource
+     * @param sqlMapper CompanySQLMapper
+     */
+    public CompanyDAO(DataSource ds, CompanySQLMapper sqlMapper) {
+    	dataSource = ds;
+    	mapper = sqlMapper;
+    	
+    }
+    
     /**
      * Fetch the specified computer from the persistence.
      *

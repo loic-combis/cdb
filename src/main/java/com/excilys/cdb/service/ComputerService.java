@@ -47,13 +47,11 @@ public class ComputerService {
     /**
      * computerDAO ComputerDAO.
      */
-    @Autowired
     private ComputerDAO computerDAO;
 
     /**
      * mapper ComputerDTOMapper.
      */
-    @Autowired
     private ComputerDTOMapper mapper;
 
     /**
@@ -61,6 +59,17 @@ public class ComputerService {
      */
     private Logger logger = LoggerFactory.getLogger(ComputerService.class);
 
+    /**
+     * Constructor.
+     * 
+     * @param map
+     * @param dao
+     */
+    public ComputerService(ComputerDTOMapper map, ComputerDAO dao) {
+    	computerDAO = dao;
+    	mapper = map;
+    }
+    
     /**
      * List a specific range of computers.
      *
