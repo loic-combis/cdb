@@ -47,7 +47,7 @@ public class CompanyDAO {
 
 	/**
 	 * Constructor.
-	 *
+	 * 
 	 * @param ds        DataSource
 	 * @param sqlMapper CompanySQLMapper
 	 */
