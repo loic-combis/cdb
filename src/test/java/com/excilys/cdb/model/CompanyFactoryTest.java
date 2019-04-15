@@ -13,32 +13,32 @@ import com.excilys.cdb.model.company.CompanyFactory;
 @RunWith(SpringRunner.class)
 public class CompanyFactoryTest {
 
-	private CompanyFactory companyFactory;
-	private static final Long ID = 21L;
-	private static final String NAME = "Apple";
+    private CompanyFactory companyFactory;
+    private static final Long ID = 21L;
+    private static final String NAME = "Apple";
 
-	@BeforeTest
-	public void setUp() {
-		companyFactory = CompanyFactory.getInstance();
-	}
+    @BeforeTest
+    public void setUp() {
+        companyFactory = CompanyFactory.getInstance();
+    }
 
-	@Test
-	public void notNullInstanceTest() {
-		assertNotNull(companyFactory);
-	}
+    @Test
+    public void notNullInstanceTest() {
+        assertNotNull(companyFactory);
+    }
 
-	@Test
-	public void sharedInstanceTest() {
-		assertEquals(companyFactory, CompanyFactory.getInstance());
-	}
+    @Test
+    public void sharedInstanceTest() {
+        assertEquals(companyFactory, CompanyFactory.getInstance());
+    }
 
-	@Test
-	public void createNotNullInstancesTest() {
-		assertNotNull(companyFactory.create(ID));
-	}
+    @Test
+    public void createNotNullInstancesTest() {
+        assertNotNull(companyFactory.create(ID));
+    }
 
-	@Test
-	public void createNotNullWithNameTest() {
-		assertNotNull(companyFactory.create(ID, NAME));
-	}
+    @Test
+    public void createNotNullWithNameTest() {
+        assertNotNull(companyFactory.create(ID, NAME));
+    }
 }

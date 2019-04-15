@@ -16,31 +16,31 @@ import com.excilys.cdb.ui.UIController;
 @RunWith(SpringRunner.class)
 public class CLIControllerTest {
 
-	@Autowired
-	private CLIController cli;
+    @Autowired
+    private CLIController cli;
 
-	private AnnotationConfigApplicationContext ctx;
+    private AnnotationConfigApplicationContext ctx;
 
-	@BeforeTest
-	public void setUp() {
-		ctx = new AnnotationConfigApplicationContext();
-		ctx.scan("com.excilys.cdb");
-		ctx.refresh();
-		cli = ctx.getBean(CLIController.class);
-	}
+    @BeforeTest
+    public void setUp() {
+        ctx = new AnnotationConfigApplicationContext();
+        ctx.scan("com.excilys.cdb");
+        ctx.refresh();
+        cli = ctx.getBean(CLIController.class);
+    }
 
-	@Test
-	public void instanceOfController() {
-		assertTrue(cli instanceof UIController);
-	}
+    @Test
+    public void instanceOfController() {
+        assertTrue(cli instanceof UIController);
+    }
 
-	@Test
-	public void instanceOfPageProvider() {
-		assertTrue(cli instanceof PageProvider);
-	}
+    @Test
+    public void instanceOfPageProvider() {
+        assertTrue(cli instanceof PageProvider);
+    }
 
-	@AfterTest
-	public void end() {
-		ctx.close();
-	}
+    @AfterTest
+    public void end() {
+        ctx.close();
+    }
 }

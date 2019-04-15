@@ -18,39 +18,39 @@ import com.excilys.cdb.persistence.dao.CompanyDAO;
 @Service("companyService")
 public class CompanyService {
 
-	/**
-	 * companyDAO CompanyDAO.
-	 */
-	CompanyDAO companyDAO;
+    /**
+     * companyDAO CompanyDAO.
+     */
+    CompanyDAO companyDAO;
 
-	/**
-	 * Constructor.
-	 * 
-	 * @param dao CompanyDAO
-	 */
-	public CompanyService(CompanyDAO dao) {
-		companyDAO = dao;
-	}
+    /**
+     * Constructor.
+     *
+     * @param dao CompanyDAO
+     */
+    public CompanyService(CompanyDAO dao) {
+        companyDAO = dao;
+    }
 
-	/**
-	 * List a specific range of companies according to the page and the number of
-	 * items.
-	 *
-	 * @param page        int
-	 * @param itemPerPage int
-	 * @return List<Company>
-	 */
-	public List<Company> list(int page, int itemPerPage) {
-		return companyDAO.list(page, itemPerPage);
-	}
+    /**
+     * List a specific range of companies according to the page and the number of
+     * items.
+     *
+     * @param page        int
+     * @param itemPerPage int
+     * @return List<Company>
+     */
+    public List<Company> list(int page, int itemPerPage) {
+        return companyDAO.list(page, itemPerPage);
+    }
 
-	/**
-	 * Delete the specified company and all the related computers.
-	 *
-	 * @param id Long
-	 * @return boolean
-	 */
-	public boolean delete(Long id) {
-		return companyDAO.delete(id);
-	}
+    /**
+     * Delete the specified company and all the related computers.
+     *
+     * @param id Long
+     * @return boolean
+     */
+    public boolean delete(Long id) {
+        return companyDAO.delete(id);
+    }
 }

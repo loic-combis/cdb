@@ -10,15 +10,15 @@ import com.excilys.cdb.ui.cli.CLIController;
  */
 public class App {
 
-	/**
-	 * Main method.
-	 *
-	 * @param args String[]
-	 */
-	public static void main(String[] args) {
-		AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfig.class);
-		CLIController cli = ctx.getBean(CLIController.class);
-		cli.start();
-		ctx.close();
-	}
+    /**
+     * Main method.
+     *
+     * @param args String[]
+     */
+    public static void main(String[] args) {
+        AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfig.class);
+        CLIController cli = ctx.getBean(CLIController.class);
+        cli.start();
+        ctx.close();
+    }
 }

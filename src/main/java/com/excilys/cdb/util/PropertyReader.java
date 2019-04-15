@@ -9,38 +9,38 @@ import org.slf4j.LoggerFactory;
 
 public class PropertyReader {
 
-	/**
-	 * prop Properties.
-	 */
-	Properties prop;
+    /**
+     * prop Properties.
+     */
+    Properties prop;
 
-	/**
-	 * LOGGER Logger.
-	 */
-	private final Logger LOGGER = LoggerFactory.getLogger(PropertyReader.class);
+    /**
+     * LOGGER Logger.
+     */
+    private final Logger LOGGER = LoggerFactory.getLogger(PropertyReader.class);
 
-	/**
-	 * Constructor.
-	 */
-	public PropertyReader() {
-		prop = new Properties();
+    /**
+     * Constructor.
+     */
+    public PropertyReader() {
+        prop = new Properties();
 
-		try {
-			InputStream inputStream = PropertyReader.class.getResourceAsStream("/application.properties");
-			prop.load(inputStream);
-		} catch (IOException e) {
-			LOGGER.error(e.getMessage());
-		}
+        try {
+            InputStream inputStream = PropertyReader.class.getResourceAsStream("/application.properties");
+            prop.load(inputStream);
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage());
+        }
 
-	}
+    }
 
-	/**
-	 * Returns the value of the specified property.
-	 *
-	 * @param key String
-	 * @return String
-	 */
-	public String get(String key) {
-		return prop.getProperty(key);
-	}
+    /**
+     * Returns the value of the specified property.
+     *
+     * @param key String
+     * @return String
+     */
+    public String get(String key) {
+        return prop.getProperty(key);
+    }
 }

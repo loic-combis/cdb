@@ -18,32 +18,32 @@ import com.excilys.cdb.mapper.CompanySQLMapper;
 @RunWith(SpringRunner.class)
 public class CompanyMapperTest {
 
-	@Autowired
-	private CompanySQLMapper mapper;
+    @Autowired
+    private CompanySQLMapper mapper;
 
-	private AnnotationConfigApplicationContext ctx;
+    private AnnotationConfigApplicationContext ctx;
 
-	@BeforeTest
-	public void setUp() {
-		ctx = new AnnotationConfigApplicationContext();
-		ctx.scan("com.excilys.cdb");
-		ctx.refresh();
-		mapper = ctx.getBean(CompanySQLMapper.class);
-	}
+    @BeforeTest
+    public void setUp() {
+        ctx = new AnnotationConfigApplicationContext();
+        ctx.scan("com.excilys.cdb");
+        ctx.refresh();
+        mapper = ctx.getBean(CompanySQLMapper.class);
+    }
 
-	@Test
-	public void mapFromNullTest() {
-		try {
-			assertNull(mapper.mapRow(null, 0));
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			fail("Not handling null result.");
-			e.printStackTrace();
-		}
-	}
+    @Test
+    public void mapFromNullTest() {
+        try {
+            assertNull(mapper.mapRow(null, 0));
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            fail("Not handling null result.");
+            e.printStackTrace();
+        }
+    }
 
-	@AfterTest
-	public void end() {
-		ctx.close();
-	}
+    @AfterTest
+    public void end() {
+        ctx.close();
+    }
 }

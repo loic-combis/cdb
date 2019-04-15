@@ -19,36 +19,36 @@ import com.excilys.cdb.mapper.ComputerSQLMapper;
 @RunWith(SpringRunner.class)
 public class ComputerMapperTest {
 
-	@Autowired
-	private ComputerSQLMapper mapper;
+    @Autowired
+    private ComputerSQLMapper mapper;
 
-	private AnnotationConfigApplicationContext ctx;
+    private AnnotationConfigApplicationContext ctx;
 
-	@BeforeTest
-	public void setUp() {
-		ctx = new AnnotationConfigApplicationContext();
-		ctx.scan("com.excilys.cdb");
-		ctx.refresh();
-		mapper = ctx.getBean(ComputerSQLMapper.class);
-	}
+    @BeforeTest
+    public void setUp() {
+        ctx = new AnnotationConfigApplicationContext();
+        ctx.scan("com.excilys.cdb");
+        ctx.refresh();
+        mapper = ctx.getBean(ComputerSQLMapper.class);
+    }
 
-	@Test
-	public void resultToObjectTest() {
-		try {
-			assertNull(mapper.mapRow(null, 0));
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			fail("Not handling null parameter.");
-		} catch (EmptyNameException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-	}
+    @Test
+    public void resultToObjectTest() {
+        try {
+            assertNull(mapper.mapRow(null, 0));
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            fail("Not handling null parameter.");
+        } catch (EmptyNameException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+    }
 
-	@AfterTest
-	public void end() {
-		ctx.close();
-	}
+    @AfterTest
+    public void end() {
+        ctx.close();
+    }
 }

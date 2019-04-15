@@ -23,66 +23,66 @@ import com.excilys.cdb.service.ComputerService;
 @WebServlet(name = "List Computers", urlPatterns = { "/list-computers" })
 public class ListComputerServlet extends HttpServlet {
 
-	/**
-	 * serialVersionUID long.
-	 */
-	private static final long serialVersionUID = 4009417829257782424L;
+    /**
+     * serialVersionUID long.
+     */
+    private static final long serialVersionUID = 4009417829257782424L;
 
-	private final Logger logger = LoggerFactory.getLogger(ListComputerServlet.class);
+    private final Logger logger = LoggerFactory.getLogger(ListComputerServlet.class);
 
-	@Autowired
-	private ComputerService computerService;
+    @Autowired
+    private ComputerService computerService;
 
-	@Autowired
-	private CompanyService companyService;
+    @Autowired
+    private CompanyService companyService;
 
-	@Override
-	public void init(ServletConfig config) throws ServletException {
-		super.init(config);
-		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
-	}
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+    }
 
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-		response.setContentType("text/html");
-		request.setAttribute("contextPath", request.getContextPath());
-		request.setAttribute("feedback", new Feedback(request.getParameter("status"), request.getParameter("message")));
+        response.setContentType("text/html");
+        request.setAttribute("contextPath", request.getContextPath());
+        request.setAttribute("feedback", new Feedback(request.getParameter("status"), request.getParameter("message")));
 
-		int page, itemPerPage;
-		try {
-			page = Integer.parseInt(request.getParameter("page"));
+        int page, itemPerPage;
+        try {
+            page = Integer.parseInt(request.getParameter("page"));
 
-		} catch (NumberFormatException nfe) {
-			page = 1;
-		}
-		try {
-			itemPerPage = Integer.parseInt(request.getParameter("itemPerPage"));
+        } catch (NumberFormatException nfe) {
+            page = 1;
+        }
+        try {
+            itemPerPage = Integer.parseInt(request.getParameter("itemPerPage"));
 
-		} catch (NumberFormatException nfe) {
-			itemPerPage = 10;
-		}
+        } catch (NumberFormatException nfe) {
+            itemPerPage = 10;
+        }
 
-		String search = request.getParameter("search");
-		request.setAttribute("search", search);
-		request.setAttribute("orderBy", request.getParameter("orderby"));
+        String search = request.getParameter("search");
+        request.setAttribute("search", search);
+        request.setAttribute("orderBy", request.getParameter("orderby"));
 
-		int computerCount = computerService.count(search);
-		request.setAttribute("pagination", new Pagination(page, itemPerPage, computerCount));
+        int computerCount = computerService.count(search);
+        request.setAttribute("pagination", new Pagination(page, itemPerPage, computerCount));
 
-		request.setAttribute("companies", companyService.list(0, 0));
+        request.setAttribute("companies", companyService.list(0, 0));
 
-		try {
-			request.setAttribute("computers",
-					computerService.list(page, itemPerPage, search, request.getParameter("orderby")));
-			request.getRequestDispatcher("/WEB-INF/jsp/dashboard.jsp").forward(request, response);
+        try {
+            request.setAttribute("computers",
+                    computerService.list(page, itemPerPage, search, request.getParameter("orderby")));
+            request.getRequestDispatcher("/WEB-INF/jsp/dashboard.jsp").forward(request, response);
 
-		} catch (UnsuccessfulTreatmentException e) {
-			// TODO Auto-generated catch block
-			logger.error(e.getMessage());
-			response.sendError(500);
-		}
+        } catch (UnsuccessfulTreatmentException e) {
+            // TODO Auto-generated catch block
+            logger.error(e.getMessage());
+            response.sendError(500);
+        }
 
-	}
+    }
 }

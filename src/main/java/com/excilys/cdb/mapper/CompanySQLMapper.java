@@ -21,14 +21,14 @@ import com.excilys.cdb.model.company.CompanyFactory;
 @Component("companySQLMapper")
 public class CompanySQLMapper extends SqlMapper implements RowMapper<Company> {
 
-	@Override
-	public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
-		// TODO Auto-generated method stub
-		Company company = null;
-		if (rs != null) {
-			company = CompanyFactory.getInstance().create(rs.getLong(1), rs.getString(2));
-		}
-		return company;
-	}
+    @Override
+    public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
+        // TODO Auto-generated method stub
+        Company company = null;
+        if (rs != null) {
+            company = CompanyFactory.getInstance().create(rs.getLong(1), rs.getString(2));
+        }
+        return company;
+    }
 
 }

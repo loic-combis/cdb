@@ -27,36 +27,36 @@ import com.excilys.cdb.model.computer.ComputerFactory;
 @Component("computerSQLMapper")
 public class ComputerSQLMapper extends SqlMapper implements RowMapper<Computer> {
 
-	private final Logger LOGGER = LoggerFactory.getLogger(ComputerSQLMapper.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(ComputerSQLMapper.class);
 
-	@Override
-	public Computer mapRow(ResultSet result, int rowNum) throws SQLException {
-		// TODO Auto-generated method stub
-		Computer computer = null;
+    @Override
+    public Computer mapRow(ResultSet result, int rowNum) throws SQLException {
+        // TODO Auto-generated method stub
+        Computer computer = null;
 
-		if (result != null) {
+        if (result != null) {
 
-			Long computerId = result.getLong(1);
-			String computerName = result.getString(2);
-			LocalDate introduction = getDateValue(result.getTimestamp(3));
-			LocalDate discontinuation = getDateValue(result.getTimestamp(4));
+            Long computerId = result.getLong(1);
+            String computerName = result.getString(2);
+            LocalDate introduction = getDateValue(result.getTimestamp(3));
+            LocalDate discontinuation = getDateValue(result.getTimestamp(4));
 
-			Long companyId = result.getLong(5) == 0L ? null : result.getLong(5);
-			String companyName = result.getString(7);
-			Company company = CompanyFactory.getInstance().create(companyId, companyName);
-			try {
-				computer = ComputerFactory.getInstance().createWithAll(computerId, computerName, introduction,
-						discontinuation, company);
-			} catch (EmptyNameException e) {
-				// TODO Auto-generated catch block
-				LOGGER.error(e.getMessage());
-			} catch (UnconsistentDatesException e) {
-				// TODO Auto-generated catch block
-				LOGGER.error(e.getMessage());
-			}
-		}
+            Long companyId = result.getLong(5) == 0L ? null : result.getLong(5);
+            String companyName = result.getString(7);
+            Company company = CompanyFactory.getInstance().create(companyId, companyName);
+            try {
+                computer = ComputerFactory.getInstance().createWithAll(computerId, computerName, introduction,
+                        discontinuation, company);
+            } catch (EmptyNameException e) {
+                // TODO Auto-generated catch block
+                LOGGER.error(e.getMessage());
+            } catch (UnconsistentDatesException e) {
+                // TODO Auto-generated catch block
+                LOGGER.error(e.getMessage());
+            }
+        }
 
-		return computer;
-	}
+        return computer;
+    }
 
 }

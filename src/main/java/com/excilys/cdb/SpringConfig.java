@@ -17,17 +17,28 @@ import com.excilys.cdb.util.PropertyReader;
 @ComponentScan("com.excilys.cdb.ui.cli")
 public class SpringConfig {
 
-	@Bean
-	public DataSource getDataSource() {
-		PropertyReader reader = new PropertyReader();
-		return DataSourceBuilder.create().driverClassName(reader.get("app.datasource.driver-class-name"))
-				.password(reader.get("app.datasource.password")).username(reader.get("app.datasource.username"))
-				.url(reader.get("app.datasource.url")).build();
-	}
+    /**
+     * Bean initializer.
+     *
+     * @return DataSource
+     */
+    @Bean
+    public DataSource getDataSource() {
+        PropertyReader reader = new PropertyReader();
+        return DataSourceBuilder.create().driverClassName(reader.get("app.datasource.driver-class-name"))
+                .password(reader.get("app.datasource.password")).username(reader.get("app.datasource.username"))
+                .url(reader.get("app.datasource.url")).build();
+    }
 
-	@Bean
-	public NamedParameterJdbcTemplate getTemplate(DataSource ds) {
-		return new NamedParameterJdbcTemplate(ds);
-	}
+    /**
+     * Bean initializer.
+     *
+     * @param ds DataSource
+     * @return NamedParameterJdbcTemplate
+     */
+    @Bean
+    public NamedParameterJdbcTemplate getTemplate(DataSource ds) {
+        return new NamedParameterJdbcTemplate(ds);
+    }
 
 }

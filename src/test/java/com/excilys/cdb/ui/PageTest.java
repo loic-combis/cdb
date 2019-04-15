@@ -24,111 +24,111 @@ import com.excilys.cdb.service.ComputerService;
 @RunWith(SpringRunner.class)
 public class PageTest {
 
-	private Page<Computer> computerPage;
+    private Page<Computer> computerPage;
 
-	private AnnotationConfigApplicationContext ctx;
+    private AnnotationConfigApplicationContext ctx;
 
-	@Autowired
-	private ComputerService computerService;
+    @Autowired
+    private ComputerService computerService;
 
-	@Autowired
-	private CompanyService companyService;
+    @Autowired
+    private CompanyService companyService;
 
-	private Page<Company> companyPage;
-	private final int ITEM_PER_PAGE = 10;
+    private Page<Company> companyPage;
+    private final int ITEM_PER_PAGE = 10;
 
-	@BeforeTest
-	public void setUp() {
+    @BeforeTest
+    public void setUp() {
 
-		ctx = new AnnotationConfigApplicationContext();
-		ctx.scan("com.excilys.cdb");
-		ctx.refresh();
-		computerService = ctx.getBean(ComputerService.class);
-		companyService = ctx.getBean(CompanyService.class);
+        ctx = new AnnotationConfigApplicationContext();
+        ctx.scan("com.excilys.cdb");
+        ctx.refresh();
+        computerService = ctx.getBean(ComputerService.class);
+        companyService = ctx.getBean(CompanyService.class);
 
-		computerPage = new Page<Computer>(Computer.class, new PageProvider() {
+        computerPage = new Page<Computer>(Computer.class, new PageProvider() {
 
-			@Override
-			public List<?> fetchDataFor(Class<?> c, int page) {
-				// TODO Auto-generated method stub
-				List<?> list = new ArrayList<>();
-				try {
-					list = computerService.list(page, ITEM_PER_PAGE, null, null);
-				} catch (UnsuccessfulTreatmentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					fail(e.getMessage());
-				}
-				return list;
-			}
+            @Override
+            public List<?> fetchDataFor(Class<?> c, int page) {
+                // TODO Auto-generated method stub
+                List<?> list = new ArrayList<>();
+                try {
+                    list = computerService.list(page, ITEM_PER_PAGE, null, null);
+                } catch (UnsuccessfulTreatmentException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                    fail(e.getMessage());
+                }
+                return list;
+            }
 
-		});
+        });
 
-		companyPage = new Page<Company>(Company.class, new PageProvider() {
+        companyPage = new Page<Company>(Company.class, new PageProvider() {
 
-			@Override
-			public List<?> fetchDataFor(Class<?> c, int page) {
-				// TODO Auto-generated method stub
-				return companyService.list(page, ITEM_PER_PAGE);
-			}
-		});
-	}
+            @Override
+            public List<?> fetchDataFor(Class<?> c, int page) {
+                // TODO Auto-generated method stub
+                return companyService.list(page, ITEM_PER_PAGE);
+            }
+        });
+    }
 
-	@Test
-	public void computersFirstPageSizeTest() {
-		assertTrue(computerPage.nextPage().size() <= ITEM_PER_PAGE);
-	}
+    @Test
+    public void computersFirstPageSizeTest() {
+        assertTrue(computerPage.nextPage().size() <= ITEM_PER_PAGE);
+    }
 
-	@Test
-	public void companiesFirstPageSizeTest() {
-		assertTrue(companyPage.nextPage().size() <= ITEM_PER_PAGE);
-	}
+    @Test
+    public void companiesFirstPageSizeTest() {
+        assertTrue(companyPage.nextPage().size() <= ITEM_PER_PAGE);
+    }
 
-	@Test
-	public void computersListFilteringTest() {
-		List<?> items;
-		try {
-			items = computerService.list(1, ITEM_PER_PAGE, null, null);
-			List<Computer> computers = Page.filter(Computer.class, items);
-			assertTrue(computers.size() <= ITEM_PER_PAGE);
-		} catch (UnsuccessfulTreatmentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-	}
+    @Test
+    public void computersListFilteringTest() {
+        List<?> items;
+        try {
+            items = computerService.list(1, ITEM_PER_PAGE, null, null);
+            List<Computer> computers = Page.filter(Computer.class, items);
+            assertTrue(computers.size() <= ITEM_PER_PAGE);
+        } catch (UnsuccessfulTreatmentException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+    }
 
-	@Test
-	public void companiesListFilteringTest() {
-		List<?> items = companyService.list(1, ITEM_PER_PAGE);
-		List<Company> companies = Page.filter(Company.class, items);
-		assertTrue(companies.size() <= ITEM_PER_PAGE);
-	}
+    @Test
+    public void companiesListFilteringTest() {
+        List<?> items = companyService.list(1, ITEM_PER_PAGE);
+        List<Company> companies = Page.filter(Company.class, items);
+        assertTrue(companies.size() <= ITEM_PER_PAGE);
+    }
 
-	@Test
-	public void computersFilteringWithWrongClassTest() {
-		List<?> items = companyService.list(1, ITEM_PER_PAGE);
-		List<Computer> computers = Page.filter(Computer.class, items);
-		assertEquals(computers.size(), 0);
-	}
+    @Test
+    public void computersFilteringWithWrongClassTest() {
+        List<?> items = companyService.list(1, ITEM_PER_PAGE);
+        List<Computer> computers = Page.filter(Computer.class, items);
+        assertEquals(computers.size(), 0);
+    }
 
-	@Test
-	public void companiesFilteringWithWrongClassTest() {
-		List<?> items;
-		try {
-			items = computerService.list(1, ITEM_PER_PAGE, null, null);
-			List<Company> companies = Page.filter(Company.class, items);
-			assertEquals(companies.size(), 0);
+    @Test
+    public void companiesFilteringWithWrongClassTest() {
+        List<?> items;
+        try {
+            items = computerService.list(1, ITEM_PER_PAGE, null, null);
+            List<Company> companies = Page.filter(Company.class, items);
+            assertEquals(companies.size(), 0);
 
-		} catch (UnsuccessfulTreatmentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-	}
+        } catch (UnsuccessfulTreatmentException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+    }
 
-	@AfterTest
-	public void end() {
-		ctx.close();
-	}
+    @AfterTest
+    public void end() {
+        ctx.close();
+    }
 }
