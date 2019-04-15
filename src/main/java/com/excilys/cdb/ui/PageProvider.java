@@ -10,12 +10,12 @@ import java.util.List;
  */
 public interface PageProvider {
 
-    /**
-     * Requests for data of a specific page.
-     *
-     * @param c    Class <?> - Type of the data to be fetched.
-     * @param page int - Page number
-     * @return List<?>
-     */
-    List<?> fetchDataFor(Class<?> c, int page);
+	/**
+	 * Requests for data of a specific page.
+	 *
+	 * @param c    Class <?> - Type of the data to be fetched.
+	 * @param page int - Page number
+	 * @return List<?>
+	 */
+	List<?> fetchDataFor(Class<?> c, int page);
 }

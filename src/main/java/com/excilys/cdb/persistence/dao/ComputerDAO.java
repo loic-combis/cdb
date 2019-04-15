@@ -34,323 +34,323 @@ import com.excilys.cdb.model.computer.Computer;
 @Repository("computerDAO")
 public class ComputerDAO {
 
-    /**
-     * mapper ComputerMapper.
-     */
-    private ComputerSQLMapper mapper;
+	/**
+	 * mapper ComputerMapper.
+	 */
+	private ComputerSQLMapper mapper;
 
-    private DataSource dataSource;
+	private DataSource dataSource;
 
-    /**
-     * LOGGER Logger.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
+	/**
+	 * LOGGER Logger.
+	 */
+	private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
 
-    /**
-     * String base SQL request.
-     */
-    private static final String LIST_REQUEST = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id %s %s %s";
-    private static final String FIND_BY_ID = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.id = ?";
-    private static final String DELETE_ONE = "DELETE FROM computer WHERE id = ?";
-    private static final String CREATE_ONE = "INSERT INTO computer(name, introduced, discontinued, company_id) VALUES(?, ?, ?, ?)";
-    private static final String UPDATE_ONE = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
-    private static final String COUNT_ALL = "SELECT COUNT(*) AS total FROM computer LEFT JOIN company ON computer.company_id = company.id %s";
-    private static final String DELETE_MANY = "DELETE FROM computer WHERE id IN (%s)";
+	/**
+	 * String base SQL request.
+	 */
+	private static final String LIST_REQUEST = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id %s %s %s";
+	private static final String FIND_BY_ID = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.id = ?";
+	private static final String DELETE_ONE = "DELETE FROM computer WHERE id = ?";
+	private static final String CREATE_ONE = "INSERT INTO computer(name, introduced, discontinued, company_id) VALUES(?, ?, ?, ?)";
+	private static final String UPDATE_ONE = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
+	private static final String COUNT_ALL = "SELECT COUNT(*) AS total FROM computer LEFT JOIN company ON computer.company_id = company.id %s";
+	private static final String DELETE_MANY = "DELETE FROM computer WHERE id IN (%s)";
 
-    private static final String SEARCH_WHERE_CLAUSE = "WHERE computer.name LIKE '%%%s%%' OR company.name LIKE '%%%s%%'";
-    private static final String ORDER_BY_CLAUSE = "ORDER BY %s";
+	private static final String SEARCH_WHERE_CLAUSE = "WHERE computer.name LIKE '%%%s%%' OR company.name LIKE '%%%s%%'";
+	private static final String ORDER_BY_CLAUSE = "ORDER BY %s";
 
-    /**
-     * Constructor.
-     * 
-     * @param ds DataSource
-     * @param sqlMapper ComputerSQLMapper
-     */
-    public ComputerDAO(DataSource ds, ComputerSQLMapper sqlMapper) {
-    	dataSource = ds;
-    	mapper = sqlMapper;
-    	
-    }
-    
-    /**
-     * Fetch a specific computer.
-     *
-     * @param id Long
-     * @return Optional<Computer>
-     * @throws EmptyNameException         ene
-     * @throws UnconsistentDatesException ude
-     */
-    @Transactional(readOnly = true)
-    public Optional<Computer> get(Long id) throws EmptyNameException, UnconsistentDatesException {
-        Computer computer = null;
-        try (Connection conn = dataSource.getConnection()) {
+	/**
+	 * Constructor.
+	 * 
+	 * @param ds        DataSource
+	 * @param sqlMapper ComputerSQLMapper
+	 */
+	public ComputerDAO(DataSource ds, ComputerSQLMapper sqlMapper) {
+		dataSource = ds;
+		mapper = sqlMapper;
 
-            PreparedStatement state = conn.prepareStatement(FIND_BY_ID);
-            state.setLong(1, id);
-            ResultSet result = state.executeQuery();
-            computer = result.next() ? mapper.queryResultToObject(result) : null;
+	}
 
-            result.close();
-            state.close();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            LOGGER.error(e.getMessage());
-        }
+	/**
+	 * Fetch a specific computer.
+	 *
+	 * @param id Long
+	 * @return Optional<Computer>
+	 * @throws EmptyNameException         ene
+	 * @throws UnconsistentDatesException ude
+	 */
+	@Transactional(readOnly = true)
+	public Optional<Computer> get(Long id) throws EmptyNameException, UnconsistentDatesException {
+		Computer computer = null;
+		try (Connection conn = dataSource.getConnection()) {
 
-        return Optional.ofNullable(computer);
-    }
+			PreparedStatement state = conn.prepareStatement(FIND_BY_ID);
+			state.setLong(1, id);
+			ResultSet result = state.executeQuery();
+			computer = result.next() ? mapper.queryResultToObject(result) : null;
 
-    /**
-     * Create a new computer.
-     *
-     * @param computer Computer
-     * @return Optional<Computer>
-     */
-    @Transactional(readOnly = false)
-    public Optional<Computer> create(Computer computer) {
-        Optional<Computer> savedComputer = Optional.empty();
+			result.close();
+			state.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			LOGGER.error(e.getMessage());
+		}
 
-        if (computer == null) {
-            return savedComputer;
-        }
-        // TODO Auto-generated method stub
-        Long companyId = (computer.getCompany() != null ? computer.getCompany().getId() : null);
+		return Optional.ofNullable(computer);
+	}
 
-        Timestamp introductionDate = mapper.getSqlTimestampValue(computer.getIntroductionDate());
-        Timestamp discontinuationDate = mapper.getSqlTimestampValue(computer.getDiscontinuationDate());
+	/**
+	 * Create a new computer.
+	 *
+	 * @param computer Computer
+	 * @return Optional<Computer>
+	 */
+	@Transactional(readOnly = false)
+	public Optional<Computer> create(Computer computer) {
+		Optional<Computer> savedComputer = Optional.empty();
 
-        try (Connection conn = dataSource.getConnection()) {
+		if (computer == null) {
+			return savedComputer;
+		}
+		// TODO Auto-generated method stub
+		Long companyId = (computer.getCompany() != null ? computer.getCompany().getId() : null);
 
-            PreparedStatement state = conn.prepareStatement(CREATE_ONE, Statement.RETURN_GENERATED_KEYS);
+		Timestamp introductionDate = mapper.getSqlTimestampValue(computer.getIntroductionDate());
+		Timestamp discontinuationDate = mapper.getSqlTimestampValue(computer.getDiscontinuationDate());
 
-            state.setString(1, computer.getName());
-            state.setTimestamp(2, introductionDate);
-            state.setTimestamp(3, discontinuationDate);
+		try (Connection conn = dataSource.getConnection()) {
 
-            state.setObject(4, companyId, java.sql.Types.INTEGER);
+			PreparedStatement state = conn.prepareStatement(CREATE_ONE, Statement.RETURN_GENERATED_KEYS);
 
-            int affectedRows = state.executeUpdate();
-            if (affectedRows == 0) {
-                LOGGER.warn("Computer not created.");
-                return savedComputer;
-            }
+			state.setString(1, computer.getName());
+			state.setTimestamp(2, introductionDate);
+			state.setTimestamp(3, discontinuationDate);
 
-            ResultSet generatedKeys = state.getGeneratedKeys();
-            generatedKeys.next();
-            computer.setId(generatedKeys.getLong(1));
-            savedComputer = Optional.ofNullable(computer);
-            LOGGER.info("Computer created with id : " + generatedKeys.getLong(1));
+			state.setObject(4, companyId, java.sql.Types.INTEGER);
 
-        } catch (SQLException e) {
-            LOGGER.error(e.getMessage());
-        }
+			int affectedRows = state.executeUpdate();
+			if (affectedRows == 0) {
+				LOGGER.warn("Computer not created.");
+				return savedComputer;
+			}
 
-        return savedComputer;
-    }
+			ResultSet generatedKeys = state.getGeneratedKeys();
+			generatedKeys.next();
+			computer.setId(generatedKeys.getLong(1));
+			savedComputer = Optional.ofNullable(computer);
+			LOGGER.info("Computer created with id : " + generatedKeys.getLong(1));
 
-    /**
-     * Delete a specific computer.
-     *
-     * @param id Long
-     * @return boolean
-     */
-    @Transactional(readOnly = false)
-    public boolean delete(Long id) {
-        // TODO Auto-generated method stub
-        boolean isSuccess = false;
-        try (Connection conn = dataSource.getConnection()) {
+		} catch (SQLException e) {
+			LOGGER.error(e.getMessage());
+		}
 
-            PreparedStatement state = conn.prepareStatement(DELETE_ONE);
-            state.setLong(1, id);
-            int result = state.executeUpdate();
-            state.close();
-            if (result == 1) {
-                LOGGER.info("Computer " + id + " deleted.");
-            } else {
-                LOGGER.warn("Computer " + id + " could not be deleted.");
-            }
-            isSuccess = result == 1;
+		return savedComputer;
+	}
 
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            LOGGER.error(e.getMessage());
-        }
+	/**
+	 * Delete a specific computer.
+	 *
+	 * @param id Long
+	 * @return boolean
+	 */
+	@Transactional(readOnly = false)
+	public boolean delete(Long id) {
+		// TODO Auto-generated method stub
+		boolean isSuccess = false;
+		try (Connection conn = dataSource.getConnection()) {
 
-        return isSuccess;
-    }
+			PreparedStatement state = conn.prepareStatement(DELETE_ONE);
+			state.setLong(1, id);
+			int result = state.executeUpdate();
+			state.close();
+			if (result == 1) {
+				LOGGER.info("Computer " + id + " deleted.");
+			} else {
+				LOGGER.warn("Computer " + id + " could not be deleted.");
+			}
+			isSuccess = result == 1;
 
-    /**
-     * Update a specific computer.
-     *
-     * @param computer Computer
-     * @return boolean
-     */
-    @Transactional(readOnly = false)
-    public boolean update(Computer computer) {
-        // TODO Auto-generated method stub
-        boolean isSuccess = false;
-        Long companyId = (computer.getCompany() != null ? computer.getCompany().getId() : null);
-        Timestamp introductionDate = mapper.getSqlTimestampValue(computer.getIntroductionDate());
-        Timestamp discontinuationDate = mapper.getSqlTimestampValue(computer.getDiscontinuationDate());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			LOGGER.error(e.getMessage());
+		}
 
-        try (Connection conn = dataSource.getConnection()) {
+		return isSuccess;
+	}
 
-            PreparedStatement state = conn.prepareStatement(UPDATE_ONE);
+	/**
+	 * Update a specific computer.
+	 *
+	 * @param computer Computer
+	 * @return boolean
+	 */
+	@Transactional(readOnly = false)
+	public boolean update(Computer computer) {
+		// TODO Auto-generated method stub
+		boolean isSuccess = false;
+		Long companyId = (computer.getCompany() != null ? computer.getCompany().getId() : null);
+		Timestamp introductionDate = mapper.getSqlTimestampValue(computer.getIntroductionDate());
+		Timestamp discontinuationDate = mapper.getSqlTimestampValue(computer.getDiscontinuationDate());
 
-            state.setString(1, computer.getName());
-            state.setTimestamp(2, introductionDate);
-            state.setTimestamp(3, discontinuationDate);
-            state.setObject(4, companyId, java.sql.Types.INTEGER);
-            state.setLong(5, computer.getId());
+		try (Connection conn = dataSource.getConnection()) {
 
-            int affectedRows = state.executeUpdate();
+			PreparedStatement state = conn.prepareStatement(UPDATE_ONE);
 
-            if (affectedRows == 1) {
-                isSuccess = true;
-                LOGGER.info("Computer " + computer.getId() + " updated.");
-            } else {
-                LOGGER.warn("Computer " + computer.getId() + " might not have been updated. Affected Rows : "
-                        + affectedRows);
-            }
+			state.setString(1, computer.getName());
+			state.setTimestamp(2, introductionDate);
+			state.setTimestamp(3, discontinuationDate);
+			state.setObject(4, companyId, java.sql.Types.INTEGER);
+			state.setLong(5, computer.getId());
 
-        } catch (SQLException e) {
-            LOGGER.error(e.getMessage());
-        }
+			int affectedRows = state.executeUpdate();
 
-        return isSuccess;
-    }
+			if (affectedRows == 1) {
+				isSuccess = true;
+				LOGGER.info("Computer " + computer.getId() + " updated.");
+			} else {
+				LOGGER.warn("Computer " + computer.getId() + " might not have been updated. Affected Rows : "
+						+ affectedRows);
+			}
 
-    /**
-     * List a specific range of computers.
-     *
-     * @param page        int
-     * @param itemPerPage int
-     * @param search      String
-     * @param orderBy     String
-     * @return List<Computer>
-     * @throws EmptyNameException         ene
-     * @throws UnconsistentDatesException ude
-     */
-    @Transactional(readOnly = true)
-    public List<Computer> list(int page, int itemPerPage, String search, String orderBy)
-            throws EmptyNameException, UnconsistentDatesException {
-        // TODO Auto-generated method stub
-        LinkedList<Computer> computers = new LinkedList<Computer>();
+		} catch (SQLException e) {
+			LOGGER.error(e.getMessage());
+		}
 
-        try (Connection conn = dataSource.getConnection()) {
+		return isSuccess;
+	}
 
-            Statement state = conn.createStatement();
-            // Add limit / Offset clause.
-            String offsetClause = itemPerPage > 0 ? "LIMIT " + itemPerPage : "";
-            offsetClause += (page > 0 && itemPerPage > 0) ? " OFFSET " + ((page - 1) * itemPerPage) : "";
+	/**
+	 * List a specific range of computers.
+	 *
+	 * @param page        int
+	 * @param itemPerPage int
+	 * @param search      String
+	 * @param orderBy     String
+	 * @return List<Computer>
+	 * @throws EmptyNameException         ene
+	 * @throws UnconsistentDatesException ude
+	 */
+	@Transactional(readOnly = true)
+	public List<Computer> list(int page, int itemPerPage, String search, String orderBy)
+			throws EmptyNameException, UnconsistentDatesException {
+		// TODO Auto-generated method stub
+		LinkedList<Computer> computers = new LinkedList<Computer>();
 
-            // Add where clause
-            String whereClause = search != null && !search.equals("")
-                    ? String.format(SEARCH_WHERE_CLAUSE, search, search)
-                    : "";
+		try (Connection conn = dataSource.getConnection()) {
 
-            String orderByClause = "";
-            if (orderBy != null && !orderBy.equals("")) {
-                switch (orderBy) {
-                case "name":
-                    orderByClause = String.format(ORDER_BY_CLAUSE, "computer.name");
-                    break;
-                case "introduced":
-                    orderByClause = String.format(ORDER_BY_CLAUSE, "computer.introduced");
-                    break;
-                case "discontinued":
-                    orderByClause = String.format(ORDER_BY_CLAUSE, "computer.discontinued");
-                    break;
-                case "company":
-                    orderByClause = String.format(ORDER_BY_CLAUSE, "company.name");
-                    break;
-                }
-            }
+			Statement state = conn.createStatement();
+			// Add limit / Offset clause.
+			String offsetClause = itemPerPage > 0 ? "LIMIT " + itemPerPage : "";
+			offsetClause += (page > 0 && itemPerPage > 0) ? " OFFSET " + ((page - 1) * itemPerPage) : "";
 
-            ResultSet result = state
-                    .executeQuery(String.format(LIST_REQUEST, whereClause, orderByClause, offsetClause));
-            while (result.next()) {
-                Computer c = mapper.queryResultToObject(result);
-                if (c != null) {
-                    computers.add(c);
-                }
-            }
-            result.close();
-            state.close();
+			// Add where clause
+			String whereClause = search != null && !search.equals("")
+					? String.format(SEARCH_WHERE_CLAUSE, search, search)
+					: "";
 
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            LOGGER.error(e.getMessage());
-        }
+			String orderByClause = "";
+			if (orderBy != null && !orderBy.equals("")) {
+				switch (orderBy) {
+				case "name":
+					orderByClause = String.format(ORDER_BY_CLAUSE, "computer.name");
+					break;
+				case "introduced":
+					orderByClause = String.format(ORDER_BY_CLAUSE, "computer.introduced");
+					break;
+				case "discontinued":
+					orderByClause = String.format(ORDER_BY_CLAUSE, "computer.discontinued");
+					break;
+				case "company":
+					orderByClause = String.format(ORDER_BY_CLAUSE, "company.name");
+					break;
+				}
+			}
 
-        return computers;
-    }
+			ResultSet result = state
+					.executeQuery(String.format(LIST_REQUEST, whereClause, orderByClause, offsetClause));
+			while (result.next()) {
+				Computer c = mapper.queryResultToObject(result);
+				if (c != null) {
+					computers.add(c);
+				}
+			}
+			result.close();
+			state.close();
 
-    /**
-     * Count the number of computers.
-     *
-     * @param search String
-     * @return int
-     */
-    @Transactional(readOnly = true)
-    public int count(String search) {
-        // TODO Auto-generated method stub
-        int count = -1;
-        try (Connection conn = dataSource.getConnection()) {
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			LOGGER.error(e.getMessage());
+		}
 
-            Statement state = conn.createStatement();
-            String whereClause = search != null && !search.equals("")
-                    ? String.format(SEARCH_WHERE_CLAUSE, search, search)
-                    : "";
-            ResultSet result = state.executeQuery(String.format(COUNT_ALL, whereClause));
-            result.next();
-            count = result.getInt("total");
-            result.close();
-            state.close();
+		return computers;
+	}
 
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            LOGGER.error(e.getMessage());
-        }
+	/**
+	 * Count the number of computers.
+	 *
+	 * @param search String
+	 * @return int
+	 */
+	@Transactional(readOnly = true)
+	public int count(String search) {
+		// TODO Auto-generated method stub
+		int count = -1;
+		try (Connection conn = dataSource.getConnection()) {
 
-        return count;
-    }
+			Statement state = conn.createStatement();
+			String whereClause = search != null && !search.equals("")
+					? String.format(SEARCH_WHERE_CLAUSE, search, search)
+					: "";
+			ResultSet result = state.executeQuery(String.format(COUNT_ALL, whereClause));
+			result.next();
+			count = result.getInt("total");
+			result.close();
+			state.close();
 
-    /**
-     * Delete a set of computers.
-     *
-     * @param ids String[]
-     * @return boolean
-     */
-    @Transactional(readOnly = false)
-    public boolean deleteMany(String[] ids) {
-        // TODO Auto-generated method stub
-        boolean isSuccess = false;
-        try (Connection conn = dataSource.getConnection()) {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < ids.length; i++) {
-                if (i != 0) {
-                    sb.append(", ");
-                }
-                sb.append("?");
-            }
-            PreparedStatement state = conn.prepareStatement(String.format(DELETE_MANY, sb.toString()));
-            for (int i = 0; i < ids.length; i++) {
-                state.setInt(i + 1, Integer.parseInt(ids[i]));
-            }
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			LOGGER.error(e.getMessage());
+		}
 
-            int result = state.executeUpdate();
-            state.close();
-            isSuccess = result > 0;
+		return count;
+	}
 
-        } catch (NumberFormatException nfe) {
-            LOGGER.error("deleteMany : " + nfe.getMessage());
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            LOGGER.error(e.getMessage());
-        }
+	/**
+	 * Delete a set of computers.
+	 *
+	 * @param ids String[]
+	 * @return boolean
+	 */
+	@Transactional(readOnly = false)
+	public boolean deleteMany(String[] ids) {
+		// TODO Auto-generated method stub
+		boolean isSuccess = false;
+		try (Connection conn = dataSource.getConnection()) {
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < ids.length; i++) {
+				if (i != 0) {
+					sb.append(", ");
+				}
+				sb.append("?");
+			}
+			PreparedStatement state = conn.prepareStatement(String.format(DELETE_MANY, sb.toString()));
+			for (int i = 0; i < ids.length; i++) {
+				state.setInt(i + 1, Integer.parseInt(ids[i]));
+			}
 
-        return isSuccess;
-    }
+			int result = state.executeUpdate();
+			state.close();
+			isSuccess = result > 0;
+
+		} catch (NumberFormatException nfe) {
+			LOGGER.error("deleteMany : " + nfe.getMessage());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			LOGGER.error(e.getMessage());
+		}
+
+		return isSuccess;
+	}
 
 }

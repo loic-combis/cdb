@@ -9,18 +9,18 @@ package com.excilys.cdb.exception;
  */
 public class EmptyNameException extends IllegalArgumentException {
 
-    /**
-     * serialVersionUID long.
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 * serialVersionUID long.
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * Constructor.
-     *
-     * @param message String
-     */
-    public EmptyNameException(String message) {
-        super(message);
-    }
+	/**
+	 * Constructor.
+	 *
+	 * @param message String
+	 */
+	public EmptyNameException(String message) {
+		super(message);
+	}
 
 }

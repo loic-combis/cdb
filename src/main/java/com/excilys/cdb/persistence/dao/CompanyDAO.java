@@ -31,129 +31,128 @@ import com.excilys.cdb.model.company.Company;
 @Repository("companyDAO")
 public class CompanyDAO {
 
-    /**
-     * mapper CompanyMapper.
-     */
-    private CompanySQLMapper mapper;
+	/**
+	 * mapper CompanyMapper.
+	 */
+	private CompanySQLMapper mapper;
 
-    private DataSource dataSource;
+	private DataSource dataSource;
 
-    
-    /**
-     * LOGGER Logger.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAO.class);
+	/**
+	 * LOGGER Logger.
+	 */
+	private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAO.class);
 
-    /**
-     * String base SQL request.
-     */
-    private static final String LIST_REQUEST = "SELECT * FROM company %s";
-    private static final String FIND_BY_ID = "SELECT * FROM company WHERE id = ?";
-    private static final String DELETE = "DELETE FROM company WHERE id = ?";
-    private static final String DELETE_RELATED_COMPUTERS = "DELETE FROM computer WHERE company_id = ?";
+	/**
+	 * String base SQL request.
+	 */
+	private static final String LIST_REQUEST = "SELECT * FROM company %s";
+	private static final String FIND_BY_ID = "SELECT * FROM company WHERE id = ?";
+	private static final String DELETE = "DELETE FROM company WHERE id = ?";
+	private static final String DELETE_RELATED_COMPUTERS = "DELETE FROM computer WHERE company_id = ?";
 
-    /**
-     * Constructor.
-     * 
-     * @param ds DataSource
-     * @param sqlMapper CompanySQLMapper
-     */
-    public CompanyDAO(DataSource ds, CompanySQLMapper sqlMapper) {
-    	dataSource = ds;
-    	mapper = sqlMapper;
-    	
-    }
-    
-    /**
-     * Fetch the specified computer from the persistence.
-     *
-     * @param id Long.
-     * @return Optional<Company>
-     */
-    @Transactional(readOnly = true)
-    public Optional<Company> get(Long id) {
-        // TODO Auto-generated method stub
-        Company company = null;
-        try (Connection conn = dataSource.getConnection()) {
+	/**
+	 * Constructor.
+	 * 
+	 * @param ds        DataSource
+	 * @param sqlMapper CompanySQLMapper
+	 */
+	public CompanyDAO(DataSource ds, CompanySQLMapper sqlMapper) {
+		dataSource = ds;
+		mapper = sqlMapper;
 
-            PreparedStatement state = conn.prepareStatement(FIND_BY_ID);
-            state.setLong(1, id);
-            ResultSet result = state.executeQuery();
-            company = result.next() ? mapper.queryResultToObject(result) : null;
-            result.close();
-            state.close();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            LOGGER.error(e.getMessage());
-        }
+	}
 
-        return Optional.ofNullable(company);
-    }
+	/**
+	 * Fetch the specified computer from the persistence.
+	 *
+	 * @param id Long.
+	 * @return Optional<Company>
+	 */
+	@Transactional(readOnly = true)
+	public Optional<Company> get(Long id) {
+		// TODO Auto-generated method stub
+		Company company = null;
+		try (Connection conn = dataSource.getConnection()) {
 
-    /**
-     * Fetch a specific range of companies.
-     *
-     * @param page        int
-     * @param itemPerPage int
-     * @return List<Company>
-     */
-    @Transactional(readOnly = true)
-    public List<Company> list(int page, int itemPerPage) {
-        // TODO Auto-generated method stub
-        LinkedList<Company> companies = new LinkedList<Company>();
+			PreparedStatement state = conn.prepareStatement(FIND_BY_ID);
+			state.setLong(1, id);
+			ResultSet result = state.executeQuery();
+			company = result.next() ? mapper.queryResultToObject(result) : null;
+			result.close();
+			state.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			LOGGER.error(e.getMessage());
+		}
 
-        try (Connection conn = dataSource.getConnection()) {
-            Statement state = conn.createStatement();
-            String offsetClause = itemPerPage > 0 ? "LIMIT " + itemPerPage : "";
-            offsetClause += (page > 1 && itemPerPage > 0) ? " OFFSET " + ((page - 1) * itemPerPage) : "";
+		return Optional.ofNullable(company);
+	}
 
-            ResultSet result = state.executeQuery(String.format(LIST_REQUEST, offsetClause));
-            while (result.next()) {
-                Company c = mapper.queryResultToObject(result);
-                if (c != null) {
-                    companies.add(c);
-                }
-            }
-            result.close();
-            state.close();
+	/**
+	 * Fetch a specific range of companies.
+	 *
+	 * @param page        int
+	 * @param itemPerPage int
+	 * @return List<Company>
+	 */
+	@Transactional(readOnly = true)
+	public List<Company> list(int page, int itemPerPage) {
+		// TODO Auto-generated method stub
+		LinkedList<Company> companies = new LinkedList<Company>();
 
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            LOGGER.error(e.getMessage());
-        }
+		try (Connection conn = dataSource.getConnection()) {
+			Statement state = conn.createStatement();
+			String offsetClause = itemPerPage > 0 ? "LIMIT " + itemPerPage : "";
+			offsetClause += (page > 1 && itemPerPage > 0) ? " OFFSET " + ((page - 1) * itemPerPage) : "";
 
-        return companies;
-    }
+			ResultSet result = state.executeQuery(String.format(LIST_REQUEST, offsetClause));
+			while (result.next()) {
+				Company c = mapper.queryResultToObject(result);
+				if (c != null) {
+					companies.add(c);
+				}
+			}
+			result.close();
+			state.close();
 
-    /**
-     * Delete the specified company and all the related computers.
-     *
-     * @param id Long
-     * @return boolean
-     */
-    @Transactional(readOnly = false)
-    public boolean delete(Long id) {
-        boolean isSuccess = false;
-        try (Connection conn = dataSource.getConnection()) {
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			LOGGER.error(e.getMessage());
+		}
 
-            conn.setAutoCommit(false);
+		return companies;
+	}
 
-            // Delete all the related computers.
-            PreparedStatement deleteRelatedComputersStatement = conn.prepareStatement(DELETE_RELATED_COMPUTERS);
-            deleteRelatedComputersStatement.setLong(1, id);
-            deleteRelatedComputersStatement.executeUpdate();
+	/**
+	 * Delete the specified company and all the related computers.
+	 *
+	 * @param id Long
+	 * @return boolean
+	 */
+	@Transactional(readOnly = false)
+	public boolean delete(Long id) {
+		boolean isSuccess = false;
+		try (Connection conn = dataSource.getConnection()) {
 
-            // Delete the company
-            PreparedStatement deleteCompanyStatement = conn.prepareStatement(DELETE);
-            deleteCompanyStatement.setLong(1, id);
-            deleteCompanyStatement.executeUpdate();
+			conn.setAutoCommit(false);
 
-            conn.commit();
-            isSuccess = true;
+			// Delete all the related computers.
+			PreparedStatement deleteRelatedComputersStatement = conn.prepareStatement(DELETE_RELATED_COMPUTERS);
+			deleteRelatedComputersStatement.setLong(1, id);
+			deleteRelatedComputersStatement.executeUpdate();
 
-        } catch (SQLException e) {
-            LOGGER.error(e.getMessage());
-        }
-        return isSuccess;
-    }
+			// Delete the company
+			PreparedStatement deleteCompanyStatement = conn.prepareStatement(DELETE);
+			deleteCompanyStatement.setLong(1, id);
+			deleteCompanyStatement.executeUpdate();
+
+			conn.commit();
+			isSuccess = true;
+
+		} catch (SQLException e) {
+			LOGGER.error(e.getMessage());
+		}
+		return isSuccess;
+	}
 }

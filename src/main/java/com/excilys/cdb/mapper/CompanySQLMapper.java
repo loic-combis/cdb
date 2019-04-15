@@ -20,14 +20,14 @@ import com.excilys.cdb.model.company.CompanyFactory;
 @Component("companySQLMapper")
 public class CompanySQLMapper extends SqlMapper<Company> {
 
-    @Override
-    public Company queryResultToObject(ResultSet result) throws SQLException {
-        // TODO Auto-generated method stub
-        Company company = null;
-        if (result != null) {
-            company = CompanyFactory.getInstance().create(result.getLong(1), result.getString(2));
-        }
-        return company;
-    }
+	@Override
+	public Company queryResultToObject(ResultSet result) throws SQLException {
+		// TODO Auto-generated method stub
+		Company company = null;
+		if (result != null) {
+			company = CompanyFactory.getInstance().create(result.getLong(1), result.getString(2));
+		}
+		return company;
+	}
 
 }

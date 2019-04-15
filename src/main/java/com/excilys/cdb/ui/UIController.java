@@ -8,14 +8,14 @@ package com.excilys.cdb.ui;
  */
 public interface UIController {
 
-    /**
-     * Starts the client.
-     */
-    void start();
+	/**
+	 * Starts the client.
+	 */
+	void start();
 
-    /**
-     * Stops the client.
-     */
-    void stop();
+	/**
+	 * Stops the client.
+	 */
+	void stop();
 
 }

@@ -23,68 +23,68 @@ import com.excilys.cdb.service.ComputerService;
 @WebServlet(name = "Edit Computer", urlPatterns = { "/edit-computer" })
 public class EditComputerServlet extends HttpServlet {
 
-    /**
-     * serialVersionUID long.
-     */
-    private static final long serialVersionUID = 3345158907466408519L;
+	/**
+	 * serialVersionUID long.
+	 */
+	private static final long serialVersionUID = 3345158907466408519L;
 
-    @Autowired
-    private ComputerService computerService;
+	@Autowired
+	private ComputerService computerService;
 
-    private Logger logger = LoggerFactory.getLogger(EditComputerServlet.class);
+	private Logger logger = LoggerFactory.getLogger(EditComputerServlet.class);
 
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
-    }
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
+		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+	}
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
-        String status = "danger";
-        String message = "";
-        ComputerDTOBuilder builder = new ComputerDTOBuilder();
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		String status = "danger";
+		String message = "";
+		ComputerDTOBuilder builder = new ComputerDTOBuilder();
 
-        try {
-            builder.setId(Long.valueOf(request.getParameter("computerId"))).setName(request.getParameter("name"))
-                    .setIntroduction(request.getParameter("introduced"))
-                    .setDiscontinuation(request.getParameter("discontinued"));
+		try {
+			builder.setId(Long.valueOf(request.getParameter("computerId"))).setName(request.getParameter("name"))
+					.setIntroduction(request.getParameter("introduced"))
+					.setDiscontinuation(request.getParameter("discontinued"));
 
-            Long companyId = Long.valueOf(request.getParameter("company"));
-            if (companyId != -1L) {
-                builder.setCompanyId(companyId);
-            }
+			Long companyId = Long.valueOf(request.getParameter("company"));
+			if (companyId != -1L) {
+				builder.setCompanyId(companyId);
+			}
 
-            if (computerService.update(builder.get())) {
-                status = "success";
-                message = ComputerService.EDIT_COMPUTER_SUCCESS;
-            } else {
-                message = ComputerService.EDIT_COMPUTER_FAILURE;
-            }
+			if (computerService.update(builder.get())) {
+				status = "success";
+				message = ComputerService.EDIT_COMPUTER_SUCCESS;
+			} else {
+				message = ComputerService.EDIT_COMPUTER_FAILURE;
+			}
 
-        } catch (DateTimeParseException e) {
-            // TODO Auto-generated catch block
-            logger.warn(e.getMessage());
-            message = ComputerService.WRONG_DATE_FORMAT;
+		} catch (DateTimeParseException e) {
+			// TODO Auto-generated catch block
+			logger.warn(e.getMessage());
+			message = ComputerService.WRONG_DATE_FORMAT;
 
-        } catch (EmptyNameException ene) {
-            logger.warn(ene.getMessage());
-            message = ComputerService.EMPTY_NAME;
+		} catch (EmptyNameException ene) {
+			logger.warn(ene.getMessage());
+			message = ComputerService.EMPTY_NAME;
 
-        } catch (NumberFormatException nfe) {
-            logger.warn(nfe.getMessage());
-            message = builder.get().getId() == null ? ComputerService.INVALID_COMPUTER_ID
-                    : ComputerService.INVALID_COMPANY;
+		} catch (NumberFormatException nfe) {
+			logger.warn(nfe.getMessage());
+			message = builder.get().getId() == null ? ComputerService.INVALID_COMPUTER_ID
+					: ComputerService.INVALID_COMPANY;
 
-        } catch (UnconsistentDatesException ude) {
-            logger.warn(ude.getMessage());
-            message = ComputerService.UNCONSISTENT_DATES;
+		} catch (UnconsistentDatesException ude) {
+			logger.warn(ude.getMessage());
+			message = ComputerService.UNCONSISTENT_DATES;
 
-        } finally {
-            response.sendRedirect(
-                    request.getContextPath() + "/list-computers?status=" + status + "&message=" + message);
-        }
-    }
+		} finally {
+			response.sendRedirect(
+					request.getContextPath() + "/list-computers?status=" + status + "&message=" + message);
+		}
+	}
 
 }
