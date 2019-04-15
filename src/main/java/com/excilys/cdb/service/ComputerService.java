@@ -7,7 +7,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -61,7 +60,7 @@ public class ComputerService {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param map
 	 * @param dao
 	 */
@@ -92,10 +91,6 @@ public class ComputerService {
 			logger.error(ene.getMessage());
 			throw new UnsuccessfulTreatmentException("Fetched computer with empty name from persistence.");
 
-		} catch (UnconsistentDatesException ude) {
-			// TODO Auto-generated catch block
-			logger.error(ude.getMessage());
-			throw new UnsuccessfulTreatmentException("Fetched computer with unconsistent dates from persistence.");
 		}
 		return computers;
 	}
@@ -127,14 +122,9 @@ public class ComputerService {
 	 * @throws NumberFormatException      nfe
 	 * @throws UnconsistentDatesException ude
 	 */
-	public Optional<ComputerDTO> create(ComputerDTO computerDto)
+	public boolean create(ComputerDTO computerDto)
 			throws NumberFormatException, EmptyNameException, DateTimeParseException, UnconsistentDatesException {
-		Optional<ComputerDTO> dto = Optional.empty();
-		Optional<Computer> opt = computerDAO.create(mapper.toComputer(computerDto));
-		if (opt.isPresent()) {
-			dto = Optional.of(mapper.toDTO(opt.get()));
-		}
-		return dto;
+		return computerDAO.create(mapper.toComputer(computerDto));
 	}
 
 	/**

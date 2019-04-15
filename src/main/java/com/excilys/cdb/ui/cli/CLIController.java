@@ -396,11 +396,9 @@ public class CLIController implements UIController, PageProvider {
 			c.setCompany(comp.get().getName());
 			c.setCompanyId(comp.get().getId());
 		}
-
-		Optional<ComputerDTO> computer = Optional.empty();
-
+		boolean isSuccess = false;
 		try {
-			computer = computerService.create(c);
+			isSuccess = computerService.create(c);
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
 			logger.error(e.getMessage());
@@ -414,8 +412,8 @@ public class CLIController implements UIController, PageProvider {
 			// TODO Auto-generated catch block
 			logger.error(e.getMessage());
 		} finally {
-			if (computer.isPresent()) {
-				presenter.present(computer.get());
+			if (isSuccess) {
+				presenter.notify(Presenter.CREATE_SUCCESS);
 
 			} else {
 				presenter.notify(Presenter.CREATE_FAIL);

@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.springframework.context.annotation.Lazy;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.excilys.cdb.model.company.Company;
@@ -18,14 +19,14 @@ import com.excilys.cdb.model.company.CompanyFactory;
  */
 @Lazy
 @Component("companySQLMapper")
-public class CompanySQLMapper extends SqlMapper<Company> {
+public class CompanySQLMapper extends SqlMapper implements RowMapper<Company> {
 
 	@Override
-	public Company queryResultToObject(ResultSet result) throws SQLException {
+	public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
 		// TODO Auto-generated method stub
 		Company company = null;
-		if (result != null) {
-			company = CompanyFactory.getInstance().create(result.getLong(1), result.getString(2));
+		if (rs != null) {
+			company = CompanyFactory.getInstance().create(rs.getLong(1), rs.getString(2));
 		}
 		return company;
 	}

@@ -148,7 +148,7 @@
 											</c:forEach>
 							        	</select>
 							        </td>
-							        <td class="editMode"><input class="btn btn-success" type="submit" value="Save"/></td>
+							        <td class="editMode"><input class="btn btn-success" type="submit" value="Save"/></td>							        
 							    </fieldset>
 							</form>
 						</tr>

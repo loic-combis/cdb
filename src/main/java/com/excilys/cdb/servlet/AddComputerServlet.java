@@ -2,7 +2,6 @@ package com.excilys.cdb.servlet;
 
 import java.io.IOException;
 import java.time.format.DateTimeParseException;
-import java.util.Optional;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -19,7 +18,6 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import com.excilys.cdb.exception.EmptyNameException;
 import com.excilys.cdb.exception.UnconsistentDatesException;
 import com.excilys.cdb.model.Feedback;
-import com.excilys.cdb.model.computer.ComputerDTO;
 import com.excilys.cdb.model.computer.ComputerDTOBuilder;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
@@ -83,8 +81,7 @@ public class AddComputerServlet extends HttpServlet {
 				builder.setCompanyId(companyId);
 			}
 
-			Optional<ComputerDTO> opt = computerService.create(builder.get());
-			if (!opt.isPresent()) {
+			if (!computerService.create(builder.get())) {
 				message = ComputerService.ADD_COMPUTER_FAILURE;
 			} else {
 				status = "success";
@@ -113,5 +110,4 @@ public class AddComputerServlet extends HttpServlet {
 					request.getContextPath() + "/add-computer?feedback=" + status + "&message=" + message);
 		}
 	}
-
 }

@@ -1,30 +1,15 @@
 package com.excilys.cdb.mapper;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
-
-import com.excilys.cdb.exception.UnconsistentDatesException;
 
 /**
  * Abstract.
  *
  * @author excilys
  *
- * @param <T> the type of entity to be mapped.
  */
-public abstract class SqlMapper<T> {
-
-	/**
-	 * Instantiate a T object from a query result.
-	 *
-	 * @param result ResultSet
-	 * @return T
-	 * @throws SQLException               sqle
-	 * @throws UnconsistentDatesException ude
-	 */
-	public abstract T queryResultToObject(ResultSet result) throws SQLException, UnconsistentDatesException;
+public abstract class SqlMapper {
 
 	/**
 	 * Format a LocalDate to java.sql.Timestamp.

@@ -34,7 +34,7 @@ public class CompanyMapperTest {
 	@Test
 	public void mapFromNullTest() {
 		try {
-			assertNull(mapper.queryResultToObject(null));
+			assertNull(mapper.mapRow(null, 0));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			fail("Not handling null result.");

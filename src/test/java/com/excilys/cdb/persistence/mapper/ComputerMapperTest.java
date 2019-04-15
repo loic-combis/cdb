@@ -14,7 +14,6 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.excilys.cdb.exception.EmptyNameException;
-import com.excilys.cdb.exception.UnconsistentDatesException;
 import com.excilys.cdb.mapper.ComputerSQLMapper;
 
 @RunWith(SpringRunner.class)
@@ -36,16 +35,12 @@ public class ComputerMapperTest {
 	@Test
 	public void resultToObjectTest() {
 		try {
-			assertNull(mapper.queryResultToObject(null));
+			assertNull(mapper.mapRow(null, 0));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail("Not handling null parameter.");
 		} catch (EmptyNameException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			fail(e.getMessage());
-		} catch (UnconsistentDatesException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail(e.getMessage());

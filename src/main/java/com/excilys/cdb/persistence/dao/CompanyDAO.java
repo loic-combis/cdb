@@ -1,19 +1,13 @@
 package com.excilys.cdb.persistence.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-
-import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +30,7 @@ public class CompanyDAO {
 	 */
 	private CompanySQLMapper mapper;
 
-	private DataSource dataSource;
+	private NamedParameterJdbcTemplate template;
 
 	/**
 	 * LOGGER Logger.
@@ -47,18 +41,18 @@ public class CompanyDAO {
 	 * String base SQL request.
 	 */
 	private static final String LIST_REQUEST = "SELECT * FROM company %s";
-	private static final String FIND_BY_ID = "SELECT * FROM company WHERE id = ?";
-	private static final String DELETE = "DELETE FROM company WHERE id = ?";
-	private static final String DELETE_RELATED_COMPUTERS = "DELETE FROM computer WHERE company_id = ?";
+	private static final String FIND_BY_ID = "SELECT * FROM company WHERE id = :id";
+	private static final String DELETE = "DELETE FROM company WHERE id = :id";
+	private static final String DELETE_RELATED_COMPUTERS = "DELETE FROM computer WHERE company_id = :id";
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param ds        DataSource
 	 * @param sqlMapper CompanySQLMapper
 	 */
-	public CompanyDAO(DataSource ds, CompanySQLMapper sqlMapper) {
-		dataSource = ds;
+	public CompanyDAO(NamedParameterJdbcTemplate jdbcTemplate, CompanySQLMapper sqlMapper) {
+		template = jdbcTemplate;
 		mapper = sqlMapper;
 
 	}
@@ -72,20 +66,9 @@ public class CompanyDAO {
 	@Transactional(readOnly = true)
 	public Optional<Company> get(Long id) {
 		// TODO Auto-generated method stub
-		Company company = null;
-		try (Connection conn = dataSource.getConnection()) {
 
-			PreparedStatement state = conn.prepareStatement(FIND_BY_ID);
-			state.setLong(1, id);
-			ResultSet result = state.executeQuery();
-			company = result.next() ? mapper.queryResultToObject(result) : null;
-			result.close();
-			state.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			LOGGER.error(e.getMessage());
-		}
-
+		Company company = template.queryForObject(FIND_BY_ID, new MapSqlParameterSource("id", id), mapper);
+		LOGGER.debug("Company fetched : " + company);
 		return Optional.ofNullable(company);
 	}
 
@@ -99,29 +82,11 @@ public class CompanyDAO {
 	@Transactional(readOnly = true)
 	public List<Company> list(int page, int itemPerPage) {
 		// TODO Auto-generated method stub
-		LinkedList<Company> companies = new LinkedList<Company>();
+		String offsetClause = itemPerPage > 0 ? "LIMIT " + itemPerPage : "";
+		offsetClause += (page > 1 && itemPerPage > 0) ? " OFFSET " + ((page - 1) * itemPerPage) : "";
 
-		try (Connection conn = dataSource.getConnection()) {
-			Statement state = conn.createStatement();
-			String offsetClause = itemPerPage > 0 ? "LIMIT " + itemPerPage : "";
-			offsetClause += (page > 1 && itemPerPage > 0) ? " OFFSET " + ((page - 1) * itemPerPage) : "";
+		return template.query(String.format(LIST_REQUEST, offsetClause), mapper);
 
-			ResultSet result = state.executeQuery(String.format(LIST_REQUEST, offsetClause));
-			while (result.next()) {
-				Company c = mapper.queryResultToObject(result);
-				if (c != null) {
-					companies.add(c);
-				}
-			}
-			result.close();
-			state.close();
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			LOGGER.error(e.getMessage());
-		}
-
-		return companies;
 	}
 
 	/**
@@ -132,27 +97,13 @@ public class CompanyDAO {
 	 */
 	@Transactional(readOnly = false)
 	public boolean delete(Long id) {
-		boolean isSuccess = false;
-		try (Connection conn = dataSource.getConnection()) {
 
-			conn.setAutoCommit(false);
+		template.update(DELETE_RELATED_COMPUTERS, new MapSqlParameterSource("id", id));
+		int affectRowsCount = template.update(DELETE, new MapSqlParameterSource("id", id));
 
-			// Delete all the related computers.
-			PreparedStatement deleteRelatedComputersStatement = conn.prepareStatement(DELETE_RELATED_COMPUTERS);
-			deleteRelatedComputersStatement.setLong(1, id);
-			deleteRelatedComputersStatement.executeUpdate();
+		LOGGER.debug("Company deleted : " + id);
 
-			// Delete the company
-			PreparedStatement deleteCompanyStatement = conn.prepareStatement(DELETE);
-			deleteCompanyStatement.setLong(1, id);
-			deleteCompanyStatement.executeUpdate();
+		return affectRowsCount > 0;
 
-			conn.commit();
-			isSuccess = true;
-
-		} catch (SQLException e) {
-			LOGGER.error(e.getMessage());
-		}
-		return isSuccess;
 	}
 }
