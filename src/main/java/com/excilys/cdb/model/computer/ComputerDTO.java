@@ -4,9 +4,9 @@ public class ComputerDTO {
 
     private Long id;
     private String name;
-    private String introduction;
-    private String discontinuation;
-    private String company;
+    private String introduced;
+    private String discontinued;
+    private String companyName;
     private Long companyId;
 
     /**
@@ -50,17 +50,17 @@ public class ComputerDTO {
      *
      * @return String
      */
-    public String getIntroduction() {
-        return introduction;
+    public String getIntroduced() {
+        return introduced;
     }
 
     /**
      * Setter.
      *
-     * @param introduction String
+     * @param introduced String
      */
-    public void setIntroduction(String introduction) {
-        this.introduction = introduction;
+    public void setIntroduced(String introduced) {
+        this.introduced = introduced;
     }
 
     /**
@@ -68,17 +68,17 @@ public class ComputerDTO {
      *
      * @return String
      */
-    public String getDiscontinuation() {
-        return discontinuation;
+    public String getDiscontinued() {
+        return discontinued;
     }
 
     /**
      * Setter.
      *
-     * @param discontinuation String
+     * @param discontinued String
      */
-    public void setDiscontinuation(String discontinuation) {
-        this.discontinuation = discontinuation;
+    public void setDiscontinued(String discontinued) {
+        this.discontinued = discontinued;
     }
 
     /**
@@ -86,17 +86,17 @@ public class ComputerDTO {
      *
      * @return String
      */
-    public String getCompany() {
-        return company;
+    public String getCompanyName() {
+        return companyName;
     }
 
     /**
      * Setter.
      *
-     * @param company String
+     * @param companyName String
      */
-    public void setCompany(String company) {
-        this.company = company;
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
     /**
@@ -127,9 +127,9 @@ public class ComputerDTO {
 
         StringBuilder sb = new StringBuilder(100);
         sb.append(id).append("\t|\t").append(name).append("\t|\t")
-                .append(introduction != null ? introduction.toString() : "null").append("\t|\t")
-                .append(discontinuation != null ? discontinuation.toString() : "null").append("\t|\t")
-                .append(companyId + " : " + company);
+                .append(introduced != null ? introduced.toString() : "null").append("\t|\t")
+                .append(discontinued != null ? discontinued.toString() : "null").append("\t|\t")
+                .append(companyId + " : " + companyId);
 
         return sb.toString();
 

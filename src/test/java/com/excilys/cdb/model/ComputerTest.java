@@ -89,30 +89,30 @@ public class ComputerTest {
 
     @Test
     public void getIntroductionDateWhenNullTest() {
-        assertNull(computerWithName.getIntroductionDate());
+        assertNull(computerWithName.getIntroduced());
     }
 
     @Test
     public void getIntroductionDateTest() {
-        assertEquals(computerWithAll.getIntroductionDate(), NOW);
+        assertEquals(computerWithAll.getIntroduced(), NOW);
     }
 
     @Test
     public void getDiscontinuationDateWhenNullTest() {
-        assertNull(computerWithName.getDiscontinuationDate());
+        assertNull(computerWithName.getDiscontinued());
     }
 
     @Test
     public void getDiscontinuationDateTest() {
-        assertEquals(computerWithAll.getDiscontinuationDate(), TOMORROW);
+        assertEquals(computerWithAll.getDiscontinued(), TOMORROW);
     }
 
     @Test
     public void setIntroductionDateTest() {
         try {
-            computerWithName.setIntroductionDate(TOMORROW);
-            assertEquals(computerWithName.getIntroductionDate(), TOMORROW);
-            computerWithName.setIntroductionDate(null);
+            computerWithName.setIntroduced(TOMORROW);
+            assertEquals(computerWithName.getIntroduced(), TOMORROW);
+            computerWithName.setIntroduced(null);
 
         } catch (UnconsistentDatesException e) {
             // TODO Auto-generated catch block
@@ -124,8 +124,8 @@ public class ComputerTest {
     @Test
     public void setIntroductionDateWithNullTest() {
         try {
-            computerWithAll.setIntroductionDate(null);
-            assertNull(computerWithAll.getIntroductionDate());
+            computerWithAll.setIntroduced(null);
+            assertNull(computerWithAll.getIntroduced());
 
         } catch (UnconsistentDatesException e) {
             // TODO Auto-generated catch block
@@ -137,8 +137,8 @@ public class ComputerTest {
     @Test
     public void setDiscontinuationDateWithNullTest() {
         try {
-            computerWithAll.setIntroductionDate(null);
-            assertNull(computerWithAll.getIntroductionDate());
+            computerWithAll.setIntroduced(null);
+            assertNull(computerWithAll.getIntroduced());
 
         } catch (UnconsistentDatesException e) {
             // TODO Auto-generated catch block
@@ -150,9 +150,9 @@ public class ComputerTest {
     @Test
     public void setDiscontinuationDateTest() {
         try {
-            computerWithName.setDiscontinuationDate(NOW);
-            assertEquals(computerWithName.getDiscontinuationDate(), NOW);
-            computerWithName.setDiscontinuationDate(null);
+            computerWithName.setDiscontinued(NOW);
+            assertEquals(computerWithName.getDiscontinued(), NOW);
+            computerWithName.setDiscontinued(null);
         } catch (UnconsistentDatesException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

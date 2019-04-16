@@ -43,10 +43,8 @@ public class ComputerDTOMapper {
         ComputerDTOBuilder builder = new ComputerDTOBuilder();
 
         builder.setId(computer.getId()).setName(computer.getName())
-                .setIntroduction(
-                        computer.getIntroductionDate() == null ? null : df.format(computer.getIntroductionDate()))
-                .setDiscontinuation(
-                        computer.getDiscontinuationDate() == null ? null : df.format(computer.getDiscontinuationDate()))
+                .setIntroduction(computer.getIntroduced() == null ? null : df.format(computer.getIntroduced()))
+                .setDiscontinuation(computer.getDiscontinued() == null ? null : df.format(computer.getDiscontinued()))
                 .setCompanyName(computer.getCompany() != null ? computer.getCompany().getName() : null)
                 .setCompanyId(computer.getCompany() != null ? computer.getCompany().getId() : null);
 
@@ -66,14 +64,14 @@ public class ComputerDTOMapper {
     public Computer toComputer(ComputerDTO dto)
             throws DateTimeParseException, NumberFormatException, EmptyNameException, UnconsistentDatesException {
 
-        String intro = dto.getIntroduction();
-        LocalDate introduction = intro == null || intro.isEmpty() ? null : LocalDate.parse(dto.getIntroduction(), df);
+        String intro = dto.getIntroduced();
+        LocalDate introduction = intro == null || intro.isEmpty() ? null : LocalDate.parse(dto.getIntroduced(), df);
 
-        String disco = dto.getDiscontinuation();
+        String disco = dto.getDiscontinued();
         LocalDate discontinuation = disco == null || disco.isEmpty() ? null
-                : LocalDate.parse(dto.getDiscontinuation(), df);
+                : LocalDate.parse(dto.getDiscontinued(), df);
 
-        Company company = CompanyFactory.getInstance().create(dto.getCompanyId(), dto.getCompany());
+        Company company = CompanyFactory.getInstance().create(dto.getCompanyId(), dto.getCompanyName());
 
         return ComputerFactory.getInstance().createWithAll(dto.getId(), dto.getName(), introduction, discontinuation,
                 company);

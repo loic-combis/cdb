@@ -48,7 +48,7 @@ public class ComputerBuilder {
      * @throws UnconsistentDatesException ude
      */
     public ComputerBuilder setIntroduction(LocalDate date) throws UnconsistentDatesException {
-        computer.setIntroductionDate(date);
+        computer.setIntroduced(date);
         return this;
     }
 
@@ -60,7 +60,7 @@ public class ComputerBuilder {
      * @throws UnconsistentDatesException ude
      */
     public ComputerBuilder setDiscontinuation(LocalDate date) throws UnconsistentDatesException {
-        computer.setDiscontinuationDate(date);
+        computer.setDiscontinued(date);
         return this;
     }
 

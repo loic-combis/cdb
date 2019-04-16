@@ -58,7 +58,7 @@ public class ComputerDTOBuilder {
      * @return ComputerDTOBuilder
      */
     public ComputerDTOBuilder setIntroduction(String introduction) {
-        dto.setIntroduction(introduction);
+        dto.setIntroduced(introduction);
         return this;
     }
 
@@ -69,7 +69,7 @@ public class ComputerDTOBuilder {
      * @return ComputerDTOBuilder
      */
     public ComputerDTOBuilder setDiscontinuation(String discontinuation) {
-        dto.setDiscontinuation(discontinuation);
+        dto.setDiscontinued(discontinuation);
         return this;
     }
 
@@ -80,7 +80,7 @@ public class ComputerDTOBuilder {
      * @return ComputerDTOBuilder
      */
     public ComputerDTOBuilder setCompanyName(String name) {
-        dto.setCompany(name);
+        dto.setCompanyName(name);
         return this;
     }
 

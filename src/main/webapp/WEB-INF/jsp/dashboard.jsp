@@ -121,28 +121,28 @@
 			                                <span class="glyphicon glyphicon-ok form-control-feedback"></span>
 								        </div>
 							        </td>
-							        <td class="viewMode">${computer.getIntroduction()}</td>
+							        <td class="viewMode">${computer.getIntroduced()}</td>
 							        <td class="editMode">
 								        <div class="form-group">
-								    		<input type="date" id="introduced-${computer.getId()}" name="introduced" class="form-control" value="${computer.getIntroduction()}"/>
+								    		<input type="date" id="introduced-${computer.getId()}" name="introduced" class="form-control" value="${computer.getIntroduced()}"/>
 								        	<small>Both introduction and discontinuation date are optional.</small>
 			                            	<span class="glyphicon glyphicon-remove form-control-feedback"></span>
 			                                <span class="glyphicon glyphicon-ok form-control-feedback"></span>
 								        </div>
 							        </td>
-							        <td class="viewMode">${computer.getDiscontinuation()}</td>
+							        <td class="viewMode">${computer.getDiscontinued()}</td>
 							        <td class="editMode">
 								        <div class="form-group">
-								    		<input type="date" id="discontinued-${computer.getId()}" name="discontinued" class="form-control" value="${computer.getDiscontinuation()}"/>
+								    		<input type="date" id="discontinued-${computer.getId()}" name="discontinued" class="form-control" value="${computer.getDiscontinued()}"/>
 									        <small class="text-danger">If both are set, discontinuation date must be after introduction date.</small>
 			                            	<span class="glyphicon glyphicon-remove form-control-feedback"></span>
 			                                <span class="glyphicon glyphicon-ok form-control-feedback"></span>
 								        </div>
 							        </td>
-							        <td class="viewMode">${computer.getCompany()}</td>
+							        <td class="viewMode">${computer.getCompanyName()}</td>
 							        <td class="editMode">
-							        	<select class="form-control" name="company" id="company-${computer.getId()}">
-							        		<option value="-1">No company</option>
+							        	<select class="form-control" name="companyId" id="company-${computer.getId()}">
+							        		<option value="">No company</option>
 		                                	<c:forEach items="${companies}" var="company">
 											    <option ${company.getId() == computer.getCompanyId() ? 'selected' : ''} value="${company.getId()}">${company.getName()}</option>
 											</c:forEach>

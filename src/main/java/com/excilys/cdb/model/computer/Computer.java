@@ -24,14 +24,14 @@ public class Computer {
     private String name;
 
     /**
-     * introductionDate LocalDate - Date the computer was introduced.
+     * introduced LocalDate - Date the computer was introduced.
      */
-    private LocalDate introductionDate;
+    private LocalDate introduced;
 
     /**
-     * discontinuationDate LocalDate - Date the computer was discontinued.
+     * discontinued LocalDate - Date the computer was discontinued.
      */
-    private LocalDate discontinuationDate;
+    private LocalDate discontinued;
 
     /**
      * company Company - Company manufacturing the computer.
@@ -81,26 +81,25 @@ public class Computer {
     /**
      * Getter.
      *
-     * {@link Computer#introductionDate}
+     * {@link Computer#introduced}
      *
      * @return LocalDate
      */
-    public LocalDate getIntroductionDate() {
-        return introductionDate;
+    public LocalDate getIntroduced() {
+        return introduced;
     }
 
     /**
      * Setter.
      *
-     * {@link Computer#introductionDate}
+     * {@link Computer#introduced}
      *
-     * @param introduction Date - Introduction date of the computer.
+     * @param introduced Date - Introduction date of the computer.
      * @throws UnconsistentDatesException ude
      */
-    public void setIntroductionDate(LocalDate introduction) throws UnconsistentDatesException {
-        if (getDiscontinuationDate() == null || introduction == null
-                || !getDiscontinuationDate().isBefore(introduction)) {
-            introductionDate = introduction;
+    public void setIntroduced(LocalDate introduced) throws UnconsistentDatesException {
+        if (getDiscontinued() == null || introduced == null || !getDiscontinued().isBefore(introduced)) {
+            this.introduced = introduced;
         } else {
             throw new UnconsistentDatesException(
                     "Attempted to set introduction date with more recent date than discontinuation date.");
@@ -110,12 +109,12 @@ public class Computer {
     /**
      * Getter.
      *
-     * {@link Computer#discontinuationDate}
+     * {@link Computer#discontinued}
      *
      * @return Date
      */
-    public LocalDate getDiscontinuationDate() {
-        return discontinuationDate;
+    public LocalDate getDiscontinued() {
+        return discontinued;
     }
 
     /**
@@ -126,9 +125,9 @@ public class Computer {
      * @param discontinued LocalDate - Discontinuation date of the computer.
      * @throws UnconsistentDatesException ude
      */
-    public void setDiscontinuationDate(LocalDate discontinued) throws UnconsistentDatesException {
-        if (getIntroductionDate() == null || discontinued == null || !discontinued.isBefore(getIntroductionDate())) {
-            discontinuationDate = discontinued;
+    public void setDiscontinued(LocalDate discontinued) throws UnconsistentDatesException {
+        if (getIntroduced() == null || discontinued == null || !discontinued.isBefore(getIntroduced())) {
+            this.discontinued = discontinued;
         } else {
             throw new UnconsistentDatesException(
                     "Attempted to set a discontinuation date older than the introduction date.");
@@ -189,8 +188,8 @@ public class Computer {
 
         StringBuilder sb = new StringBuilder(100);
         sb.append(id).append("\t|\t").append(name).append("\t|\t")
-                .append(introductionDate != null ? introductionDate.toString() : "null").append("\t|\t")
-                .append(discontinuationDate != null ? discontinuationDate.toString() : "null").append("\t|\t")
+                .append(introduced != null ? introduced.toString() : "null").append("\t|\t")
+                .append(discontinued != null ? discontinued.toString() : "null").append("\t|\t")
                 .append(company != null ? company.getId() + " : " + company.getName() : "null");
         return sb.toString();
 

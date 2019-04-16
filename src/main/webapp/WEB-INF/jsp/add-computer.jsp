@@ -5,9 +5,9 @@
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
-<link href="${contextPath}/assets/css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="${contextPath}/assets/css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="${contextPath}/assets/css/main.css" rel="stylesheet" media="screen">
+<link href="<c:url value="/assets/css/bootstrap.min.css" />" rel="stylesheet" media="screen">
+<link href="<c:url value="/assets/css/font-awesome.css" />" rel="stylesheet" media="screen">
+<link href="<c:url value="/assets/css/main.css" />" rel="stylesheet" media="screen">
 </head>
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
@@ -30,7 +30,7 @@
 		        			</c:if>
 		        		</div>
                 	</div>
-                    <form id="addComputer" action="add-computer" method="POST">
+                    <form id="addComputer" action="<c:url value="/computers/add"/>" method="POST">
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
@@ -55,8 +55,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>
-                                <select name="company" class="form-control" id="companyId" >
-                                	<option value="-1">No company</option>
+                                <select name="companyId" class="form-control" id="companyId" >
+                                	<option value="">No company</option>
                                 	<c:forEach items="${companies}" var="company">
 									    <option value="${company.getId()}">${company.getName()}</option>
 									</c:forEach>
@@ -67,14 +67,14 @@
                         <div class="actions pull-right">
                             <input type="submit" value="Add" class="btn btn-primary">
                             or
-                            <a href="${contextPath}/list-computers" class="btn btn-default">Cancel</a>
+                            <a href="<c:url value="/computers"/>" class="btn btn-default">Cancel</a>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </section>
-    <script src="${contextPath}/assets/js/jquery.min.js"></script>
-    <script src="${contextPath}/assets/js/addComputer.js"></script>
+<script src="<c:url value="/assets/js/jquery.min.js"/>"></script>
+<script src="<c:url value="/assets/js/addComputer.js"/>"></script>
 </body>
 </html>

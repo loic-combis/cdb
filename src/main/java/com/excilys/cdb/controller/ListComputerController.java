@@ -1,9 +1,6 @@
 package com.excilys.cdb.controller;
 
-import java.io.IOException;
 import java.util.Optional;
-
-import javax.servlet.ServletException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,8 +34,7 @@ public class ListComputerController {
     @RequestMapping(method = RequestMethod.GET)
     protected String list(@RequestParam Optional<String> status, @RequestParam Optional<String> message,
             @RequestParam Optional<Integer> page, @RequestParam Optional<Integer> itemPerPage,
-            @RequestParam Optional<String> search, @RequestParam("orderby") Optional<String> orderBy, Model map)
-            throws ServletException, IOException {
+            @RequestParam Optional<String> search, @RequestParam("orderby") Optional<String> orderBy, Model map) {
 
         map.addAttribute("feedback", new Feedback(status.orElse(""), message.orElse("")));
 

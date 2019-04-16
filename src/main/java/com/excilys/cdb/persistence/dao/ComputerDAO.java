@@ -97,8 +97,8 @@ public class ComputerDAO {
         // TODO Auto-generated method stub
         Long companyId = (computer.getCompany() != null ? computer.getCompany().getId() : null);
 
-        Timestamp introductionDate = mapper.getSqlTimestampValue(computer.getIntroductionDate());
-        Timestamp discontinuationDate = mapper.getSqlTimestampValue(computer.getDiscontinuationDate());
+        Timestamp introductionDate = mapper.getSqlTimestampValue(computer.getIntroduced());
+        Timestamp discontinuationDate = mapper.getSqlTimestampValue(computer.getDiscontinued());
 
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue("name", computer.getName());
@@ -134,8 +134,8 @@ public class ComputerDAO {
     public boolean update(Computer computer) {
         // TODO Auto-generated method stub
         Long companyId = (computer.getCompany() != null ? computer.getCompany().getId() : null);
-        Timestamp introductionDate = mapper.getSqlTimestampValue(computer.getIntroductionDate());
-        Timestamp discontinuationDate = mapper.getSqlTimestampValue(computer.getDiscontinuationDate());
+        Timestamp introductionDate = mapper.getSqlTimestampValue(computer.getIntroduced());
+        Timestamp discontinuationDate = mapper.getSqlTimestampValue(computer.getDiscontinued());
 
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue("name", computer.getName());

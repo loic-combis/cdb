@@ -378,7 +378,7 @@ public class CLIController implements UIController, PageProvider {
             return;
         }
         if (intro.isPresent()) {
-            c.setIntroduction(intro.get());
+            c.setIntroduced(intro.get());
         }
 
         Optional<String> disco = requestValidDate("Discontinuation");
@@ -386,7 +386,7 @@ public class CLIController implements UIController, PageProvider {
             return;
         }
         if (disco.isPresent()) {
-            c.setDiscontinuation(disco.get());
+            c.setDiscontinued(disco.get());
         }
 
         Optional<Company> comp = requestValidCompany();
@@ -395,7 +395,7 @@ public class CLIController implements UIController, PageProvider {
         }
 
         if (comp.isPresent()) {
-            c.setCompany(comp.get().getName());
+            c.setCompanyName(comp.get().getName());
             c.setCompanyId(comp.get().getId());
         }
         boolean isSuccess = false;
@@ -452,7 +452,7 @@ public class CLIController implements UIController, PageProvider {
                 return;
             }
             if (intro.isPresent()) {
-                c.setIntroduction(intro.get());
+                c.setIntroduced(intro.get());
             }
 
             Optional<String> disco = requestValidDate("Discontinuation");
@@ -460,7 +460,7 @@ public class CLIController implements UIController, PageProvider {
                 return;
             }
             if (disco.isPresent()) {
-                c.setDiscontinuation(disco.get());
+                c.setDiscontinued(disco.get());
             }
 
             Optional<Company> comp = requestValidCompany();
@@ -468,7 +468,7 @@ public class CLIController implements UIController, PageProvider {
                 return;
             }
             if (comp.isPresent()) {
-                c.setCompany(comp.get().getName());
+                c.setCompanyName(comp.get().getName());
                 c.setCompanyId(comp.get().getId());
             }
 
