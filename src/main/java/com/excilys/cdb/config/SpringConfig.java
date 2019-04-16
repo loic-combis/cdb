@@ -1,4 +1,4 @@
-package com.excilys.cdb;
+package com.excilys.cdb.config;
 
 import javax.sql.DataSource;
 
@@ -40,5 +40,4 @@ public class SpringConfig {
     public NamedParameterJdbcTemplate getTemplate(DataSource ds) {
         return new NamedParameterJdbcTemplate(ds);
     }
-
 }

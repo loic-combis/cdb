@@ -6,14 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
-<link href="${contextPath}/assets/css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="${contextPath}/assets/css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="${contextPath}/assets/css/main.css" rel="stylesheet" media="screen">
+<link href="<c:url value="/assets/css/bootstrap.min.css" />" rel="stylesheet" media="screen">
+<link href="<c:url value="/assets/css/font-awesome.css" />" rel="stylesheet" media="screen">
+<link href="<c:url value="/assets/css/main.css" />" rel="stylesheet" media="screen">
 </head>
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="${contextPath}/list-computers"> Application - Computer Database </a>
+            <a class="navbar-brand" href="<c:url value="/computers" />"> Application - Computer Database </a>
         </div>
     </header>
 
@@ -31,20 +31,20 @@
         	</div>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
-                    <form id="searchForm" action="${contextPath}/list-computers?page=1&itemPerPage=${pagination.getItemPerPage()}" method="GET" class="form-inline">
+                    <form id="searchForm" action="<c:url value="/computers?page=1&itemPerPage=${pagination.getItemPerPage()}" />" method="GET" class="form-inline">
                         <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${search}"/>
                         <input type="submit" id="searchsubmit" value="Filter by name"
                         class="btn btn-primary" />
                     </form>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="${contextPath}/add-computer">Add Computer</a> 
+                    <a class="btn btn-success" id="addComputer" href="<c:url value="/computers/add" />">Add Computer</a> 
                     <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
                 </div>
             </div>
         </div>
 
-        <form id="deleteForm" action="${contextPath}/delete-computers" method="POST">
+        <form id="deleteForm" action="<c:url value="/computers/delete"/>" method="POST">
             <input type="hidden" name="selection" value="">
         </form>
 
@@ -64,7 +64,7 @@
                             </span>
                         </th>
                         <th>
-                            <a href="${contextPath}/list-computers?itemPerPage=${pagination.getItemPerPage()}&search=${search}&orderby=name">
+                            <a href="<c:url value="/computers?itemPerPage=${pagination.getItemPerPage()}&search=${search}&orderby=name" />">
                             	Computer name
                             	<c:if test='${orderBy.equals("name")}'>
 	                        		<i class="fa fa-chevron-down"></i>
@@ -72,7 +72,7 @@
                             </a>
                         </th>
                         <th>
-                            <a href="${contextPath}/list-computers?itemPerPage=${pagination.getItemPerPage()}&search=${search}&orderby=introduced">
+                            <a href="<c:url value="/computers?itemPerPage=${pagination.getItemPerPage()}&search=${search}&orderby=introduced" />">
                             	Introduction date
                             	<c:if test='${orderBy.equals("introduced")}'>
 	                        		<i class="fa fa-chevron-down"></i>
@@ -81,7 +81,7 @@
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
-                            <a href="${contextPath}/list-computers?itemPerPage=${pagination.getItemPerPage()}&search=${search}&orderby=discontinued">
+                            <a href="<c:url value="/computers?itemPerPage=${pagination.getItemPerPage()}&search=${search}&orderby=discontinued"/>">
                             	Discontinuation date
                             	<c:if test='${orderBy.equals("discontinued")}'>
 	                        		<i class="fa fa-chevron-down"></i>
@@ -90,7 +90,7 @@
                         </th>
                         <!-- Table header for Company -->
                         <th>
-                          <a href="${contextPath}/list-computers?itemPerPage=${pagination.getItemPerPage()}&search=${search}&orderby=company">
+                          <a href="<c:url value="/computers?itemPerPage=${pagination.getItemPerPage()}&search=${search}&orderby=company"/>">
                           	Company
                           	<c:if test='${orderBy.equals("company")}'>
                         		<i class="fa fa-chevron-down"></i>
@@ -106,7 +106,7 @@
                 <tbody id="results">
                 	<c:forEach items="${computers}" var="computer">
            				<tr> 
-           					<form method="POST" class="editForm" id="form-${computer.getId()}" action="${contextPath}/edit-computer">
+           					<form method="POST" class="editForm" id="form-${computer.getId()}" action="<c:url value="/computers/edit"/>">
            						<fieldset>     
 							       	<td class="editMode">
 							       		<input type="checkbox" name="cb" class="cb" value="${computer.getId()}">
@@ -162,12 +162,12 @@
         <div class="container text-center">
             <ul class="pagination">
                 <li>
-                    <a href="${contextPath}/list-computers?page=${pagination.previous()}&itemPerPage=${pagination.getItemPerPage()}&search=${search}&orderby=${orderBy}" aria-label="Previous">
+                    <a href="<c:url value="/computers?page=${pagination.previous()}&itemPerPage=${pagination.getItemPerPage()}&search=${search}&orderby=${orderBy}"/>" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               </li>
               <li>
-              	<a class="${pagination.compareCurrent(1)}" href="${contextPath}/list-computers?page=1&itemPerPage=${pagination.getItemPerPage()}&search=${search}&orderby=${orderBy}">1</a>
+              	<a class="${pagination.compareCurrent(1)}" href="<c:url value="/computers?page=1&itemPerPage=${pagination.getItemPerPage()}&search=${search}&orderby=${orderBy}"/>">1</a>
               </li>
               <c:if test="${pagination.currentPageStart() - 1 > 1}">
                 <li><a href="#">...</a></li>
@@ -179,7 +179,7 @@
               	step="1"
               >
               	<li>
-              		<a class="${pagination.compareCurrent(count)}" href="${contextPath}/list-computers?page=${count}&itemPerPage=${pagination.getItemPerPage()}&search=${search}&orderby=${orderBy}">${count}</a>
+              		<a class="${pagination.compareCurrent(count)}" href="<c:url value="/computers?page=${count}&itemPerPage=${pagination.getItemPerPage()}&search=${search}&orderby=${orderBy}"/>">${count}</a>
               	</li>
               </c:forEach>
               <c:if test="${pagination.currentPageEnd() + 1 < pagination.lastPage()}">
@@ -188,12 +188,12 @@
               <c:if test="${pagination.lastPage() > 1}">
 	              <li>
 	              	<a 	class="${pagination.compareCurrent(pagination.lastPage())}"
-	              		href="${contextPath}/list-computers?page=${pagination.lastPage()}&itemPerPage=${pagination.getItemPerPage()}&search=${search}&orderby=${orderBy}">${pagination.lastPage()}</a>
+	              		href="<c:url value="/computers?page=${pagination.lastPage()}&itemPerPage=${pagination.getItemPerPage()}&search=${search}&orderby=${orderBy}"/>">${pagination.lastPage()}</a>
 	              </li>
               </c:if>
               <li>
                 <a
-                	href="${contextPath}/list-computers?page=${pagination.next()}&itemPerPage=${pagination.getItemPerPage()}&search=${search}&orderby=${orderBy}" aria-label="Next">
+                	href="<c:url value="/computers?page=${pagination.next()}&itemPerPage=${pagination.getItemPerPage()}&search=${search}&orderby=${orderBy}"/>" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
@@ -204,13 +204,13 @@
         	<c:forEach items="${pagination.getSizes()}" var="size" >
         	<a 
         	class="btn ${pagination.compareItemPerPage(size)}"
-        	href="${contextPath}/list-computers?page=1&itemPerPage=${size}&search=${search}&orderby=${orderBy}" class="btn btn-default">${size}</a>
+        	href="<c:url value="/computers?page=1&itemPerPage=${size}&search=${search}&orderby=${orderBy}"/>" class="btn btn-default">${size}</a>
         	</c:forEach>
         </div>
     </footer>
-<script src="${contextPath}/assets/js/jquery.min.js"></script>
-<script src="${contextPath}/assets/js/bootstrap.min.js"></script>
-<script src="${contextPath}/assets/js/dashboard.js"></script>
+<script src="<c:url value="/assets/js/jquery.min.js"/>"></script>
+<script src="<c:url value="/assets/js/bootstrap.min.js"/>"></script>
+<script src="<c:url value="/assets/js/dashboard.js"/>"></script>
 
 </body>
 </html>

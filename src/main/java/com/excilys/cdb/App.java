@@ -2,6 +2,7 @@ package com.excilys.cdb;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import com.excilys.cdb.config.SpringConfig;
 import com.excilys.cdb.ui.cli.CLIController;
 
 /**

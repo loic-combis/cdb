@@ -5,31 +5,4 @@
     	version="3.1">
     	
 	<display-name>CDB Application</display-name>
-	
-	<context-param>
-	    <param-name>contextClass</param-name>
-	    <param-value>
-	        org.springframework.web.context.support.AnnotationConfigWebApplicationContext
-	    </param-value>
-	</context-param>
-
-	<context-param>
-	    <param-name>contextConfigLocation</param-name>
-	    <param-value>
-	        com.excilys.cdb.SpringConfig
-	    </param-value>
-	</context-param>
-	
-	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
-	
-	<error-page>
-  		<error-code>404</error-code>
-  		<location>/assets/errors/404.html</location>
-	</error-page>
-	<error-page>
-	  	<error-code>501</error-code>
-	  	<location>/assets/errors/500.html</location>
-	</error-page>
 </web-app>

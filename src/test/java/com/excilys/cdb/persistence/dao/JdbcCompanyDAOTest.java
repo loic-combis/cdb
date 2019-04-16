@@ -14,6 +14,7 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import com.excilys.cdb.config.SpringConfig;
 import com.excilys.cdb.model.company.Company;
 
 @RunWith(SpringRunner.class)
@@ -26,8 +27,7 @@ public class JdbcCompanyDAOTest {
 
     @BeforeTest
     public void setUp() {
-        ctx = new AnnotationConfigApplicationContext();
-        ctx.scan("com.excilys.cdb");
+        ctx = new AnnotationConfigApplicationContext(SpringConfig.class);
         ctx.refresh();
         companyDAO = ctx.getBean(CompanyDAO.class);
     }

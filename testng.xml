@@ -16,14 +16,14 @@
   </test>
   <test name="Dao">
   	<classes>
-  		<class name="com.excilys.cdb.persistence.dao.JdbcCompanyDAOTest" />
-  		<class name="com.excilys.cdb.persistence.dao.JdbcComputerDAOTest" />
+  		<!--<class name="com.excilys.cdb.persistence.dao.JdbcCompanyDAOTest" /> 
+  		<class name="com.excilys.cdb.persistence.dao.JdbcComputerDAOTest" /> -->
   	</classes>
   </test>
   <test name="Mapper">
   	<classes>
-  	  	<class name="com.excilys.cdb.persistence.mapper.CompanyMapperTest" />
-  	  	<class name="com.excilys.cdb.persistence.mapper.ComputerMapperTest" />  
+  	  	<!-- <class name="com.excilys.cdb.persistence.mapper.CompanyMapperTest" /> 
+  	  	<class name="com.excilys.cdb.persistence.mapper.ComputerMapperTest" />  -->
   	</classes>
   </test>
 </suite> <!-- Suite -->

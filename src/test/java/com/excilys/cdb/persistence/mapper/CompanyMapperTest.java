@@ -13,6 +13,7 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import com.excilys.cdb.config.SpringConfig;
 import com.excilys.cdb.mapper.CompanySQLMapper;
 
 @RunWith(SpringRunner.class)
@@ -25,8 +26,7 @@ public class CompanyMapperTest {
 
     @BeforeTest
     public void setUp() {
-        ctx = new AnnotationConfigApplicationContext();
-        ctx.scan("com.excilys.cdb");
+        ctx = new AnnotationConfigApplicationContext(SpringConfig.class);
         ctx.refresh();
         mapper = ctx.getBean(CompanySQLMapper.class);
     }
