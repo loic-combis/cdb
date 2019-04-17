@@ -1,4 +1,6 @@
 <%@taglib  uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -106,51 +108,18 @@
                 <tbody id="results">
                 	<c:forEach items="${computers}" var="computer">
            				<tr> 
-           					<form method="POST" class="editForm" id="form-${computer.getId()}" action="<c:url value="/computers/edit"/>">
-           						<fieldset>     
-							       	<td class="editMode">
-							       		<input type="checkbox" name="cb" class="cb" value="${computer.getId()}">
-							        </td>
-							        <td class="viewMode">${computer.getName()}</td>
-							        <td class="editMode">
-								        <div class="form-group">
-								        	<input type="hidden" name="computerId" value="${computer.getId()}"/>
-								    		<input type="text" id="name-${computer.getId()}" name="name" class="form-control" value="${computer.getName()}"/>
-								        	<small class="text-danger">Name can't be empty.</small>
-			                                <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-			                                <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-								        </div>
-							        </td>
-							        <td class="viewMode">${computer.getIntroduced()}</td>
-							        <td class="editMode">
-								        <div class="form-group">
-								    		<input type="date" id="introduced-${computer.getId()}" name="introduced" class="form-control" value="${computer.getIntroduced()}"/>
-								        	<small>Both introduction and discontinuation date are optional.</small>
-			                            	<span class="glyphicon glyphicon-remove form-control-feedback"></span>
-			                                <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-								        </div>
-							        </td>
-							        <td class="viewMode">${computer.getDiscontinued()}</td>
-							        <td class="editMode">
-								        <div class="form-group">
-								    		<input type="date" id="discontinued-${computer.getId()}" name="discontinued" class="form-control" value="${computer.getDiscontinued()}"/>
-									        <small class="text-danger">If both are set, discontinuation date must be after introduction date.</small>
-			                            	<span class="glyphicon glyphicon-remove form-control-feedback"></span>
-			                                <span class="glyphicon glyphicon-ok form-control-feedback"></span>
-								        </div>
-							        </td>
-							        <td class="viewMode">${computer.getCompanyName()}</td>
-							        <td class="editMode">
-							        	<select class="form-control" name="companyId" id="company-${computer.getId()}">
-							        		<option value="">No company</option>
-		                                	<c:forEach items="${companies}" var="company">
-											    <option ${company.getId() == computer.getCompanyId() ? 'selected' : ''} value="${company.getId()}">${company.getName()}</option>
-											</c:forEach>
-							        	</select>
-							        </td>
-							        <td class="editMode"><input class="btn btn-success" type="submit" value="Save"/></td>							        
-							    </fieldset>
-							</form>
+							<td class="editMode">
+								<input type="checkbox" name="cb" class="cb" value="${computer.getId()}">
+							</td>
+							<td class="viewMode">${computer.getName()}</td>
+							        
+							<td class="viewMode">${computer.getIntroduced()}</td>
+							        
+							<td class="viewMode">${computer.getDiscontinued()}</td>
+							        
+							<td class="viewMode">${computer.getCompanyName()}</td>
+							        
+							<td class="editMode"><a href="/computers/${computer.getId()}/edit" class="btn btn-warning">Edit</a></td>							        
 						</tr>
 					</c:forEach>
                 </tbody>

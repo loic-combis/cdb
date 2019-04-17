@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.excilys.cdb.exception.UnsuccessfulTreatmentException;
 import com.excilys.cdb.model.Feedback;
 import com.excilys.cdb.model.Pagination;
-import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 
 @Controller
@@ -24,11 +23,8 @@ public class ListComputerController {
 
     private ComputerService computerService;
 
-    private CompanyService companyService;
-
-    public ListComputerController(ComputerService computerSer, CompanyService companySer) {
+    public ListComputerController(ComputerService computerSer) {
         computerService = computerSer;
-        companyService = companySer;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -43,8 +39,6 @@ public class ListComputerController {
         int computerCount = computerService.count(search.orElse(""));
 
         map.addAttribute("pagination", new Pagination(page.orElse(1), itemPerPage.orElse(10), computerCount));
-
-        map.addAttribute("companies", companyService.list(0, 0));
 
         try {
             map.addAttribute("computers", computerService.list(page.orElse(1), itemPerPage.orElse(10),

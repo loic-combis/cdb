@@ -1,50 +1,78 @@
 package com.excilys.cdb.controller;
 
 import java.time.format.DateTimeParseException;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.excilys.cdb.exception.EmptyNameException;
 import com.excilys.cdb.exception.UnconsistentDatesException;
-import com.excilys.cdb.model.computer.ComputerDTOBuilder;
+import com.excilys.cdb.model.Feedback;
+import com.excilys.cdb.model.computer.ComputerDTO;
+import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 
 @Controller
-@RequestMapping("/computers/edit")
 public class EditComputerController {
+
+    private static final String COMPUTER_NOT_FOUND = "Computer not found.";
 
     private ComputerService computerService;
 
+    private CompanyService companyService;
+
     private Logger logger = LoggerFactory.getLogger(EditComputerController.class);
 
-    public EditComputerController(ComputerService computerSer) {
+    public EditComputerController(ComputerService computerSer, CompanyService companySer) {
         computerService = computerSer;
+        companyService = companySer;
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    protected RedirectView edit(HttpServletRequest request, @RequestParam Map<String, String> body) {
-        String status = "danger";
-        String message = "";
-        ComputerDTOBuilder builder = new ComputerDTOBuilder();
+    @ModelAttribute
+    public ComputerDTO computerDTO() {
+        return new ComputerDTO();
+    }
 
+    @GetMapping(value = "/computers/{id}/edit")
+    protected String show(@PathVariable(value = "id") Long id, Model map) {
         try {
-            builder.setId(Long.valueOf(body.get("computerId"))).setName(body.get("name"))
-                    .setIntroduction(body.get("introduced")).setDiscontinuation(body.get("discontinued"));
+            Optional<ComputerDTO> computer = computerService.get(id);
+            if (computer.isPresent()) {
+                map.addAttribute("computerDTO", computer.get());
+                map.addAttribute("companies", companyService.list(0, 0));
 
-            if (!body.get("companyId").equals("")) {
-                builder.setCompanyId(Long.valueOf(body.get("companyId")));
+                return "edit-computer";
+            } else {
+                map.addAttribute("feedback", new Feedback("danger", COMPUTER_NOT_FOUND));
+                return "dashboard";
             }
 
-            if (computerService.update(builder.get())) {
+        } catch (EmptyNameException e) {
+            // TODO Auto-generated catch block
+            logger.error(e.getMessage());
+            return "500";
+        } catch (UnconsistentDatesException e) {
+            // TODO Auto-generated catch block
+            logger.error(e.getMessage());
+            return "500";
+        }
+    }
+
+    @PostMapping(value = "/computers/{id}/edit")
+    protected RedirectView edit(@ModelAttribute ComputerDTO computerDTO, @PathVariable(value = "id") Long id) {
+        String status = "danger";
+        String message = "";
+        try {
+
+            if (computerService.update(computerDTO)) {
                 status = "success";
                 message = ComputerService.EDIT_COMPUTER_SUCCESS;
             } else {
@@ -62,8 +90,7 @@ public class EditComputerController {
 
         } catch (NumberFormatException nfe) {
             logger.warn(nfe.getMessage());
-            message = builder.get().getId() == null ? ComputerService.INVALID_COMPUTER_ID
-                    : ComputerService.INVALID_COMPANY;
+            message = ComputerService.INVALID_COMPANY;
 
         } catch (UnconsistentDatesException ude) {
             logger.warn(ude.getMessage());
@@ -71,7 +98,7 @@ public class EditComputerController {
 
         }
 
-        return new RedirectView(request.getContextPath() + "/computers?status=" + status + "&message=" + message);
+        return new RedirectView("/computers?status=" + status + "&message=" + message);
     }
 
 }

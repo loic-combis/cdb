@@ -1,4 +1,6 @@
 <%@taglib  uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,46 +32,46 @@
 		        			</c:if>
 		        		</div>
                 	</div>
-                    <form id="addComputer" action="<c:url value="/computers/add"/>" method="POST">
+                    <form:form id="addComputer" action="/computers/add" method="POST" modelAttribute="computerDTO">
                         <fieldset>
                             <div class="form-group">
-                                <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" name="name" id="computerName" placeholder="Computer name">
+                                <form:label path="name">Computer name</form:label>
+                                <form:input type="text" class="form-control" path="name" placeholder="Computer name" />
                                 <small class="text-danger">Name can't be empty.</small>
                                 <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                                 <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                             </div>
                             <div class="form-group">
-                                <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" name="introduced" id="introduced" placeholder="Introduced date">
+                                <form:label path="introduced">Introduced date</form:label>
+                                <form:input type="date" class="form-control" path="introduced" placeholder="Introduced date" />
                             	<small>Both introduction and discontinuation date are optional.</small>
                             	<span class="glyphicon glyphicon-remove form-control-feedback"></span>
                                 <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                             </div>
                             <div class="form-group">
-                                <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" name="discontinued" id="discontinued" placeholder="Discontinued date">
+                                <form:label path="discontinued">Discontinued date</form:label>
+                                <form:input type="date" class="form-control" path="discontinued" placeholder="Discontinued date" />
                             	<small class="text-danger">If both are set, discontinuation date must be after introduction date.</small>
                             	<span class="glyphicon glyphicon-remove form-control-feedback"></span>
                                 <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                             </div>
                             <div class="form-group">
-                                <label for="companyId">Company</label>
-                                <select name="companyId" class="form-control" id="companyId" >
-                                	<option value="">No company</option>
+                                <form:label path="companyId">Company</form:label>
+                                <form:select path="companyId" class="form-control">
+                                    <form:option value="">No Company</form:option>
                                 	<c:forEach items="${companies}" var="company">
-									    <option value="${company.getId()}">${company.getName()}</option>
+									    <form:option value="${company.getId()}">${company.getName()}</form:option>
 									</c:forEach>
-                                </select>
+                                </form:select>
                                 <small>Company is optional.</small>
                             </div>                  
                         </fieldset>
                         <div class="actions pull-right">
                             <input type="submit" value="Add" class="btn btn-primary">
                             or
-                            <a href="<c:url value="/computers"/>" class="btn btn-default">Cancel</a>
+                            <a href="/computers" class="btn btn-default">Cancel</a>
                         </div>
-                    </form>
+                    </form:form>
                 </div>
             </div>
         </div>

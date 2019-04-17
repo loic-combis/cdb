@@ -1,30 +1,28 @@
 package com.excilys.cdb.controller;
 
 import java.time.format.DateTimeParseException;
-import java.util.Map;
 import java.util.Optional;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.excilys.cdb.exception.EmptyNameException;
 import com.excilys.cdb.exception.UnconsistentDatesException;
 import com.excilys.cdb.model.Feedback;
-import com.excilys.cdb.model.computer.ComputerDTOBuilder;
+import com.excilys.cdb.model.computer.ComputerDTO;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 
 @Controller
-@RequestMapping("/computers/add")
 public class AddComputerController {
 
     /**
@@ -49,28 +47,24 @@ public class AddComputerController {
         computerService = computerSer;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping(value = "/computers/add", produces = MediaType.TEXT_HTML_VALUE)
     protected String show(@RequestParam Optional<String> feedback, @RequestParam Optional<String> message, Model map) {
-
         map.addAttribute("feedback", new Feedback(feedback.orElse(""), message.orElse("")));
         map.addAttribute("companies", companyService.list(0, 0));
         return "add-computer";
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    protected RedirectView create(HttpServletRequest request, @RequestParam Map<String, String> body) {
+    @ModelAttribute
+    public ComputerDTO computerDTO() {
+        return new ComputerDTO();
+    }
+
+    @PostMapping("/computers/add")
+    protected RedirectView create(@ModelAttribute("computerDTO") ComputerDTO computerDTO) {
         String status = "danger";
         String message = "";
         try {
-            ComputerDTOBuilder builder = new ComputerDTOBuilder();
-            builder.setName(body.get("name")).setIntroduction(body.get("introduced"))
-                    .setDiscontinuation(body.get("discontinued"));
-
-            if (!body.get("companyId").equals("")) {
-                builder.setCompanyId(Long.valueOf(body.get("companyId")));
-            }
-
-            if (!computerService.create(builder.get())) {
+            if (!computerService.create(computerDTO)) {
                 message = ComputerService.ADD_COMPUTER_FAILURE;
             } else {
                 status = "success";
@@ -96,6 +90,6 @@ public class AddComputerController {
 
         }
 
-        return new RedirectView(request.getContextPath() + "/computers/add?feedback=" + status + "&message=" + message);
+        return new RedirectView("/computers/add?feedback=" + status + "&message=" + message);
     }
 }

@@ -37,7 +37,7 @@
 
 (function($) {
 	$("#addComputer").on("submit", function(event){
-		var input = $("#computerName");
+		var input = $("#name");
 		input.val(input.val().trim());
 		if(input.val() === ""){ // Check the name.
 			event.preventDefault();
@@ -57,8 +57,8 @@
 }(jQuery));
 
 (function($) {
-	$("#computerName").change(function(event){
-		input = $("#computerName");
+	$("#name").change(function(event){
+		input = $("#name");
 		input.val(input.val().trim());
 		$.fn.addFeedback(input.parent(), input.val() === "");
 		if(input.val() !== ""){

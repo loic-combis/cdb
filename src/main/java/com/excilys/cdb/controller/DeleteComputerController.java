@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Map;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,8 +24,7 @@ public class DeleteComputerController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    protected RedirectView deleteMany(HttpServletRequest request, @RequestParam Map<String, String> body)
-            throws ServletException, IOException {
+    protected RedirectView deleteMany(@RequestParam Map<String, String> body) throws ServletException, IOException {
 
         String[] selection = body.get("selection").split(",");
         boolean success = computerService.deleteMany(selection);
@@ -40,7 +38,7 @@ public class DeleteComputerController {
             message = ComputerService.DELETE_MANY_FAILURE;
         }
 
-        return new RedirectView(request.getContextPath() + "/computers?feedback=" + status + "&message=" + message);
+        return new RedirectView("/computers?feedback=" + status + "&message=" + message);
 
     }
 }
