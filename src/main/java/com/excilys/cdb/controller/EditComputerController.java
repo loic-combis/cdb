@@ -5,25 +5,24 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.excilys.cdb.exception.EmptyNameException;
 import com.excilys.cdb.exception.UnconsistentDatesException;
-import com.excilys.cdb.model.Feedback;
 import com.excilys.cdb.model.computer.ComputerDTO;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 
 @Controller
 public class EditComputerController {
-
-    private static final String COMPUTER_NOT_FOUND = "Computer not found.";
 
     private ComputerService computerService;
 
@@ -42,7 +41,7 @@ public class EditComputerController {
     }
 
     @GetMapping(value = "/computers/{id}/edit")
-    protected String show(@PathVariable(value = "id") Long id, Model map) {
+    protected Object show(@PathVariable(value = "id") Long id, Model map) {
         try {
             Optional<ComputerDTO> computer = computerService.get(id);
             if (computer.isPresent()) {
@@ -51,18 +50,17 @@ public class EditComputerController {
 
                 return "edit-computer";
             } else {
-                map.addAttribute("feedback", new Feedback("danger", COMPUTER_NOT_FOUND));
-                return "dashboard";
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
             }
 
         } catch (EmptyNameException e) {
             // TODO Auto-generated catch block
             logger.error(e.getMessage());
-            return "500";
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (UnconsistentDatesException e) {
             // TODO Auto-generated catch block
             logger.error(e.getMessage());
-            return "500";
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

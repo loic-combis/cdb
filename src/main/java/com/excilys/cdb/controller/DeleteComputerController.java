@@ -6,15 +6,13 @@ import java.util.Map;
 import javax.servlet.ServletException;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.excilys.cdb.service.ComputerService;
 
 @Controller
-@RequestMapping("/computers/delete")
 public class DeleteComputerController {
 
     private ComputerService computerService;
@@ -23,7 +21,7 @@ public class DeleteComputerController {
         computerService = computerSer;
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping(value = "/computers/delete")
     protected RedirectView deleteMany(@RequestParam Map<String, String> body) throws ServletException, IOException {
 
         String[] selection = body.get("selection").split(",");
