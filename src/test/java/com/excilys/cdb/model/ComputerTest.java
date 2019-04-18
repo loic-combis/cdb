@@ -3,15 +3,12 @@ package com.excilys.cdb.model;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
 
 import java.time.LocalDate;
 
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.excilys.cdb.exception.EmptyNameException;
-import com.excilys.cdb.exception.UnconsistentDatesException;
 import com.excilys.cdb.model.company.CompanyFactory;
 import com.excilys.cdb.model.computer.Computer;
 import com.excilys.cdb.model.computer.ComputerFactory;
@@ -36,18 +33,8 @@ public class ComputerTest {
         computerWithName = new Computer(NAME);
         TOMORROW = NOW.plusDays(1);
 
-        try {
-            computerWithAll = ComputerFactory.getInstance().createWithAll(ID, NAME, NOW, TOMORROW,
-                    CompanyFactory.getInstance().create(COMPANY_ID, COMPANY_NAME));
-        } catch (EmptyNameException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            fail(e.getMessage());
-        } catch (UnconsistentDatesException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            fail(e.getMessage());
-        }
+        computerWithAll = ComputerFactory.getInstance().createWithAll(ID, NAME, NOW, TOMORROW,
+                CompanyFactory.getInstance().create(COMPANY_ID, COMPANY_NAME));
     }
 
     @Test
@@ -78,16 +65,6 @@ public class ComputerTest {
     }
 
     @Test
-    public void setNullNameTest() {
-        try {
-            computerWithName.setName(null);
-            fail("Null name should throw an EmptyNameException.");
-        } catch (EmptyNameException ene) {
-            assertNotNull(computerWithName.getName());
-        }
-    }
-
-    @Test
     public void getIntroductionDateWhenNullTest() {
         assertNull(computerWithName.getIntroduced());
     }
@@ -109,55 +86,28 @@ public class ComputerTest {
 
     @Test
     public void setIntroductionDateTest() {
-        try {
-            computerWithName.setIntroduced(TOMORROW);
-            assertEquals(computerWithName.getIntroduced(), TOMORROW);
-            computerWithName.setIntroduced(null);
-
-        } catch (UnconsistentDatesException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            fail(e.getMessage());
-        }
+        computerWithName.setIntroduced(TOMORROW);
+        assertEquals(computerWithName.getIntroduced(), TOMORROW);
+        computerWithName.setIntroduced(null);
     }
 
     @Test
     public void setIntroductionDateWithNullTest() {
-        try {
-            computerWithAll.setIntroduced(null);
-            assertNull(computerWithAll.getIntroduced());
-
-        } catch (UnconsistentDatesException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            fail(e.getMessage());
-        }
+        computerWithAll.setIntroduced(null);
+        assertNull(computerWithAll.getIntroduced());
     }
 
     @Test
     public void setDiscontinuationDateWithNullTest() {
-        try {
-            computerWithAll.setIntroduced(null);
-            assertNull(computerWithAll.getIntroduced());
-
-        } catch (UnconsistentDatesException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            fail(e.getMessage());
-        }
+        computerWithAll.setIntroduced(null);
+        assertNull(computerWithAll.getIntroduced());
     }
 
     @Test
     public void setDiscontinuationDateTest() {
-        try {
-            computerWithName.setDiscontinued(NOW);
-            assertEquals(computerWithName.getDiscontinued(), NOW);
-            computerWithName.setDiscontinued(null);
-        } catch (UnconsistentDatesException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            fail(e.getMessage());
-        }
+        computerWithName.setDiscontinued(NOW);
+        assertEquals(computerWithName.getDiscontinued(), NOW);
+        computerWithName.setDiscontinued(null);
     }
 
     @Test

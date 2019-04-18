@@ -13,7 +13,6 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.excilys.cdb.exception.EmptyNameException;
 import com.excilys.cdb.mapper.ComputerSQLMapper;
 
 @RunWith(SpringRunner.class)
@@ -40,10 +39,6 @@ public class ComputerMapperTest {
             // TODO Auto-generated catch block
             e.printStackTrace();
             fail("Not handling null parameter.");
-        } catch (EmptyNameException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            fail(e.getMessage());
         }
     }
 

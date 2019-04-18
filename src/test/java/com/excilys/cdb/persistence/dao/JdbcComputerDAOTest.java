@@ -3,7 +3,6 @@ package com.excilys.cdb.persistence.dao;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.List;
 
@@ -14,7 +13,6 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.excilys.cdb.exception.EmptyNameException;
 import com.excilys.cdb.model.computer.Computer;
 
 @RunWith(SpringRunner.class)
@@ -40,15 +38,8 @@ public class JdbcComputerDAOTest {
     @Test
     public void listComputersTest() {
         List<Computer> computers;
-        try {
-            computers = dao.list(0, 10, null, null);
-            assertTrue(computers.size() <= 10);
-
-        } catch (EmptyNameException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            fail(e.getMessage());
-        }
+        computers = dao.list(0, 10, null, null);
+        assertTrue(computers.size() <= 10);
     }
 
     @Test

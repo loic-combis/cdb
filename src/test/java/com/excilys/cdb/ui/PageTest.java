@@ -2,7 +2,6 @@ package com.excilys.cdb.ui;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 
-import com.excilys.cdb.exception.UnsuccessfulTreatmentException;
 import com.excilys.cdb.model.company.Company;
 import com.excilys.cdb.model.computer.Computer;
 import com.excilys.cdb.service.CompanyService;
@@ -52,13 +50,7 @@ public class PageTest {
             public List<?> fetchDataFor(Class<?> c, int page) {
                 // TODO Auto-generated method stub
                 List<?> list = new ArrayList<>();
-                try {
-                    list = computerService.list(page, ITEM_PER_PAGE, null, null);
-                } catch (UnsuccessfulTreatmentException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                    fail(e.getMessage());
-                }
+                list = computerService.list(page, ITEM_PER_PAGE, null, null);
                 return list;
             }
 
@@ -87,15 +79,9 @@ public class PageTest {
     @Test
     public void computersListFilteringTest() {
         List<?> items;
-        try {
-            items = computerService.list(1, ITEM_PER_PAGE, null, null);
-            List<Computer> computers = Page.filter(Computer.class, items);
-            assertTrue(computers.size() <= ITEM_PER_PAGE);
-        } catch (UnsuccessfulTreatmentException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            fail(e.getMessage());
-        }
+        items = computerService.list(1, ITEM_PER_PAGE, null, null);
+        List<Computer> computers = Page.filter(Computer.class, items);
+        assertTrue(computers.size() <= ITEM_PER_PAGE);
     }
 
     @Test
@@ -115,16 +101,9 @@ public class PageTest {
     @Test
     public void companiesFilteringWithWrongClassTest() {
         List<?> items;
-        try {
-            items = computerService.list(1, ITEM_PER_PAGE, null, null);
-            List<Company> companies = Page.filter(Company.class, items);
-            assertEquals(companies.size(), 0);
-
-        } catch (UnsuccessfulTreatmentException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            fail(e.getMessage());
-        }
+        items = computerService.list(1, ITEM_PER_PAGE, null, null);
+        List<Company> companies = Page.filter(Company.class, items);
+        assertEquals(companies.size(), 0);
     }
 
     @AfterTest
