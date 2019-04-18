@@ -2,8 +2,6 @@ package com.excilys.cdb.model.computer;
 
 import java.time.LocalDate;
 
-import com.excilys.cdb.exception.EmptyNameException;
-import com.excilys.cdb.exception.UnconsistentDatesException;
 import com.excilys.cdb.model.company.Company;
 
 /**
@@ -42,9 +40,8 @@ public class Computer {
      * Constructor.
      *
      * @param name String - Name to be set.
-     * @throws EmptyNameException ene.
      */
-    public Computer(String name) throws EmptyNameException {
+    public Computer(String name) {
         this.setName(name);
     }
 
@@ -65,17 +62,9 @@ public class Computer {
      * {@link Computer#name}
      *
      * @param name String - Name to be set.
-     * @throws EmptyNameException ene
      */
-    public void setName(String name) throws EmptyNameException {
-        if (name == null) {
-            throw new EmptyNameException("Attempted to set name with a null value.");
-        }
-        String trimmedName = name.trim();
-        if ("".equals(trimmedName)) {
-            throw new EmptyNameException("Attempted to set name with an empty value.");
-        }
-        this.name = trimmedName;
+    public void setName(String name) {
+        this.name = name.trim();
     }
 
     /**
@@ -95,15 +84,9 @@ public class Computer {
      * {@link Computer#introduced}
      *
      * @param introduced Date - Introduction date of the computer.
-     * @throws UnconsistentDatesException ude
      */
-    public void setIntroduced(LocalDate introduced) throws UnconsistentDatesException {
-        if (getDiscontinued() == null || introduced == null || !getDiscontinued().isBefore(introduced)) {
-            this.introduced = introduced;
-        } else {
-            throw new UnconsistentDatesException(
-                    "Attempted to set introduction date with more recent date than discontinuation date.");
-        }
+    public void setIntroduced(LocalDate introduced) {
+        this.introduced = introduced;
     }
 
     /**
@@ -123,15 +106,9 @@ public class Computer {
      * {@link Computer#discontinuationDate}
      *
      * @param discontinued LocalDate - Discontinuation date of the computer.
-     * @throws UnconsistentDatesException ude
      */
-    public void setDiscontinued(LocalDate discontinued) throws UnconsistentDatesException {
-        if (getIntroduced() == null || discontinued == null || !discontinued.isBefore(getIntroduced())) {
-            this.discontinued = discontinued;
-        } else {
-            throw new UnconsistentDatesException(
-                    "Attempted to set a discontinuation date older than the introduction date.");
-        }
+    public void setDiscontinued(LocalDate discontinued) {
+        this.discontinued = discontinued;
     }
 
     /**

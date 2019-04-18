@@ -15,8 +15,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.excilys.cdb.exception.EmptyNameException;
-import com.excilys.cdb.exception.UnconsistentDatesException;
 import com.excilys.cdb.mapper.ComputerSQLMapper;
 import com.excilys.cdb.model.computer.Computer;
 
@@ -74,7 +72,7 @@ public class ComputerDAO {
      * @throws UnconsistentDatesException ude
      */
     @Transactional(readOnly = true)
-    public Optional<Computer> get(Long id) throws EmptyNameException, UnconsistentDatesException {
+    public Optional<Computer> get(Long id) {
         Computer computer = null;
         try {
             computer = template.queryForObject(FIND_BY_ID, new MapSqlParameterSource("id", id), mapper);

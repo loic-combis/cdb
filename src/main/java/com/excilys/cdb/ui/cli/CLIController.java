@@ -13,11 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.excilys.cdb.exception.EmptyNameException;
-import com.excilys.cdb.exception.UnconsistentDatesException;
-import com.excilys.cdb.exception.UnsuccessfulTreatmentException;
+import com.excilys.cdb.mapper.ComputerDTOMapper;
 import com.excilys.cdb.model.company.Company;
 import com.excilys.cdb.model.company.CompanyFactory;
+import com.excilys.cdb.model.computer.Computer;
 import com.excilys.cdb.model.computer.ComputerDTO;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
@@ -133,6 +132,8 @@ public class CLIController implements UIController, PageProvider {
      */
     private CompanyService companyService;
 
+    private ComputerDTOMapper mapper;
+
     /**
      * presenter CLIPresenter - Presents data to the client.
      */
@@ -165,9 +166,10 @@ public class CLIController implements UIController, PageProvider {
      * @param computerService ComputerService
      * @param companyService  CompanyService
      */
-    public CLIController(ComputerService computerService, CompanyService companyService) {
+    public CLIController(ComputerService computerService, CompanyService companyService, ComputerDTOMapper mapper) {
         this.computerService = computerService;
         this.companyService = companyService;
+        this.mapper = mapper;
         presenter = new CLIPresenter();
         scanner = new Scanner(System.in);
     }
@@ -205,13 +207,8 @@ public class CLIController implements UIController, PageProvider {
     public List<?> fetchDataFor(Class<?> c, int page) {
         // TODO Auto-generated method stub
         if (c == ComputerDTO.class) {
-            List<ComputerDTO> computers = null;
-            try {
-                computers = computerService.list(page, itemPerPage, null, null);
-            } catch (UnsuccessfulTreatmentException e) {
-                // TODO Auto-generated catch block
-                presenter.notify(Presenter.UNSUCCESSFUL_TREATMENT);
-            }
+            List<Computer> computers = null;
+            computers = computerService.list(page, itemPerPage, null, null);
             return computers;
         }
 
@@ -342,24 +339,15 @@ public class CLIController implements UIController, PageProvider {
             return;
         }
 
-        Optional<ComputerDTO> computer;
-        try {
-            computer = computerService.get(id.get());
-            if (computer.isPresent()) {
-                presenter.present(computer.get());
+        Optional<Computer> computer;
+        computer = computerService.get(id.get());
+        if (computer.isPresent()) {
+            presenter.present(mapper.toDTO(computer.get()));
 
-            } else {
-                presenter.notify(Presenter.COMPUTER_NOT_FOUND);
-            }
-        } catch (EmptyNameException e) {
-            // TODO Auto-generated catch block
-            logger.error(e.getMessage());
-            presenter.notify(Presenter.UNSUCCESSFUL_TREATMENT);
-        } catch (UnconsistentDatesException e) {
-            // TODO Auto-generated catch block
-            logger.error(e.getMessage());
-            presenter.notify(Presenter.UNSUCCESSFUL_TREATMENT);
+        } else {
+            presenter.notify(Presenter.COMPUTER_NOT_FOUND);
         }
+
     }
 
     /**
@@ -400,17 +388,11 @@ public class CLIController implements UIController, PageProvider {
         }
         boolean isSuccess = false;
         try {
-            isSuccess = computerService.create(c);
+            isSuccess = computerService.create(mapper.toComputer(c));
         } catch (NumberFormatException e) {
             // TODO Auto-generated catch block
             logger.error(e.getMessage());
-        } catch (EmptyNameException e) {
-            // TODO Auto-generated catch block
-            logger.error(e.getMessage());
         } catch (DateTimeParseException e) {
-            // TODO Auto-generated catch block
-            logger.error(e.getMessage());
-        } catch (UnconsistentDatesException e) {
             // TODO Auto-generated catch block
             logger.error(e.getMessage());
         } finally {
@@ -431,70 +413,59 @@ public class CLIController implements UIController, PageProvider {
         if (!id.isPresent()) {
             return;
         }
-        Optional<ComputerDTO> opt;
+        Optional<Computer> opt;
 
+        opt = computerService.get(id.get());
+
+        if (!opt.isPresent()) {
+            presenter.notify(Presenter.COMPUTER_NOT_FOUND);
+            return;
+        }
+        ComputerDTO c = mapper.toDTO(opt.get());
+        Optional<String> name = requestValidName();
+        if (!name.isPresent()) {
+            return;
+        }
+        c.setName(name.get());
+
+        Optional<String> intro = requestValidDate("Introduction");
+        if (!intro.isPresent() && (shouldStop || shouldShowMenu)) {
+            return;
+        }
+        if (intro.isPresent()) {
+            c.setIntroduced(intro.get());
+        }
+
+        Optional<String> disco = requestValidDate("Discontinuation");
+        if (!disco.isPresent() && (shouldStop || shouldShowMenu)) {
+            return;
+        }
+        if (disco.isPresent()) {
+            c.setDiscontinued(disco.get());
+        }
+
+        Optional<Company> comp = requestValidCompany();
+        if (!comp.isPresent() && (shouldStop || shouldShowMenu)) {
+            return;
+        }
+        if (comp.isPresent()) {
+            c.setCompanyName(comp.get().getName());
+            c.setCompanyId(comp.get().getId());
+        }
+
+        boolean success = false;
         try {
-            opt = computerService.get(id.get());
-
-            if (!opt.isPresent()) {
-                presenter.notify(Presenter.COMPUTER_NOT_FOUND);
-                return;
-            }
-            ComputerDTO c = opt.get();
-            Optional<String> name = requestValidName();
-            if (!name.isPresent()) {
-                return;
-            }
-            c.setName(name.get());
-
-            Optional<String> intro = requestValidDate("Introduction");
-            if (!intro.isPresent() && (shouldStop || shouldShowMenu)) {
-                return;
-            }
-            if (intro.isPresent()) {
-                c.setIntroduced(intro.get());
-            }
-
-            Optional<String> disco = requestValidDate("Discontinuation");
-            if (!disco.isPresent() && (shouldStop || shouldShowMenu)) {
-                return;
-            }
-            if (disco.isPresent()) {
-                c.setDiscontinued(disco.get());
-            }
-
-            Optional<Company> comp = requestValidCompany();
-            if (!comp.isPresent() && (shouldStop || shouldShowMenu)) {
-                return;
-            }
-            if (comp.isPresent()) {
-                c.setCompanyName(comp.get().getName());
-                c.setCompanyId(comp.get().getId());
-            }
-
-            boolean success = false;
-            try {
-                success = computerService.update(c);
-            } catch (NumberFormatException e) {
-                // TODO Auto-generated catch block
-                logger.error(e.getMessage());
-
-            } catch (DateTimeParseException e) {
-                // TODO Auto-generated catch block
-                logger.error(e.getMessage());
-
-            } finally {
-                presenter.notify(success ? Presenter.UPDATE_SUCCESS : Presenter.UPDATE_FAIL);
-            }
-        } catch (EmptyNameException e1) {
+            success = computerService.update(mapper.toComputer(c));
+        } catch (NumberFormatException e) {
             // TODO Auto-generated catch block
-            logger.error(e1.getMessage());
-            presenter.notify(Presenter.UNSUCCESSFUL_TREATMENT);
+            logger.error(e.getMessage());
 
-        } catch (UnconsistentDatesException e1) {
+        } catch (DateTimeParseException e) {
             // TODO Auto-generated catch block
-            logger.error(e1.getMessage());
-            presenter.notify(Presenter.UNSUCCESSFUL_TREATMENT);
+            logger.error(e.getMessage());
+
+        } finally {
+            presenter.notify(success ? Presenter.UPDATE_SUCCESS : Presenter.UPDATE_FAIL);
         }
 
     }

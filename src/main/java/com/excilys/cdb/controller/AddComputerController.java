@@ -1,6 +1,5 @@
 package com.excilys.cdb.controller;
 
-import java.time.format.DateTimeParseException;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -8,18 +7,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.excilys.cdb.exception.EmptyNameException;
-import com.excilys.cdb.exception.UnconsistentDatesException;
+import com.excilys.cdb.mapper.ComputerDTOMapper;
 import com.excilys.cdb.model.Feedback;
 import com.excilys.cdb.model.computer.ComputerDTO;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
+import com.excilys.cdb.validator.ComputerDTOValidator;
 
 @Controller
 public class AddComputerController {
@@ -34,14 +37,22 @@ public class AddComputerController {
      */
     private ComputerService computerService;
 
+    private ComputerDTOMapper mapper;
+
     /**
      * logger Logger.
      */
     private Logger logger = LoggerFactory.getLogger(AddComputerController.class);
 
-    public AddComputerController(CompanyService companySer, ComputerService computerSer) {
+    public AddComputerController(CompanyService companySer, ComputerService computerSer, ComputerDTOMapper dtoMapper) {
         companyService = companySer;
         computerService = computerSer;
+        mapper = dtoMapper;
+    }
+
+    @InitBinder("computerDTO")
+    protected void initBinder(WebDataBinder binder) {
+        binder.setValidator(new ComputerDTOValidator());
     }
 
     @GetMapping(value = "/computers/add", produces = MediaType.TEXT_HTML_VALUE)
@@ -57,34 +68,21 @@ public class AddComputerController {
     }
 
     @PostMapping("/computers/add")
-    protected RedirectView create(@ModelAttribute("computerDTO") ComputerDTO computerDTO) {
+    protected RedirectView create(@Validated @ModelAttribute("computerDTO") ComputerDTO computerDTO,
+            BindingResult result) {
         String status = "danger";
         String message = "";
-        try {
-            if (!computerService.create(computerDTO)) {
-                message = ComputerService.ADD_COMPUTER_FAILURE;
-            } else {
-                status = "success";
-                message = ComputerService.ADD_COMPUTER_SUCCESS;
-            }
 
-        } catch (DateTimeParseException e) {
-            // TODO Auto-generated catch block
-            logger.warn(e.getMessage());
-            message = ComputerService.WRONG_DATE_FORMAT;
+        if (result.hasErrors()) {
+            message = result.getAllErrors().get(0).getDefaultMessage();
 
-        } catch (EmptyNameException ene) {
-            logger.warn(ene.getMessage());
-            message = ComputerService.EMPTY_NAME;
+        } else if (computerService.create(mapper.toComputer(computerDTO))) {
+            status = "success";
+            message = ComputerService.ADD_COMPUTER_SUCCESS;
+            logger.info("Computer created : " + computerDTO);
 
-        } catch (NumberFormatException nfe) {
-            logger.warn(nfe.getMessage());
-            message = ComputerService.INVALID_COMPANY;
-
-        } catch (UnconsistentDatesException ude) {
-            logger.warn(ude.getMessage());
-            message = ComputerService.UNCONSISTENT_DATES;
-
+        } else {
+            message = ComputerService.ADD_COMPUTER_FAILURE;
         }
 
         return new RedirectView("/computers/add?feedback=" + status + "&message=" + message);

@@ -13,11 +13,11 @@
       <maxFileSize>5MB</maxFileSize>
     </triggeringPolicy>
     <encoder>
-      <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+      <pattern>%date{ISO8601} %-5level %-4relative [%thread] %logger{35} - %msg%n</pattern>
     </encoder>
   </appender>
 
-  <root level="DEBUG">
+  <root level="INFO">
     <appender-ref ref="FILE" />
   </root>
 </configuration>

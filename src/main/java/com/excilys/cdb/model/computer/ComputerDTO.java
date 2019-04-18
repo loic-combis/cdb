@@ -3,10 +3,15 @@ package com.excilys.cdb.model.computer;
 public class ComputerDTO {
 
     private Long id;
+
     private String name;
+
     private String introduced;
+
     private String discontinued;
+
     private String companyName;
+
     private Long companyId;
 
     /**

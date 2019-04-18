@@ -4,12 +4,12 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import com.excilys.cdb.exception.EmptyNameException;
-import com.excilys.cdb.exception.UnconsistentDatesException;
 import com.excilys.cdb.model.company.Company;
 import com.excilys.cdb.model.company.CompanyFactory;
 import com.excilys.cdb.model.computer.Computer;
@@ -56,13 +56,10 @@ public class ComputerDTOMapper {
      *
      * @param dto ComputerDTO
      * @return Computer
-     * @throws EmptyNameException         ene
-     * @throws NumberFormatException      nfe
-     * @throws DateTimeParseException     dtpe
-     * @throws UnconsistentDatesException ude
+     * @throws NumberFormatException  nfe
+     * @throws DateTimeParseException dtpe
      */
-    public Computer toComputer(ComputerDTO dto)
-            throws DateTimeParseException, NumberFormatException, EmptyNameException, UnconsistentDatesException {
+    public Computer toComputer(ComputerDTO dto) throws DateTimeParseException, NumberFormatException {
 
         String intro = dto.getIntroduced();
         LocalDate introduction = intro == null || intro.isEmpty() ? null : LocalDate.parse(dto.getIntroduced(), df);
@@ -75,6 +72,16 @@ public class ComputerDTOMapper {
 
         return ComputerFactory.getInstance().createWithAll(dto.getId(), dto.getName(), introduction, discontinuation,
                 company);
+    }
+
+    public List<ComputerDTO> mapList(List<Computer> computers) {
+        List<ComputerDTO> dtos = new LinkedList<ComputerDTO>();
+
+        computers.stream().forEach(computer -> {
+            dtos.add(toDTO(computer));
+        });
+
+        return dtos;
     }
 
 }

@@ -2,7 +2,6 @@ package com.excilys.cdb.model.computer;
 
 import java.time.LocalDate;
 
-import com.excilys.cdb.exception.UnconsistentDatesException;
 import com.excilys.cdb.model.company.Company;
 
 public class ComputerBuilder {
@@ -45,9 +44,8 @@ public class ComputerBuilder {
      *
      * @param date LocalDate
      * @return ComputerBuilder
-     * @throws UnconsistentDatesException ude
      */
-    public ComputerBuilder setIntroduction(LocalDate date) throws UnconsistentDatesException {
+    public ComputerBuilder setIntroduction(LocalDate date) {
         computer.setIntroduced(date);
         return this;
     }
@@ -57,9 +55,8 @@ public class ComputerBuilder {
      *
      * @param date LocalDate
      * @return ComputerBuilder
-     * @throws UnconsistentDatesException ude
      */
-    public ComputerBuilder setDiscontinuation(LocalDate date) throws UnconsistentDatesException {
+    public ComputerBuilder setDiscontinuation(LocalDate date) {
         computer.setDiscontinued(date);
         return this;
     }
