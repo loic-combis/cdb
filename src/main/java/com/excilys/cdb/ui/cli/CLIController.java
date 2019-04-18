@@ -165,6 +165,7 @@ public class CLIController implements UIController, PageProvider {
      *
      * @param computerService ComputerService
      * @param companyService  CompanyService
+     * @param mapper          ComputerDTOMapper
      */
     public CLIController(ComputerService computerService, CompanyService companyService, ComputerDTOMapper mapper) {
         this.computerService = computerService;

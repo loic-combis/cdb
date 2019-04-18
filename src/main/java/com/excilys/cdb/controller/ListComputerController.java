@@ -19,11 +19,29 @@ public class ListComputerController {
 
     private ComputerDTOMapper mapper;
 
+    /**
+     * Constructor.
+     *
+     * @param computerSer ComputerService
+     * @param dtoMapper   ComputerDTOMapper
+     */
     public ListComputerController(ComputerService computerSer, ComputerDTOMapper dtoMapper) {
         computerService = computerSer;
         mapper = dtoMapper;
     }
 
+    /**
+     * Endpoint to list a set of computers.
+     *
+     * @param status      String
+     * @param message     String
+     * @param page        int
+     * @param itemPerPage int
+     * @param search      String
+     * @param orderBy     String
+     * @param map         Model
+     * @return String
+     */
     @GetMapping(value = "/computers")
     protected String list(@RequestParam Optional<String> status, @RequestParam Optional<String> message,
             @RequestParam Optional<Integer> page, @RequestParam Optional<Integer> itemPerPage,

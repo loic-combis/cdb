@@ -15,6 +15,11 @@ import org.springframework.web.servlet.view.JstlView;
 @ComponentScan("com.excilys.cdb.controller")
 public class CdbWebConfig implements WebMvcConfigurer {
 
+    /**
+     * Defines the ViewResolver bean.
+     *
+     * @return ViewResolver
+     */
     @Bean
     public ViewResolver viewResolver() {
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();

@@ -32,24 +32,48 @@ public class EditComputerController {
 
     private ComputerDTOMapper mapper;
 
+    /**
+     * Constructor.
+     *
+     * @param computerSer ComputerService
+     * @param companySer  CompanyService
+     * @param dtoMapper   ComputerDTOMapper
+     */
     public EditComputerController(ComputerService computerSer, CompanyService companySer, ComputerDTOMapper dtoMapper) {
         computerService = computerSer;
         companyService = companySer;
         mapper = dtoMapper;
     }
 
+    /**
+     * Init ComputerDTO validator.
+     *
+     * @param binder WebDatabinder
+     */
     @InitBinder("computerDTO")
     protected void initBinder(WebDataBinder binder) {
         binder.setValidator(new ComputerDTOValidator());
     }
 
+    /**
+     * Init the computerDTO model attribute.
+     *
+     * @return ComputerDTO
+     */
     @ModelAttribute
     public ComputerDTO computerDTO() {
         return new ComputerDTO();
     }
 
+    /**
+     * Endpoint to show the edit computer page.
+     *
+     * @param id  Long
+     * @param map Model
+     * @return String
+     */
     @GetMapping(value = "/computers/{id}/edit")
-    protected Object show(@PathVariable(value = "id") Long id, Model map) {
+    protected String show(@PathVariable(value = "id") Long id, Model map) {
         Optional<Computer> computer = computerService.get(id);
         if (computer.isPresent()) {
             map.addAttribute("computerDTO", mapper.toDTO(computer.get()));
@@ -61,6 +85,14 @@ public class EditComputerController {
         }
     }
 
+    /**
+     * Endpoint to edit a computer.
+     *
+     * @param computerDTO ComputerDTO
+     * @param id          Long
+     * @param result      BindingResult
+     * @return RedirectView
+     */
     @PostMapping(value = "/computers/{id}/edit")
     protected RedirectView edit(@Validated @ModelAttribute ComputerDTO computerDTO, @PathVariable(value = "id") Long id,
             BindingResult result) {

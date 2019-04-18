@@ -1,9 +1,6 @@
 package com.excilys.cdb.controller;
 
-import java.io.IOException;
 import java.util.Map;
-
-import javax.servlet.ServletException;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,12 +14,23 @@ public class DeleteComputerController {
 
     private ComputerService computerService;
 
+    /**
+     * Constructor.
+     *
+     * @param computerSer ComputerService
+     */
     public DeleteComputerController(ComputerService computerSer) {
         computerService = computerSer;
     }
 
+    /**
+     * Endpoint to delete a set of computers.
+     *
+     * @param body Map<String, String>
+     * @return RedirectView
+     */
     @PostMapping(value = "/computers/delete")
-    protected RedirectView deleteMany(@RequestParam Map<String, String> body) throws ServletException, IOException {
+    protected RedirectView deleteMany(@RequestParam Map<String, String> body) {
 
         String[] selection = body.get("selection").split(",");
         boolean success = computerService.deleteMany(selection);

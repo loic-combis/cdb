@@ -44,17 +44,37 @@ public class AddComputerController {
      */
     private Logger logger = LoggerFactory.getLogger(AddComputerController.class);
 
+    /**
+     * Constructor.
+     *
+     * @param companySer  CompanyService
+     * @param computerSer ComputerService
+     * @param dtoMapper   ComputerDTOMapper
+     */
     public AddComputerController(CompanyService companySer, ComputerService computerSer, ComputerDTOMapper dtoMapper) {
         companyService = companySer;
         computerService = computerSer;
         mapper = dtoMapper;
     }
 
+    /**
+     * Init the computerDTOValidator.
+     *
+     * @param binder WebDataBinder
+     */
     @InitBinder("computerDTO")
     protected void initBinder(WebDataBinder binder) {
         binder.setValidator(new ComputerDTOValidator());
     }
 
+    /**
+     * Show the add computer page.
+     *
+     * @param feedback Optional<String>
+     * @param message  Optional<String>
+     * @param map      Model
+     * @return String
+     */
     @GetMapping(value = "/computers/add", produces = MediaType.TEXT_HTML_VALUE)
     protected String show(@RequestParam Optional<String> feedback, @RequestParam Optional<String> message, Model map) {
         map.addAttribute("feedback", new Feedback(feedback.orElse(""), message.orElse("")));
@@ -62,11 +82,23 @@ public class AddComputerController {
         return "add-computer";
     }
 
+    /**
+     * Init the model attribute computerDTO.
+     *
+     * @return ComputerDTO
+     */
     @ModelAttribute
     public ComputerDTO computerDTO() {
         return new ComputerDTO();
     }
 
+    /**
+     * Endpoint to create a new computer.
+     *
+     * @param computerDTO ComputerDTO
+     * @param result      BindingResult
+     * @return RedirectView
+     */
     @PostMapping("/computers/add")
     protected RedirectView create(@Validated @ModelAttribute("computerDTO") ComputerDTO computerDTO,
             BindingResult result) {

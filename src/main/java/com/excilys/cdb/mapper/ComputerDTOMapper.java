@@ -74,6 +74,12 @@ public class ComputerDTOMapper {
                 company);
     }
 
+    /**
+     * Map a list of computers into a list of dto.
+     *
+     * @param computers List<Computer>
+     * @return List<ComputerDTO>
+     */
     public List<ComputerDTO> mapList(List<Computer> computers) {
         List<ComputerDTO> dtos = new LinkedList<ComputerDTO>();
 
