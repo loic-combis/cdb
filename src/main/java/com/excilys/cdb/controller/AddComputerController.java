@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,6 +41,10 @@ public class AddComputerController {
 
     private ComputerDTOMapper mapper;
 
+    private ComputerDTOValidator validator;
+
+    private MessageSource source;
+
     /**
      * logger Logger.
      */
@@ -51,10 +57,13 @@ public class AddComputerController {
      * @param computerSer ComputerService
      * @param dtoMapper   ComputerDTOMapper
      */
-    public AddComputerController(CompanyService companySer, ComputerService computerSer, ComputerDTOMapper dtoMapper) {
+    public AddComputerController(CompanyService companySer, ComputerService computerSer, ComputerDTOMapper dtoMapper,
+            ComputerDTOValidator computerValidator, MessageSource messageSource) {
         companyService = companySer;
         computerService = computerSer;
         mapper = dtoMapper;
+        validator = computerValidator;
+        source = messageSource;
     }
 
     /**
@@ -64,7 +73,7 @@ public class AddComputerController {
      */
     @InitBinder("computerDTO")
     protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(new ComputerDTOValidator());
+        binder.setValidator(validator);
     }
 
     /**
@@ -106,15 +115,15 @@ public class AddComputerController {
         String message = "";
 
         if (result.hasErrors()) {
-            message = result.getAllErrors().get(0).getDefaultMessage();
+            message = result.getAllErrors().get(0).getCode();
 
         } else if (computerService.create(mapper.toComputer(computerDTO))) {
             status = "success";
-            message = ComputerService.ADD_COMPUTER_SUCCESS;
+            message = source.getMessage(ComputerService.ADD_COMPUTER_SUCCESS, null, LocaleContextHolder.getLocale());
             logger.info("Computer created : " + computerDTO);
 
         } else {
-            message = ComputerService.ADD_COMPUTER_FAILURE;
+            message = source.getMessage(ComputerService.ADD_COMPUTER_FAILURE, null, LocaleContextHolder.getLocale());
         }
 
         return new RedirectView("/computers/add?feedback=" + status + "&message=" + message);

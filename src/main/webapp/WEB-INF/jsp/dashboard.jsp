@@ -1,5 +1,6 @@
 <%@taglib  uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <!DOCTYPE html>
 <html>
@@ -16,6 +17,10 @@
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <a class="navbar-brand" href="<c:url value="/computers" />"> Application - Computer Database </a>
+            <div class="pull-right">
+            	<a class="navbar-brand" href="/computers?lang=fr">Français</a>
+        		<a class="navbar-brand" href="/computers?lang=en">English</a>
+            </div>
         </div>
     </header>
 
@@ -23,7 +28,7 @@
         <div class="container">
         	<div class="row">
         		<div class="col-lg-5 col-md-12">
-	        		<h1 id="homeTitle"> ${pagination.getItemCount()} Computer(s) found.</h1>
+	        		<h1 id="homeTitle"> ${pagination.getItemCount()} <spring:message code="computers.found" /></h1>
         		</div>
         		<div class="col-lg-7 col-md-12">
         			<c:if test='${feedback.getMessage() != null}'>
@@ -34,14 +39,16 @@
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
                     <form id="searchForm" action="<c:url value="/computers?page=1&itemPerPage=${pagination.getItemPerPage()}" />" method="GET" class="form-inline">
-                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${search}"/>
-                        <input type="submit" id="searchsubmit" value="Filter by name"
+                        <spring:message code="search" var="searchLabel"/>
+                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="${searchLabel}" value="${search}"/>
+                        <spring:message code="filter" var="filterLabel"/>
+                        <input type="submit" id="searchsubmit" value="${filterLabel}"
                         class="btn btn-primary" />
                     </form>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="<c:url value="/computers/add" />">Add Computer</a> 
-                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
+                    <a class="btn btn-success" id="addComputer" href="<c:url value="/computers/add" />"><spring:message code="computer.add" /></a> 
+                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message code="edit" /></a>
                 </div>
             </div>
         </div>
@@ -67,7 +74,7 @@
                         </th>
                         <th>
                             <a href="<c:url value="/computers?itemPerPage=${pagination.getItemPerPage()}&search=${search}&orderby=name" />">
-                            	Computer name
+                            	<spring:message code="computer.name" />
                             	<c:if test='${orderBy.equals("name")}'>
 	                        		<i class="fa fa-chevron-down"></i>
 	                        	</c:if>
@@ -75,7 +82,7 @@
                         </th>
                         <th>
                             <a href="<c:url value="/computers?itemPerPage=${pagination.getItemPerPage()}&search=${search}&orderby=introduced" />">
-                            	Introduction date
+                            	<spring:message code="introduction.date" />
                             	<c:if test='${orderBy.equals("introduced")}'>
 	                        		<i class="fa fa-chevron-down"></i>
 	                        	</c:if>
@@ -84,7 +91,7 @@
                         <!-- Table header for Discontinued Date -->
                         <th>
                             <a href="<c:url value="/computers?itemPerPage=${pagination.getItemPerPage()}&search=${search}&orderby=discontinued"/>">
-                            	Discontinuation date
+                            	<spring:message code="discontinuation.date" />
                             	<c:if test='${orderBy.equals("discontinued")}'>
 	                        		<i class="fa fa-chevron-down"></i>
 	                        	</c:if>
@@ -93,14 +100,14 @@
                         <!-- Table header for Company -->
                         <th>
                           <a href="<c:url value="/computers?itemPerPage=${pagination.getItemPerPage()}&search=${search}&orderby=company"/>">
-                          	Company
+                            <spring:message code="company" />
                           	<c:if test='${orderBy.equals("company")}'>
                         		<i class="fa fa-chevron-down"></i>
                         	</c:if>
                           </a>
                         </th>
 						<th class="editMode">
-							Save
+                        	<spring:message code="save" />
 						</th>
                     </tr>
                 </thead>
@@ -119,7 +126,7 @@
 							        
 							<td class="viewMode">${computer.getCompanyName()}</td>
 							        
-							<td class="editMode"><a href="/computers/${computer.getId()}/edit" class="btn btn-warning">Edit</a></td>							        
+							<td class="editMode"><a href="/computers/${computer.getId()}/edit" class="btn btn-warning"><spring:message code="edit" /></a></td>							        
 						</tr>
 					</c:forEach>
                 </tbody>

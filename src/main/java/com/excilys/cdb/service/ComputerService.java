@@ -23,12 +23,12 @@ public class ComputerService {
     /**
      * Feedback messages.
      */
-    public static final String DELETE_MANY_SUCCESS = "Deletion successful.";
-    public static final String DELETE_MANY_FAILURE = "Deletion unsuccessfull.";
-    public static final String ADD_COMPUTER_SUCCESS = "Computer successfully added.";
-    public static final String ADD_COMPUTER_FAILURE = "Couldn't create the computer.";
-    public static final String EDIT_COMPUTER_SUCCESS = "Update successful";
-    public static final String EDIT_COMPUTER_FAILURE = "Couldn't update the computer";
+    public static final String DELETE_MANY_SUCCESS = "delete.many.success";
+    public static final String DELETE_MANY_FAILURE = "delete.many.failure";
+    public static final String ADD_COMPUTER_SUCCESS = "add.computer.success";
+    public static final String ADD_COMPUTER_FAILURE = "add.computer.failure";
+    public static final String EDIT_COMPUTER_SUCCESS = "edit.computer.success";
+    public static final String EDIT_COMPUTER_FAILURE = "edit.computer.failure";
 
     /**
      * computerDAO ComputerDAO.

@@ -2,12 +2,25 @@ package com.excilys.cdb.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class ErrorController {
+
+    private MessageSource source;
+
+    /**
+     * Constructor.
+     *
+     * @param messageSource MessageSource;
+     */
+    public ErrorController(MessageSource messageSource) {
+        source = messageSource;
+    }
 
     /**
      * Endpoint to handle error on requests.
@@ -24,23 +37,28 @@ public class ErrorController {
 
         switch (httpErrorCode) {
         case 400:
-            errorMsg = "Bad Request dumbass!";
+            errorMsg = source.getMessage("400", null, LocaleContextHolder.getLocale());
+            ;
             break;
 
         case 401:
-            errorMsg = "Unauthorized, get out!";
+            errorMsg = source.getMessage("401", null, LocaleContextHolder.getLocale());
+            ;
             break;
 
         case 404:
-            errorMsg = "Resource not found, too bad bitch!";
+            errorMsg = source.getMessage("404", null, LocaleContextHolder.getLocale());
+            ;
             break;
 
         case 500:
-            errorMsg = "Internal Server Error, my bad bro...";
+            errorMsg = source.getMessage("500", null, LocaleContextHolder.getLocale());
+            ;
             break;
 
         default:
-            errorMsg = "Unknown reason.";
+            errorMsg = source.getMessage("default", null, LocaleContextHolder.getLocale());
+            ;
             break;
         }
         map.addAttribute("errorCode", httpErrorCode);

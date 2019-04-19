@@ -2,6 +2,8 @@ package com.excilys.cdb.controller;
 
 import java.util.Optional;
 
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,6 +34,10 @@ public class EditComputerController {
 
     private ComputerDTOMapper mapper;
 
+    private ComputerDTOValidator validator;
+
+    private MessageSource source;
+
     /**
      * Constructor.
      *
@@ -39,10 +45,13 @@ public class EditComputerController {
      * @param companySer  CompanyService
      * @param dtoMapper   ComputerDTOMapper
      */
-    public EditComputerController(ComputerService computerSer, CompanyService companySer, ComputerDTOMapper dtoMapper) {
+    public EditComputerController(ComputerService computerSer, CompanyService companySer, ComputerDTOMapper dtoMapper,
+            ComputerDTOValidator computerValidator, MessageSource messageSource) {
         computerService = computerSer;
         companyService = companySer;
         mapper = dtoMapper;
+        validator = computerValidator;
+        source = messageSource;
     }
 
     /**
@@ -52,7 +61,7 @@ public class EditComputerController {
      */
     @InitBinder("computerDTO")
     protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(new ComputerDTOValidator());
+        binder.setValidator(validator);
     }
 
     /**
@@ -94,20 +103,20 @@ public class EditComputerController {
      * @return RedirectView
      */
     @PostMapping(value = "/computers/{id}/edit")
-    protected RedirectView edit(@Validated @ModelAttribute ComputerDTO computerDTO, @PathVariable(value = "id") Long id,
-            BindingResult result) {
+    protected RedirectView edit(@Validated @ModelAttribute("computerDTO") ComputerDTO computerDTO,
+            @PathVariable(value = "id") Long id, BindingResult result) {
         String status = "danger";
         String message = "";
 
         if (result.hasErrors()) {
-            message = result.getAllErrors().get(0).getDefaultMessage();
+            message = result.getAllErrors().get(0).getCode();
 
         } else if (computerService.update(mapper.toComputer(computerDTO))) {
             status = "success";
-            message = ComputerService.EDIT_COMPUTER_SUCCESS;
+            message = source.getMessage(ComputerService.EDIT_COMPUTER_SUCCESS, null, LocaleContextHolder.getLocale());
 
         } else {
-            message = ComputerService.EDIT_COMPUTER_FAILURE;
+            message = source.getMessage(ComputerService.EDIT_COMPUTER_FAILURE, null, LocaleContextHolder.getLocale());
         }
 
         return new RedirectView("/computers?status=" + status + "&message=" + message);

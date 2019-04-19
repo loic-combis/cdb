@@ -2,6 +2,8 @@ package com.excilys.cdb.controller;
 
 import java.util.Map;
 
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,13 +16,16 @@ public class DeleteComputerController {
 
     private ComputerService computerService;
 
+    private MessageSource source;
+
     /**
      * Constructor.
      *
      * @param computerSer ComputerService
      */
-    public DeleteComputerController(ComputerService computerSer) {
+    public DeleteComputerController(ComputerService computerSer, MessageSource messageSource) {
         computerService = computerSer;
+        source = messageSource;
     }
 
     /**
@@ -31,20 +36,19 @@ public class DeleteComputerController {
      */
     @PostMapping(value = "/computers/delete")
     protected RedirectView deleteMany(@RequestParam Map<String, String> body) {
-
         String[] selection = body.get("selection").split(",");
         boolean success = computerService.deleteMany(selection);
 
         String message, status;
         if (success) {
             status = "success";
-            message = ComputerService.DELETE_MANY_SUCCESS;
+            message = source.getMessage(ComputerService.DELETE_MANY_SUCCESS, null, LocaleContextHolder.getLocale());
         } else {
             status = "danger";
-            message = ComputerService.DELETE_MANY_FAILURE;
+            message = source.getMessage(ComputerService.DELETE_MANY_FAILURE, null, LocaleContextHolder.getLocale());
         }
 
-        return new RedirectView("/computers?feedback=" + status + "&message=" + message);
+        return new RedirectView("/computers?status=" + status + "&message=" + message);
 
     }
 }
