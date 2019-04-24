@@ -3,15 +3,17 @@ package com.excilys.cdb.persistence.dao;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.excilys.cdb.mapper.CompanySQLMapper;
 import com.excilys.cdb.model.company.Company;
 
 /**
@@ -25,12 +27,7 @@ import com.excilys.cdb.model.company.Company;
 @Repository("companyDAO")
 public class CompanyDAO {
 
-    /**
-     * mapper CompanyMapper.
-     */
-    private CompanySQLMapper mapper;
-
-    private NamedParameterJdbcTemplate template;
+    private SessionFactory factory;
 
     /**
      * LOGGER Logger.
@@ -40,21 +37,18 @@ public class CompanyDAO {
     /**
      * String base SQL request.
      */
-    private static final String LIST_REQUEST = "SELECT * FROM company %s";
-    private static final String FIND_BY_ID = "SELECT * FROM company WHERE id = :id";
-    private static final String DELETE = "DELETE FROM company WHERE id = :id";
-    private static final String DELETE_RELATED_COMPUTERS = "DELETE FROM computer WHERE company_id = :id";
+    private static final String LIST_REQUEST = "from Company";
+    public static final String FIND_BY_ID = "from Company where id = :id";
+    private static final String DELETE = "delete Company where id = :id";
+    private static final String DELETE_RELATED_COMPUTERS = "delete Computer where company_id = :id";
 
     /**
      * Constructor.
      *
-     * @param jdbcTemplate NamedParameterJdbcTemplate
-     * @param sqlMapper    CompanySQLMapper
+     * @param sessionFactory LocalSessionFactoryBean
      */
-    public CompanyDAO(NamedParameterJdbcTemplate jdbcTemplate, CompanySQLMapper sqlMapper) {
-        template = jdbcTemplate;
-        mapper = sqlMapper;
-
+    public CompanyDAO(LocalSessionFactoryBean sessionFactory) {
+        factory = sessionFactory.getObject();
     }
 
     /**
@@ -63,13 +57,22 @@ public class CompanyDAO {
      * @param id Long.
      * @return Optional<Company>
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public Optional<Company> get(Long id) {
         // TODO Auto-generated method stub
+        Optional<Company> opt = Optional.empty();
 
-        Company company = template.queryForObject(FIND_BY_ID, new MapSqlParameterSource("id", id), mapper);
-        LOGGER.debug("Company fetched : " + company);
-        return Optional.ofNullable(company);
+        try (Session session = factory.openSession()) {
+
+            Query<Company> query = session.createQuery(FIND_BY_ID, Company.class);
+            query.setParameter("id", id);
+
+            Company company = query.getSingleResult();
+            opt = Optional.ofNullable(company);
+
+            LOGGER.debug("Company fetched : " + company);
+        }
+        return opt;
     }
 
     /**
@@ -79,14 +82,20 @@ public class CompanyDAO {
      * @param itemPerPage int
      * @return List<Company>
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public List<Company> list(int page, int itemPerPage) {
         // TODO Auto-generated method stub
-        String offsetClause = itemPerPage > 0 ? "LIMIT " + itemPerPage : "";
-        offsetClause += (page > 1 && itemPerPage > 0) ? " OFFSET " + ((page - 1) * itemPerPage) : "";
+        try (Session session = factory.openSession()) {
 
-        return template.query(String.format(LIST_REQUEST, offsetClause), mapper);
-
+            Query<Company> query = session.createQuery(LIST_REQUEST, Company.class);
+            if (page > 1 && itemPerPage > 0) {
+                query.setFirstResult((page - 1) * itemPerPage);
+            }
+            if (itemPerPage > 0) {
+                query.setMaxResults(itemPerPage);
+            }
+            return query.list();
+        }
     }
 
     /**
@@ -98,12 +107,21 @@ public class CompanyDAO {
     @Transactional(readOnly = false)
     public boolean delete(Long id) {
 
-        template.update(DELETE_RELATED_COMPUTERS, new MapSqlParameterSource("id", id));
-        int affectRowsCount = template.update(DELETE, new MapSqlParameterSource("id", id));
+        try (Session session = factory.openSession()) {
+            Transaction tx = session.beginTransaction();
+            Query deleteRelatedComputersQuery = session.createQuery(DELETE_RELATED_COMPUTERS);
+            deleteRelatedComputersQuery.setParameter("id", id);
+            deleteRelatedComputersQuery.executeUpdate();
 
-        LOGGER.debug("Company deleted : " + id);
+            Query deleteCompanyQuery = session.createQuery(DELETE);
+            deleteCompanyQuery.setParameter("id", id);
+            int affectedRowsCount = deleteCompanyQuery.executeUpdate();
 
-        return affectRowsCount > 0;
+            tx.commit();
+            LOGGER.debug("Company deleted : " + id);
+
+            return affectedRowsCount > 0;
+        }
 
     }
 }

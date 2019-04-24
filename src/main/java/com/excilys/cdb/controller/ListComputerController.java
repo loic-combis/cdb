@@ -50,7 +50,7 @@ public class ListComputerController {
         map.addAttribute("feedback", new Feedback(status.orElse(""), message.orElse("")));
         map.addAttribute("orderby", orderBy.orElse(""));
         map.addAttribute("search", search.orElse(""));
-        int computerCount = computerService.count(search.orElse(""));
+        Long computerCount = computerService.count(search.orElse(""));
 
         map.addAttribute("pagination", new Pagination(page.orElse(1), itemPerPage.orElse(10), computerCount));
 

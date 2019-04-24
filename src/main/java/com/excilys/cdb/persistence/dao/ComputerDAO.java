@@ -1,21 +1,19 @@
 package com.excilys.cdb.persistence.dao;
 
-import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.excilys.cdb.mapper.ComputerSQLMapper;
+import com.excilys.cdb.model.company.Company;
 import com.excilys.cdb.model.computer.Computer;
 
 /**
@@ -29,38 +27,30 @@ import com.excilys.cdb.model.computer.Computer;
 @Repository("computerDAO")
 public class ComputerDAO {
 
-    /**
-     * mapper ComputerMapper.
-     */
-    private ComputerSQLMapper mapper;
+    private SessionFactory factory;
 
-    private NamedParameterJdbcTemplate template;
-
-    private final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
+    private Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 
     /**
      * String base SQL request.
      */
-    private static final String LIST_REQUEST = "SELECT *, company.name AS company_name FROM computer LEFT JOIN company ON computer.company_id = company.id %s %s %s";
-    private static final String FIND_BY_ID = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.id = :id";
-    private static final String DELETE_ONE = "DELETE FROM computer WHERE id = :id";
-    private static final String CREATE_ONE = "INSERT INTO computer(name, introduced, discontinued, company_id) VALUES(:name, :introduced, :discontinued, :company_id)";
-    private static final String UPDATE_ONE = "UPDATE computer SET name = :name, introduced = :introduced, discontinued = :discontinued, company_id = :company_id WHERE id = :id";
-    private static final String COUNT_ALL = "SELECT COUNT(*) AS total FROM computer LEFT JOIN company ON computer.company_id = company.id %s";
-    private static final String DELETE_MANY = "DELETE FROM computer WHERE id IN (:ids)";
+    private static final String LIST_REQUEST = "from Computer %s %s";
+    private static final String FIND_BY_ID = "from Computer where id = :id";
+    private static final String DELETE_ONE = "delete Computer where id = :id";
+    private static final String UPDATE_ONE = "update Computer set name = :name, introduced = :introduced, discontinued = :discontinued, company_id = :company_id where id = :id";
+    private static final String COUNT_ALL = "select count(c) from Computer c %s";
+    private static final String DELETE_MANY = "delete Computer where id in (:ids)";
 
-    private static final String SEARCH_WHERE_CLAUSE = "WHERE computer.name LIKE '%%%s%%' OR company.name LIKE '%%%s%%'";
-    private static final String ORDER_BY_CLAUSE = "ORDER BY %s";
+    private static final String SEARCH_WHERE_CLAUSE = "where name like '%%%s%%' or name like '%%%s%%'";
+    private static final String ORDER_BY_CLAUSE = "order by %s";
 
     /**
      * Constructor.
      *
-     * @param jdbcTemplate NamedParameterJdbcTemplate
-     * @param sqlMapper    ComputerSQLMapper
+     * @param sessionFactory LocalSessionFactoryBean
      */
-    public ComputerDAO(NamedParameterJdbcTemplate jdbcTemplate, ComputerSQLMapper sqlMapper) {
-        mapper = sqlMapper;
-        template = jdbcTemplate;
+    public ComputerDAO(LocalSessionFactoryBean sessionFactory) {
+        factory = sessionFactory.getObject();
     }
 
     /**
@@ -68,19 +58,18 @@ public class ComputerDAO {
      *
      * @param id Long
      * @return Optional<Computer>
-     * @throws EmptyNameException         ene
-     * @throws UnconsistentDatesException ude
      */
     @Transactional(readOnly = true)
     public Optional<Computer> get(Long id) {
-        Computer computer = null;
-        try {
-            computer = template.queryForObject(FIND_BY_ID, new MapSqlParameterSource("id", id), mapper);
-        } catch (EmptyResultDataAccessException e) {
-            LOGGER.debug("Tried to fetch non existing computer with id : " + id);
+
+        Optional<Computer> opt = Optional.empty();
+        try (Session session = factory.openSession()) {
+            Query<Computer> query = session.createQuery(FIND_BY_ID, Computer.class);
+            query.setParameter("id", id);
+            opt = Optional.ofNullable(query.getSingleResult());
         }
 
-        return Optional.ofNullable(computer);
+        return opt;
     }
 
     /**
@@ -92,19 +81,18 @@ public class ComputerDAO {
     @Transactional(readOnly = false)
     public boolean create(Computer computer) {
 
-        // TODO Auto-generated method stub
-        Long companyId = (computer.getCompany() != null ? computer.getCompany().getId() : null);
+        try (Session session = factory.openSession()) {
+            session.beginTransaction();
 
-        Timestamp introductionDate = mapper.getSqlTimestampValue(computer.getIntroduced());
-        Timestamp discontinuationDate = mapper.getSqlTimestampValue(computer.getDiscontinued());
+            if (computer.getCompany() != null) {
+                Query<Company> query = session.createQuery(CompanyDAO.FIND_BY_ID, Company.class);
+                query.setParameter("id", computer.getCompany().getId());
+                computer.setCompany(query.getSingleResult());
+            }
+            session.save(computer);
 
-        MapSqlParameterSource parameters = new MapSqlParameterSource();
-        parameters.addValue("name", computer.getName());
-        parameters.addValue("introduced", introductionDate);
-        parameters.addValue("discontinued", discontinuationDate);
-        parameters.addValue("company_id", companyId);
-
-        template.update(CREATE_ONE, parameters);
+            session.getTransaction().commit();
+        }
 
         return true;
     }
@@ -118,8 +106,16 @@ public class ComputerDAO {
     @Transactional(readOnly = false)
     public boolean delete(Long id) {
         // TODO Auto-generated method stub
-        int affectedRowsCount = template.update(DELETE_ONE, new MapSqlParameterSource("id", id));
-        return affectedRowsCount > 0;
+        try (Session session = factory.openSession()) {
+            session.beginTransaction();
+
+            Query query = session.createQuery(DELETE_ONE);
+            query.setParameter("id", id);
+            int affectedRowsCount = query.executeUpdate();
+
+            session.getTransaction().commit();
+            return affectedRowsCount > 0;
+        }
     }
 
     /**
@@ -131,20 +127,22 @@ public class ComputerDAO {
     @Transactional(readOnly = false)
     public boolean update(Computer computer) {
         // TODO Auto-generated method stub
-        Long companyId = (computer.getCompany() != null ? computer.getCompany().getId() : null);
-        Timestamp introductionDate = mapper.getSqlTimestampValue(computer.getIntroduced());
-        Timestamp discontinuationDate = mapper.getSqlTimestampValue(computer.getDiscontinued());
+        try (Session session = factory.openSession()) {
+            session.beginTransaction();
 
-        MapSqlParameterSource parameters = new MapSqlParameterSource();
-        parameters.addValue("name", computer.getName());
-        parameters.addValue("introduced", introductionDate);
-        parameters.addValue("discontinued", discontinuationDate);
-        parameters.addValue("company_id", companyId);
-        parameters.addValue("id", computer.getId());
+            Query query = session.createQuery(UPDATE_ONE);
+            query.setParameter("name", computer.getName());
+            query.setParameter("introduced", computer.getIntroduced());
+            query.setParameter("discontinued", computer.getDiscontinued());
+            query.setParameter("company_id", computer.getCompany() != null ? computer.getCompany().getId() : null);
+            query.setParameter("id", computer.getId());
 
-        int affectedRowsCount = template.update(UPDATE_ONE, parameters);
+            int affectedRowsCount = query.executeUpdate();
 
-        return affectedRowsCount > 0;
+            session.getTransaction().commit();
+
+            return affectedRowsCount > 0;
+        }
     }
 
     /**
@@ -161,35 +159,43 @@ public class ComputerDAO {
     @Transactional(readOnly = true)
     public List<Computer> list(int page, int itemPerPage, String search, String orderBy) {
         // TODO Auto-generated method stub
+        try (Session session = factory.openSession()) {
+            // Add where clause
+            String whereClause = search != null && !search.equals("")
+                    ? String.format(SEARCH_WHERE_CLAUSE, search, search)
+                    : "";
 
-        // Add limit / Offset clause.
-        String offsetClause = itemPerPage > 0 ? "LIMIT " + itemPerPage : "";
-        offsetClause += (page > 0 && itemPerPage > 0) ? " OFFSET " + ((page - 1) * itemPerPage) : "";
-
-        // Add where clause
-        String whereClause = search != null && !search.equals("") ? String.format(SEARCH_WHERE_CLAUSE, search, search)
-                : "";
-
-        // OrderBy clause.
-        String orderByClause = "";
-        if (orderBy != null && !orderBy.equals("")) {
-            switch (orderBy) {
-            case "name":
-                orderByClause = String.format(ORDER_BY_CLAUSE, "computer.name");
-                break;
-            case "introduced":
-                orderByClause = String.format(ORDER_BY_CLAUSE, "computer.introduced");
-                break;
-            case "discontinued":
-                orderByClause = String.format(ORDER_BY_CLAUSE, "computer.discontinued");
-                break;
-            case "company":
-                orderByClause = String.format(ORDER_BY_CLAUSE, "company.name");
-                break;
+            // OrderBy clause.
+            String orderByClause = "";
+            if (orderBy != null && !orderBy.equals("")) {
+                switch (orderBy) {
+                case "name":
+                    orderByClause = String.format(ORDER_BY_CLAUSE, "name");
+                    break;
+                case "introduced":
+                    orderByClause = String.format(ORDER_BY_CLAUSE, "introduced");
+                    break;
+                case "discontinued":
+                    orderByClause = String.format(ORDER_BY_CLAUSE, "discontinued");
+                    break;
+                case "company":
+                    orderByClause = String.format(ORDER_BY_CLAUSE, "name");
+                    break;
+                }
             }
-        }
 
-        return template.query(String.format(LIST_REQUEST, whereClause, orderByClause, offsetClause), mapper);
+            Query<Computer> query = session.createQuery(String.format(LIST_REQUEST, whereClause, orderByClause),
+                    Computer.class);
+
+            if (itemPerPage > 0) {
+                query.setMaxResults(itemPerPage);
+            }
+            if (page > 0 && itemPerPage > 0) {
+                query.setFirstResult((page - 1) * itemPerPage);
+            }
+
+            return query.list();
+        }
     }
 
     /**
@@ -199,12 +205,17 @@ public class ComputerDAO {
      * @return int
      */
     @Transactional(readOnly = true)
-    public int count(String search) {
+    public Long count(String search) {
         // TODO Auto-generated method stub
-        String whereClause = search != null && !search.equals("") ? String.format(SEARCH_WHERE_CLAUSE, search, search)
-                : "";
-        return template.queryForObject(String.format(COUNT_ALL, whereClause), new MapSqlParameterSource(),
-                Integer.class);
+        try (Session session = factory.openSession()) {
+            String whereClause = search != null && !search.equals("")
+                    ? String.format(SEARCH_WHERE_CLAUSE, search, search)
+                    : "";
+            Query query = session.createQuery(String.format(COUNT_ALL, whereClause));
+
+            return (Long) query.list().get(0);
+
+        }
     }
 
     /**
@@ -216,9 +227,19 @@ public class ComputerDAO {
     @Transactional(readOnly = false)
     public boolean deleteMany(String[] ids) {
         // TODO Auto-generated method stub
-        LOGGER.error(ids.toString());
-        int affectedRowsCount = template.update(DELETE_MANY, Collections.singletonMap("ids", Arrays.asList(ids)));
 
-        return affectedRowsCount > 0;
+        Long[] longIds = new Long[ids.length];
+        for (int i = 0; i < ids.length; i++) {
+            longIds[i] = Long.parseLong(ids[i]);
+        }
+        try (Session session = factory.openSession()) {
+            session.beginTransaction();
+
+            Query query = session.createQuery(DELETE_MANY);
+            query.setParameterList("ids", longIds);
+            Object affectedRowsCount = query.executeUpdate();
+            session.getTransaction().commit();
+            return true;
+        }
     }
 }

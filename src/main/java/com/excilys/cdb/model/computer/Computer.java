@@ -2,6 +2,15 @@ package com.excilys.cdb.model.computer;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 import com.excilys.cdb.model.company.Company;
 
 /**
@@ -10,31 +19,48 @@ import com.excilys.cdb.model.company.Company;
  * @author excilys
  *
  */
+@Entity
+@Table(name = "computer")
 public class Computer {
     /**
      * id Long - Unique id of the computer in the database.
      */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     /**
      * name String - Name of the computer.
      */
+    @Column(name = "name")
     private String name;
 
     /**
      * introduced LocalDate - Date the computer was introduced.
      */
+    @Column(name = "introduced")
     private LocalDate introduced;
 
     /**
      * discontinued LocalDate - Date the computer was discontinued.
      */
+    @Column(name = "discontinued")
     private LocalDate discontinued;
 
     /**
      * company Company - Company manufacturing the computer.
      */
+    @ManyToOne
+    @JoinColumn(name = "company_id")
     private Company company;
+
+    /**
+     * Constructor.
+     */
+    public Computer() {
+
+    }
 
     /**
      * Constructor.

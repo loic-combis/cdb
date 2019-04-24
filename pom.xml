@@ -17,6 +17,7 @@
     <testng.version>6.14.3</testng.version>
     <spring.version>5.1.6.RELEASE</spring.version>
     <spring-boot.version>2.1.4.RELEASE</spring-boot.version>
+    <hibernate.version>5.4.2.Final</hibernate.version>
   </properties>
   
   <url>http://maven.apache.org</url>
@@ -85,6 +86,18 @@
             </exclusion>
         </exclusions>            
     </dependency>
+    
+    <dependency>
+	    <groupId>org.hibernate</groupId>
+	    <artifactId>hibernate-core</artifactId>
+	    <version>${hibernate.version}</version>
+	</dependency>
+    
+    <dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-orm</artifactId>
+	    <version>${spring.version}</version>
+	</dependency>
 	
   </dependencies>
   

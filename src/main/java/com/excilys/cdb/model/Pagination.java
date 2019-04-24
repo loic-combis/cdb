@@ -4,7 +4,7 @@ public class Pagination {
 
     private int currentPage;
     private int itemPerPage;
-    private int itemCount;
+    private Long itemCount;
     private int[] sizes = { 10, 20, 50, 100 };
 
     /**
@@ -12,9 +12,9 @@ public class Pagination {
      *
      * @param currentPage int
      * @param itemPerPage int
-     * @param itemCount   int
+     * @param itemCount   Long
      */
-    public Pagination(int currentPage, int itemPerPage, int itemCount) {
+    public Pagination(int currentPage, int itemPerPage, Long itemCount) {
         setCurrentPage(currentPage);
         setItemPerPage(itemPerPage);
         setItemCount(itemCount);
@@ -59,18 +59,18 @@ public class Pagination {
     /**
      * Getter.
      *
-     * @return int
+     * @return Long
      */
-    public int getItemCount() {
+    public Long getItemCount() {
         return itemCount;
     }
 
     /**
      * Setter.
      *
-     * @param itemCount int
+     * @param itemCount Long
      */
-    public void setItemCount(int itemCount) {
+    public void setItemCount(Long itemCount) {
         this.itemCount = itemCount;
     }
 
@@ -107,7 +107,7 @@ public class Pagination {
      * @return int
      */
     public int lastPage() {
-        int potentialLastPage = getItemCount() / getItemPerPage();
+        int potentialLastPage = getItemCount().intValue() / getItemPerPage();
         return (getItemCount() % getItemPerPage() == 0) ? potentialLastPage : potentialLastPage + 1;
     }
 

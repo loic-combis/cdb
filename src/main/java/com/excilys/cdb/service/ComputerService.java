@@ -103,9 +103,9 @@ public class ComputerService {
      * Count the number of computer stored.
      *
      * @param search String
-     * @return int
+     * @return Long
      */
-    public int count(String search) {
+    public Long count(String search) {
         return computerDAO.count(search);
     }
 

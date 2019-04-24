@@ -69,6 +69,9 @@ public class ComputerDTOMapper {
                 : LocalDate.parse(dto.getDiscontinued(), df);
 
         Company company = CompanyFactory.getInstance().create(dto.getCompanyId(), dto.getCompanyName());
+        if (company.getId() == null) {
+            company = null;
+        }
 
         return ComputerFactory.getInstance().createWithAll(dto.getId(), dto.getName(), introduction, discontinuation,
                 company);
