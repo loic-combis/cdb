@@ -3,6 +3,8 @@ package com.excilys.cdb.persistence.dao;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.NoResultException;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -64,9 +66,15 @@ public class ComputerDAO {
 
         Optional<Computer> opt = Optional.empty();
         try (Session session = factory.openSession()) {
+
             Query<Computer> query = session.createQuery(FIND_BY_ID, Computer.class);
             query.setParameter("id", id);
-            opt = Optional.ofNullable(query.getSingleResult());
+            opt = Optional.of(query.getSingleResult());
+
+            logger.info("Computer fetched : " + opt.get());
+        } catch (NoResultException nre) {
+
+            logger.warn(nre.getMessage());
         }
 
         return opt;
@@ -89,12 +97,19 @@ public class ComputerDAO {
                 query.setParameter("id", computer.getCompany().getId());
                 computer.setCompany(query.getSingleResult());
             }
-            session.save(computer);
+            int id = (int) session.save(computer);
 
             session.getTransaction().commit();
+
+            logger.info("Computer created with id : " + id);
+
+            return true;
+
+        } catch (NoResultException nre) {
+
+            return false;
         }
 
-        return true;
     }
 
     /**
@@ -114,6 +129,9 @@ public class ComputerDAO {
             int affectedRowsCount = query.executeUpdate();
 
             session.getTransaction().commit();
+
+            logger.info("Computer deleted with id : " + id);
+
             return affectedRowsCount > 0;
         }
     }
@@ -140,6 +158,8 @@ public class ComputerDAO {
             int affectedRowsCount = query.executeUpdate();
 
             session.getTransaction().commit();
+
+            logger.info("Computer updated with id : " + computer.getId());
 
             return affectedRowsCount > 0;
         }
@@ -237,9 +257,12 @@ public class ComputerDAO {
 
             Query query = session.createQuery(DELETE_MANY);
             query.setParameterList("ids", longIds);
-            Object affectedRowsCount = query.executeUpdate();
+            int affectedRowsCount = query.executeUpdate();
+
             session.getTransaction().commit();
-            return true;
+            logger.info("Computer deleted with ids : " + ids);
+
+            return affectedRowsCount > 0;
         }
     }
 }

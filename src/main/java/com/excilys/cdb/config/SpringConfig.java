@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -78,17 +77,6 @@ public class SpringConfig {
         return DataSourceBuilder.create().driverClassName(reader.get("app.datasource.driver-class-name"))
                 .password(reader.get("app.datasource.password")).username(reader.get("app.datasource.username"))
                 .url(reader.get("app.datasource.url")).build();
-    }
-
-    /**
-     * Bean initializer.
-     *
-     * @param ds DataSource
-     * @return NamedParameterJdbcTemplate
-     */
-    @Bean
-    public NamedParameterJdbcTemplate getTemplate(DataSource ds) {
-        return new NamedParameterJdbcTemplate(ds);
     }
 
     /**

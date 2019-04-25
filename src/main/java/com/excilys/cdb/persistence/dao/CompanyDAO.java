@@ -3,6 +3,8 @@ package com.excilys.cdb.persistence.dao;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.NoResultException;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -70,7 +72,10 @@ public class CompanyDAO {
             Company company = query.getSingleResult();
             opt = Optional.ofNullable(company);
 
-            LOGGER.debug("Company fetched : " + company);
+            LOGGER.info("Company fetched : " + company);
+        } catch (NoResultException nre) {
+
+            LOGGER.warn(nre.getMessage());
         }
         return opt;
     }
@@ -118,7 +123,7 @@ public class CompanyDAO {
             int affectedRowsCount = deleteCompanyQuery.executeUpdate();
 
             tx.commit();
-            LOGGER.debug("Company deleted : " + id);
+            LOGGER.info("Company deleted : " + id);
 
             return affectedRowsCount > 0;
         }
