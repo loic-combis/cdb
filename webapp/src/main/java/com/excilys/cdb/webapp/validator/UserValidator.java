@@ -29,7 +29,7 @@ public class UserValidator implements Validator {
             errors.rejectValue("login", EMPTY_LOGIN);
         }
 
-        if (StringUtils.isEmpty(formData.getPassword()) || formData.getLogin().trim().length() < 6) {
+        if (StringUtils.isEmpty(formData.getPassword()) || formData.getPassword().trim().length() < 6) {
             errors.rejectValue("password", PASSWORD_IS_INVALID);
         }
 
