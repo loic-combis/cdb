@@ -74,6 +74,12 @@ public class ErrorController {
      * @return int
      */
     private int getErrorCode(HttpServletRequest httpRequest) {
-        return (Integer) httpRequest.getAttribute("javax.servlet.error.status_code");
+        Object code = httpRequest.getAttribute("javax.servlet.error.status_code");
+
+        if (code == null) {
+            return 500;
+        } else {
+            return (Integer) code;
+        }
     }
 }

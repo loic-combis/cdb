@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -26,6 +27,7 @@ import com.excilys.cdb.service.service.ComputerService;
 import com.excilys.cdb.webapp.validator.ComputerDTOValidator;
 
 @Controller
+@RequestMapping("/computers/{id}/edit")
 public class EditComputerController {
 
     private ComputerService computerService;
@@ -81,7 +83,7 @@ public class EditComputerController {
      * @param map Model
      * @return String
      */
-    @GetMapping(value = "/computers/{id}/edit")
+    @GetMapping
     protected String show(@PathVariable(value = "id") Long id, Model map) {
         Optional<Computer> computer = computerService.get(id);
         if (computer.isPresent()) {
@@ -102,7 +104,7 @@ public class EditComputerController {
      * @param result      BindingResult
      * @return RedirectView
      */
-    @PostMapping(value = "/computers/{id}/edit")
+    @PostMapping
     protected RedirectView edit(@Validated @ModelAttribute("computerDTO") ComputerDTO computerDTO,
             @PathVariable(value = "id") Long id, BindingResult result) {
         String status = "danger";

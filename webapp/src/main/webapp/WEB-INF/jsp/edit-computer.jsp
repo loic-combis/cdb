@@ -19,6 +19,8 @@
             <div class="pull-right">
             	<a class="navbar-brand" href="/computers/${computerDTO.getId()}/edit?lang=fr">Français</a>
         		<a class="navbar-brand" href="/computers/${computerDTO.getId()}/edit?lang=en">English</a>
+        		<a class="narvbar-brand btn btn-danger" href="/logout"><i class="fa fa-power-off"></i></a>
+        	
             </div>
         </div>
     </header>

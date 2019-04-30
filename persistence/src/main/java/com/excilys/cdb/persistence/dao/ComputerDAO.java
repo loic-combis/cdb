@@ -232,7 +232,6 @@ public class ComputerDAO {
                     ? String.format(SEARCH_WHERE_CLAUSE, search, search)
                     : "";
             Query<?> query = session.createQuery(String.format(COUNT_ALL, whereClause));
-            logger.error("" + query.list());
             return (Long) query.list().get(0);
 
         }

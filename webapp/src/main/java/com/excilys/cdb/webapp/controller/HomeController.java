@@ -65,7 +65,9 @@ public class HomeController {
 
     @GetMapping({ "/", "/home" })
     public String show(@RequestParam Optional<String> feedback, @RequestParam Optional<String> message, Model map) {
+
         map.addAttribute("feedback", new Feedback(feedback.orElse(""), message.orElse("")));
+
         return "home";
     }
 
@@ -79,8 +81,8 @@ public class HomeController {
             message = source.getMessage(result.getAllErrors().get(0).getCode(), null, LocaleContextHolder.getLocale());
 
         } else {
-            userFormData.setPassword(encoder.encode(userFormData.getPassword()));
             try {
+                userFormData.setPassword(encoder.encode(userFormData.getPassword()));
                 if (userService.create(User.ofCreateForm(userFormData))) {
                     message = source.getMessage(UserService.CREATE_USER_SUCCESS, null, LocaleContextHolder.getLocale());
                     status = "success";
@@ -94,21 +96,5 @@ public class HomeController {
         }
 
         return new RedirectView("/home?feedback=" + status + "&message=" + message);
-    }
-
-    @PostMapping("/authenticate")
-    public RedirectView login(@RequestParam Optional<String> login, @RequestParam Optional<String> password,
-            Model map) {
-        Object result = userService.login(login.orElse(""),
-                (user) -> encoder.matches(password.orElse(""), user.getPassword()));
-
-        if (result instanceof User) { // Authentication successfull.
-            return new RedirectView("/computers");
-
-        } else {
-            String status = "danger";
-            String message = source.getMessage((String) result, null, LocaleContextHolder.getLocale());
-            return new RedirectView("/home?feedback=" + status + "&message=" + message);
-        }
     }
 }

@@ -1,8 +1,5 @@
 package com.excilys.cdb.service.service;
 
-import java.util.Optional;
-import java.util.function.Function;
-
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +14,6 @@ public class UserService {
     public static final String CREATE_USER_SUCCESS = "user.created";
     public static final String CREATE_USER_FAILURE = "user.not.created";
     public static final String USER_ALREADY_EXISTS = "user.already.exists";
-    public static final String USER_NOT_FOUND = "user.not.found";
-    public static final String WRONG_CREDENTIALS = "wrong.credentials";
 
     private UserDAO userDAO;
 
@@ -28,18 +23,5 @@ public class UserService {
 
     public boolean create(User user) throws UserAlreadyExistsException {
         return userDAO.create(user);
-    }
-
-    public Object login(String string, Function<User, Boolean> verificator) {
-        Optional<User> opt = userDAO.findByLogin(string);
-        if (opt.isEmpty()) {
-            return USER_NOT_FOUND;
-        }
-
-        if (verificator.apply(opt.get())) {
-            return opt.get();
-        }
-
-        return WRONG_CREDENTIALS;
     }
 }

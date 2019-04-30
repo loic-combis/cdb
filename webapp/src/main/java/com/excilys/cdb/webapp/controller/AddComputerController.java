@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -27,6 +27,7 @@ import com.excilys.cdb.service.service.ComputerService;
 import com.excilys.cdb.webapp.validator.ComputerDTOValidator;
 
 @Controller
+@RequestMapping("/computers/add")
 public class AddComputerController {
 
     /**
@@ -84,7 +85,7 @@ public class AddComputerController {
      * @param map      Model
      * @return String
      */
-    @GetMapping(value = "/computers/add", produces = MediaType.TEXT_HTML_VALUE)
+    @GetMapping
     protected String show(@RequestParam Optional<String> feedback, @RequestParam Optional<String> message, Model map) {
         map.addAttribute("feedback", new Feedback(feedback.orElse(""), message.orElse("")));
         map.addAttribute("companies", companyService.list(0, 0));
@@ -108,7 +109,7 @@ public class AddComputerController {
      * @param result      BindingResult
      * @return RedirectView
      */
-    @PostMapping("/computers/add")
+    @PostMapping
     protected RedirectView create(@Validated @ModelAttribute("computerDTO") ComputerDTO computerDTO,
             BindingResult result) {
         String status = "danger";

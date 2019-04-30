@@ -55,6 +55,7 @@ public class UserDAO {
     }
 
     public Optional<User> findByLogin(String login) {
+
         Optional<User> opt = Optional.empty();
 
         try (Session session = factory.openSession()) {

@@ -14,7 +14,7 @@ import org.springframework.web.servlet.view.JstlView;
 
 @Configuration
 @EnableWebMvc
-@Import({ com.excilys.cdb.webapp.config.Config.class })
+@Import({ com.excilys.cdb.webapp.config.Config.class, com.excilys.cdb.webapp.config.security.SecurityConfig.class })
 public class CdbWebConfig implements WebMvcConfigurer {
 
     /**
