@@ -18,7 +18,7 @@
         <div class="container">
             <a class="navbar-brand" href="<c:url value="/home" />"> Application - Computer Database </a>
             <div class="navbar-brand pull-right">
-            	<form id="searchForm" action="/authenticate" method="POST" class="form-inline">
+            	<form id="loginForm" action="/authenticate" method="POST" class="form-inline">
                 	<spring:message code="login" var="userLogin"/>
                     <input type="text" name="login" class="form-control" placeholder="${userLogin}"/>
                     <spring:message code="password" var="userPwd"/>
@@ -44,13 +44,13 @@
         	</div> 
         </div>
         <div class="container" style="margin-top: 10px;">
-       		<form:form action="/users" method="POST" modelAttribute="createUserFormData">
+       		<form:form action="/users" method="POST" modelAttribute="createUserFormData" id="createUser">
        			<fieldset>
        				 <div class="form-group">
                      	<spring:message code="login" var="userLogin"/>
                         <form:label path="login">${userLogin}</form:label>
                         <form:input type="text" class="form-control" path="login" placeholder="${userLogin}" />
-                       	<small><spring:message code="login.is.empty"/></small>
+                       	<small class="text-danger"><spring:message code="login.is.empty"/></small>
                         <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                         <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                      </div>
@@ -58,7 +58,7 @@
                      	<spring:message code="password" var="userPwd"/>
                         <form:label path="password">${userPwd}</form:label>
                         <form:input type="password" class="form-control" path="password" placeholder="${userPwd}" />
-                       	<small><spring:message code="password.is.invalid"/></small>
+                       	<small class="text-danger"><spring:message code="password.is.invalid"/></small>
                         <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                         <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                      </div>
@@ -66,7 +66,7 @@
                      	<spring:message code="confirmation" var="pwdConfirm"/>
                         <form:label path="confirmation">${pwdConfirm}</form:label>
                         <form:input type="password" class="form-control" path="confirmation" placeholder="${pwdConfirm}" />
-                       	<small><spring:message code="passwords.do.not.match"/></small>
+                       	<small class="text-danger"><spring:message code="passwords.do.not.match"/></small>
                         <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                         <span class="glyphicon glyphicon-ok form-control-feedback"></span>
                      </div>
@@ -83,7 +83,8 @@
         	<a class="navbar-brand" href="/home?lang=en">English</a>
 		</div>
     </footer>
-<script src="<c:url value="/assets/js/jquery.min.js"/>"></script>
-<script src="<c:url value="/assets/js/bootstrap.min.js"/>"></script>
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
+<script src="/assets/js/home.js"></script>
 </body>
 </html>
