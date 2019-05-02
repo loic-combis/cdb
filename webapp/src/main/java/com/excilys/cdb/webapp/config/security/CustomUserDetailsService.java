@@ -4,10 +4,8 @@ import static com.excilys.cdb.core.User.MANAGER;
 import static com.excilys.cdb.core.User.USER;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -36,29 +34,14 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (optUser.isEmpty()) {
             throw new UsernameNotFoundException("User does not exist.");
         }
-        Set<String> roles = new HashSet<String>();
-        roles.add(USER);
+        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+        authorities.add(new SimpleGrantedAuthority(USER));
 
         if (optUser.get().getRole().equals(MANAGER)) {
-            roles.add(MANAGER);
+            authorities.add(new SimpleGrantedAuthority(MANAGER));
         }
-        List<GrantedAuthority> authorities = buildUserAuthority(roles);
-
         return buildUserForAuthentication(optUser.get(), authorities);
 
-    }
-
-    private List<GrantedAuthority> buildUserAuthority(Set<String> userRoles) {
-
-        Set<GrantedAuthority> setAuths = new HashSet<GrantedAuthority>();
-
-        for (String role : userRoles) {
-            setAuths.add(new SimpleGrantedAuthority(role));
-        }
-
-        List<GrantedAuthority> Result = new ArrayList<GrantedAuthority>(setAuths);
-
-        return Result;
     }
 
     private User buildUserForAuthentication(com.excilys.cdb.core.User user, List<GrantedAuthority> authorities) {
