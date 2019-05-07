@@ -22,9 +22,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.cors().and().csrf().disable().authorizeRequests().antMatchers("/", "/home").permitAll().and().formLogin()
-                .loginPage("/home").loginProcessingUrl("/authenticate").usernameParameter("login")
-                .passwordParameter("password").successHandler(authenticationHandler())
+        http.csrf().disable().authorizeRequests().antMatchers("/api/**").permitAll().antMatchers("/", "/home")
+                .permitAll().and().formLogin().loginPage("/home").loginProcessingUrl("/authenticate")
+                .usernameParameter("login").passwordParameter("password").successHandler(authenticationHandler())
                 .failureHandler(authenticationHandler()).and().logout().logoutUrl("/logout").logoutSuccessUrl("/home")
                 .and().exceptionHandling().accessDeniedHandler(accessDeniedHandler());
     }

@@ -1,17 +1,13 @@
 package com.excilys.cdb.webapp.controller.rest;
 
-import static com.excilys.cdb.core.User.ROLE_MANAGER;
-
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.http.MediaType;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -19,10 +15,10 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -77,23 +73,12 @@ public class ComputerRestController {
     }
 
     /**
-     * Init the model attribute computerDTO.
-     *
-     * @return ComputerDTO
-     */
-    @ModelAttribute
-    public ComputerDTO computerDTO() {
-        return new ComputerDTO();
-    }
-
-    /**
      * Endpoint to fetch the specified computer.
      *
      * @param id Long
      * @return ComputerDTO
      */
     @GetMapping(value = "/{id}")
-    @PreAuthorize("isAuthenticated()")
     protected ComputerDTO get(@PathVariable(value = "id") Long id) {
         return mapper.toDTO(computerService.get(id).orElse(null));
     }
@@ -110,8 +95,7 @@ public class ComputerRestController {
      * @param map         Model
      * @return List<ComputerDTO>
      */
-    @GetMapping
-    @PreAuthorize("isAuthenticated()")
+    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     protected List<ComputerDTO> list(@RequestParam Optional<String> status, @RequestParam Optional<String> message,
             @RequestParam Optional<Integer> page, @RequestParam Optional<Integer> itemPerPage,
             @RequestParam Optional<String> search, @RequestParam("orderby") Optional<String> orderBy, Model map) {
@@ -131,8 +115,7 @@ public class ComputerRestController {
      * @return Feedback
      */
     @PostMapping
-    @Secured({ ROLE_MANAGER })
-    protected Feedback create(@Validated @ModelAttribute("computerDTO") ComputerDTO computerDTO, BindingResult result) {
+    protected Feedback create(@Validated @RequestBody ComputerDTO computerDTO, BindingResult result) {
 
         String status = "danger";
         String message = "";
@@ -159,10 +142,9 @@ public class ComputerRestController {
      * @param result      BindingResult
      * @return Feedback
      */
-    @PutMapping("/{id}")
-    @Secured({ ROLE_MANAGER })
-    protected Feedback edit(@Validated @ModelAttribute("computerDTO") ComputerDTO computerDTO,
-            @PathVariable(value = "id") Long id, BindingResult result) {
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    protected Feedback edit(@Validated @RequestBody ComputerDTO computerDTO, @PathVariable(value = "id") Long id,
+            BindingResult result) {
         String status = "danger";
         String message = "";
 
@@ -181,16 +163,15 @@ public class ComputerRestController {
     }
 
     /**
-     * Endpoint to delete a set of computers.
+     * Endpoint to delete a specific computer.
      *
-     * @param body Map<String, String>
+     * @param id Long
      * @return Feedback
      */
-    @DeleteMapping("/{id}")
-    @Secured({ ROLE_MANAGER })
-    protected Feedback deleteMany(@RequestParam Map<String, String> body) {
-        String[] selection = body.get("selection").split(",");
-        boolean success = computerService.deleteMany(selection);
+    @DeleteMapping(value = "/{id}")
+    protected Feedback deleteMany(@PathVariable("id") Long id) {
+
+        boolean success = computerService.delete(id);
 
         String message, status;
         if (success) {

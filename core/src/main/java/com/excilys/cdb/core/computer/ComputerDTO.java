@@ -1,9 +1,7 @@
 package com.excilys.cdb.core.computer;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-@JsonDeserialize(builder = ComputerDTOBuilder.class)
 public class ComputerDTO {
 
     private Long id;

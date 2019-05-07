@@ -41,6 +41,7 @@ public class ComputerDTOValidator implements Validator {
     public void validate(Object target, Errors errors) {
         // TODO Auto-generated method stub
         ComputerDTO dto = (ComputerDTO) target;
+        LOGGER.error(dto.toString());
         if (StringUtils.isEmpty(dto.getName()) || dto.getName().trim().equals("")) {
             errors.rejectValue("name", source.getMessage(EMPTY_NAME, null, LocaleContextHolder.getLocale()));
         }
