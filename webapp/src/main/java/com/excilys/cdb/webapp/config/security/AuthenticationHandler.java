@@ -31,15 +31,25 @@ public class AuthenticationHandler implements AuthenticationSuccessHandler, Auth
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException exception) throws IOException, ServletException {
 
-        logger.info("Authentication error.");
-        response.sendRedirect("/home?feedback=danger&message="
-                + messageSource.getMessage(AUTHENTICATION_FAILURE, null, LocaleContextHolder.getLocale()));
+        logger.info("Authentication error for login : " + request.getParameter("login"));
+        String isApiLogin = request.getParameter("isApiLogin");
+        if (isApiLogin != null && isApiLogin.equals("true")) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        } else {
+            response.sendRedirect("/home?feedback=danger&message="
+                    + messageSource.getMessage(AUTHENTICATION_FAILURE, null, LocaleContextHolder.getLocale()));
+        }
     }
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
             Authentication authentication) throws IOException, ServletException {
-        response.sendRedirect("/computers");
-    }
+        String isApiLogin = request.getParameter("isApiLogin");
+        if (isApiLogin != null && isApiLogin.equals("true")) {
+            response.setStatus(HttpServletResponse.SC_OK);
 
+        } else {
+            response.sendRedirect("/computers");
+        }
+    }
 }

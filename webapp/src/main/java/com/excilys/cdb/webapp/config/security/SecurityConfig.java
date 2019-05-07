@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.DigestAuthenticationFilter;
 
@@ -21,15 +22,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.csrf().disable().authorizeRequests().antMatchers("/", "/home").permitAll().and().formLogin()
+        http.cors().and().csrf().disable().authorizeRequests().antMatchers("/", "/home").permitAll().and().formLogin()
                 .loginPage("/home").loginProcessingUrl("/authenticate").usernameParameter("login")
                 .passwordParameter("password").successHandler(authenticationHandler())
-                .failureHandler(authenticationHandler()).and().logout().logoutUrl("/logout").logoutSuccessUrl("/home");
+                .failureHandler(authenticationHandler()).and().logout().logoutUrl("/logout").logoutSuccessUrl("/home")
+                .and().exceptionHandling().accessDeniedHandler(accessDeniedHandler());
     }
 
     @Bean
     public AuthenticationHandler authenticationHandler() {
         return new AuthenticationHandler();
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return new CustomAccessDeniedHandler();
     }
 
     @Bean

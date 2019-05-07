@@ -38,29 +38,29 @@ public class ErrorController {
         switch (httpErrorCode) {
         case 400:
             errorMsg = source.getMessage("400", null, LocaleContextHolder.getLocale());
-            ;
             break;
 
         case 401:
             errorMsg = source.getMessage("401", null, LocaleContextHolder.getLocale());
-            ;
+            break;
+
+        case 403:
+            errorMsg = source.getMessage("403", null, LocaleContextHolder.getLocale());
             break;
 
         case 404:
             errorMsg = source.getMessage("404", null, LocaleContextHolder.getLocale());
-            ;
             break;
 
         case 500:
             errorMsg = source.getMessage("500", null, LocaleContextHolder.getLocale());
-            ;
             break;
 
         default:
             errorMsg = source.getMessage("default", null, LocaleContextHolder.getLocale());
-            ;
             break;
         }
+
         map.addAttribute("errorCode", httpErrorCode);
         map.addAttribute("errorMessage", errorMsg);
 
@@ -77,7 +77,16 @@ public class ErrorController {
         Object code = httpRequest.getAttribute("javax.servlet.error.status_code");
 
         if (code == null) {
-            return 500;
+            code = httpRequest.getParameter("code");
+            if (code != null) {
+                try {
+                    return Integer.valueOf((String) code);
+                } catch (NumberFormatException e) {
+                    return 400;
+                }
+            } else {
+                return 500;
+            }
         } else {
             return (Integer) code;
         }
