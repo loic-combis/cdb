@@ -1,10 +1,13 @@
 package com.excilys.cdb.webapp.controller;
 
+import static com.excilys.cdb.core.User.ROLE_MANAGER;
+
 import java.util.Optional;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -84,6 +87,7 @@ public class EditComputerController {
      * @return String
      */
     @GetMapping
+    @Secured(ROLE_MANAGER)
     protected String show(@PathVariable(value = "id") Long id, Model map) {
         Optional<Computer> computer = computerService.get(id);
         if (computer.isPresent()) {
@@ -105,6 +109,7 @@ public class EditComputerController {
      * @return RedirectView
      */
     @PostMapping
+    @Secured(ROLE_MANAGER)
     protected RedirectView edit(@Validated @ModelAttribute("computerDTO") ComputerDTO computerDTO,
             @PathVariable(value = "id") Long id, BindingResult result) {
         String status = "danger";

@@ -1,5 +1,9 @@
 package com.excilys.cdb.core.computer;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+@JsonDeserialize(builder = ComputerDTOBuilder.class)
 public class ComputerDTO {
 
     private Long id;
@@ -19,6 +23,7 @@ public class ComputerDTO {
      *
      * @return Long.
      */
+    @JsonGetter("id")
     public Long getId() {
         return id;
     }
@@ -37,6 +42,7 @@ public class ComputerDTO {
      *
      * @return String
      */
+    @JsonGetter("name")
     public String getName() {
         return name;
     }
@@ -55,6 +61,7 @@ public class ComputerDTO {
      *
      * @return String
      */
+    @JsonGetter("introduced")
     public String getIntroduced() {
         return introduced;
     }
@@ -73,6 +80,7 @@ public class ComputerDTO {
      *
      * @return String
      */
+    @JsonGetter("discontinued")
     public String getDiscontinued() {
         return discontinued;
     }
@@ -91,6 +99,7 @@ public class ComputerDTO {
      *
      * @return String
      */
+    @JsonGetter("companyName")
     public String getCompanyName() {
         return companyName;
     }
@@ -109,6 +118,7 @@ public class ComputerDTO {
      *
      * @return Long
      */
+    @JsonGetter("companyId")
     public Long getCompanyId() {
         return companyId;
     }

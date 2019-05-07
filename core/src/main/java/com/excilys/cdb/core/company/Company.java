@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+
 /**
  * Class managing the company entity within the application.
  *
@@ -37,6 +39,7 @@ public class Company {
      *
      * @return String
      */
+    @JsonGetter("name")
     public String getName() {
         return name;
     }
@@ -59,6 +62,7 @@ public class Company {
      *
      * @return Long
      */
+    @JsonGetter("id")
     public Long getId() {
         return id;
     }

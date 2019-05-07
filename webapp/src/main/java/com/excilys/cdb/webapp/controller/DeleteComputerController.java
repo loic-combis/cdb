@@ -1,9 +1,12 @@
 package com.excilys.cdb.webapp.controller;
 
+import static com.excilys.cdb.core.User.ROLE_MANAGER;
+
 import java.util.Map;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,6 +38,7 @@ public class DeleteComputerController {
      * @return RedirectView
      */
     @PostMapping(value = "/computers/delete")
+    @Secured(ROLE_MANAGER)
     protected RedirectView deleteMany(@RequestParam Map<String, String> body) {
         String[] selection = body.get("selection").split(",");
         boolean success = computerService.deleteMany(selection);

@@ -1,5 +1,7 @@
 package com.excilys.cdb.core;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+
 public class Feedback {
 
     private String status;
@@ -21,6 +23,7 @@ public class Feedback {
      *
      * @return String
      */
+    @JsonGetter("message")
     public String getMessage() {
         return message;
     }
@@ -39,6 +42,7 @@ public class Feedback {
      *
      * @return String
      */
+    @JsonGetter("status")
     public String getStatus() {
         return status;
     }

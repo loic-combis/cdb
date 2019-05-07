@@ -3,9 +3,11 @@ package com.excilys.cdb.webapp.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.cdb.binding.mapper.ComputerDTOMapper;
@@ -15,6 +17,7 @@ import com.excilys.cdb.core.computer.Computer;
 import com.excilys.cdb.service.service.ComputerService;
 
 @Controller
+@RequestMapping("/computers")
 public class ListComputerController {
 
     private ComputerService computerService;
@@ -44,7 +47,8 @@ public class ListComputerController {
      * @param map         Model
      * @return String
      */
-    @GetMapping(value = "/computers")
+    @GetMapping
+    @PreAuthorize("isAuthenticated()")
     protected String list(@RequestParam Optional<String> status, @RequestParam Optional<String> message,
             @RequestParam Optional<Integer> page, @RequestParam Optional<Integer> itemPerPage,
             @RequestParam Optional<String> search, @RequestParam("orderby") Optional<String> orderBy, Model map) {

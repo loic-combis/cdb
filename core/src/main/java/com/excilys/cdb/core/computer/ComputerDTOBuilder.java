@@ -1,11 +1,14 @@
 package com.excilys.cdb.core.computer;
 
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+
 /**
  * Build ComputerDTO by chaining.
  *
  * @author excilys
  *
  */
+@JsonPOJOBuilder(buildMethodName = "get", withPrefix = "set")
 public class ComputerDTOBuilder {
 
     /**

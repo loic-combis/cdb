@@ -11,8 +11,8 @@ import javax.persistence.Table;
 @Table(name = "user")
 public class User {
 
-    public static final String USER = "user";
-    public static final String MANAGER = "manager";
+    public static final String ROLE_USER = "ROLE_USER";
+    public static final String ROLE_MANAGER = "ROLE_MANAGER";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -104,7 +104,7 @@ public class User {
         User user = new User();
         user.setLogin(userForm.getLogin().trim());
         user.setPassword(userForm.getPassword().trim());
-        user.setRole(USER);
+        user.setRole(ROLE_USER);
         return user;
     }
 }

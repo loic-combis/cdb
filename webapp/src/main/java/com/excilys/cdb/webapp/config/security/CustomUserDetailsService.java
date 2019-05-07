@@ -1,7 +1,7 @@
 package com.excilys.cdb.webapp.config.security;
 
-import static com.excilys.cdb.core.User.MANAGER;
-import static com.excilys.cdb.core.User.USER;
+import static com.excilys.cdb.core.User.ROLE_MANAGER;
+import static com.excilys.cdb.core.User.ROLE_USER;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,10 +35,10 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("User does not exist.");
         }
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-        authorities.add(new SimpleGrantedAuthority(USER));
+        authorities.add(new SimpleGrantedAuthority(ROLE_USER));
 
-        if (optUser.get().getRole().equals(MANAGER)) {
-            authorities.add(new SimpleGrantedAuthority(MANAGER));
+        if (optUser.get().getRole().equals(ROLE_MANAGER)) {
+            authorities.add(new SimpleGrantedAuthority(ROLE_MANAGER));
         }
         return buildUserForAuthentication(optUser.get(), authorities);
 

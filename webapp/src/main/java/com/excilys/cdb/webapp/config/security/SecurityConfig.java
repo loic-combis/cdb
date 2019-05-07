@@ -1,9 +1,8 @@
 package com.excilys.cdb.webapp.config.security;
 
-import static com.excilys.cdb.core.User.MANAGER;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -16,14 +15,13 @@ import com.excilys.cdb.persistence.dao.UserDAO;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.csrf().disable().authorizeRequests()
-                .antMatchers("/computers/add", "/computers/delete", "/computers/**/edit").hasAuthority(MANAGER)
-                .antMatchers("/computers").authenticated().antMatchers("/", "/home").permitAll().and().formLogin()
+        http.csrf().disable().authorizeRequests().antMatchers("/", "/home").permitAll().and().formLogin()
                 .loginPage("/home").loginProcessingUrl("/authenticate").usernameParameter("login")
                 .passwordParameter("password").successHandler(authenticationHandler())
                 .failureHandler(authenticationHandler()).and().logout().logoutUrl("/logout").logoutSuccessUrl("/home");

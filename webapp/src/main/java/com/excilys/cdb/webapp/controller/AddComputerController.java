@@ -1,11 +1,14 @@
 package com.excilys.cdb.webapp.controller;
 
+import static com.excilys.cdb.core.User.ROLE_MANAGER;
+
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -86,6 +89,7 @@ public class AddComputerController {
      * @return String
      */
     @GetMapping
+    @Secured(ROLE_MANAGER)
     protected String show(@RequestParam Optional<String> feedback, @RequestParam Optional<String> message, Model map) {
         map.addAttribute("feedback", new Feedback(feedback.orElse(""), message.orElse("")));
         map.addAttribute("companies", companyService.list(0, 0));
@@ -110,6 +114,7 @@ public class AddComputerController {
      * @return RedirectView
      */
     @PostMapping
+    @Secured(ROLE_MANAGER)
     protected RedirectView create(@Validated @ModelAttribute("computerDTO") ComputerDTO computerDTO,
             BindingResult result) {
         String status = "danger";

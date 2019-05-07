@@ -23,6 +23,10 @@ public class CompanyService {
      */
     CompanyDAO companyDAO;
 
+    public static final String DELETE_COMPANY_SUCCESS = "company.delete.success";
+
+    public static final String DELETE_COMPANY_FAILURE = "company.delete.failure";
+
     /**
      * Constructor.
      *

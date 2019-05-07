@@ -1,5 +1,8 @@
 package com.excilys.cdb.core.company;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Singleton Class responsible for instantiating the Company object.
  *
@@ -40,7 +43,8 @@ public class CompanyFactory {
      * @param name String - the name to be set.
      * @return Company
      */
-    public Company create(Long id, String name) {
+    @JsonCreator
+    public Company create(@JsonProperty("id") Long id, @JsonProperty("name") String name) {
         Company company = new Company();
         company.setId(id);
         company.setName(name);
@@ -54,7 +58,8 @@ public class CompanyFactory {
      * @param id Long - the id to be set.
      * @return Company
      */
-    public Company create(Long id) {
+    @JsonCreator
+    public Company create(@JsonProperty("id") Long id) {
         Company company = new Company();
         company.setId(id);
         return company;
@@ -66,7 +71,8 @@ public class CompanyFactory {
      * @param name String
      * @return Company
      */
-    public Company create(String name) {
+    @JsonCreator
+    public Company create(@JsonProperty("name") String name) {
         Company company = new Company();
         company.setName(name);
         return company;
