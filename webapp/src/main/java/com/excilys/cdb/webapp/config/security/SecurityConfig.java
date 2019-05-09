@@ -9,10 +9,13 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.DigestAuthenticationFilter;
 
 import com.excilys.cdb.persistence.dao.UserDAO;
+import com.excilys.cdb.webapp.config.security.api.JsonAuthenticationFilter;
+import com.excilys.cdb.webapp.config.security.api.JsonAuthenticationHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -22,11 +25,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.csrf().disable().authorizeRequests().antMatchers("/api/**").permitAll().antMatchers("/", "/home")
-                .permitAll().and().formLogin().loginPage("/home").loginProcessingUrl("/authenticate")
-                .usernameParameter("login").passwordParameter("password").successHandler(authenticationHandler())
-                .failureHandler(authenticationHandler()).and().logout().logoutUrl("/logout").logoutSuccessUrl("/home")
-                .and().exceptionHandling().accessDeniedHandler(accessDeniedHandler());
+        http.addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class).authorizeRequests()
+                .antMatchers("/", "/home").permitAll().and().formLogin().loginPage("/home")
+                .loginProcessingUrl("/authenticate").usernameParameter("login").passwordParameter("password")
+                .successHandler(authenticationHandler()).failureHandler(authenticationHandler()).and()
+                .exceptionHandling().accessDeniedHandler(accessDeniedHandler()).and().logout().logoutUrl("/logout")
+                .logoutSuccessUrl("/home").and().csrf().disable();
     }
 
     @Bean
@@ -35,8 +39,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
+    public JsonAuthenticationHandler jsonAuthenticationHandler() {
+        return new JsonAuthenticationHandler();
+    }
+
+    @Bean
     public AccessDeniedHandler accessDeniedHandler() {
         return new CustomAccessDeniedHandler();
+    }
+
+    public JsonAuthenticationFilter authenticationFilter() throws Exception {
+        JsonAuthenticationFilter filter = new JsonAuthenticationFilter();
+        filter.setAuthenticationManager(authenticationManagerBean());
+        filter.setAuthenticationSuccessHandler(jsonAuthenticationHandler());
+        filter.setAuthenticationFailureHandler(jsonAuthenticationHandler());
+        return filter;
     }
 
     @Bean

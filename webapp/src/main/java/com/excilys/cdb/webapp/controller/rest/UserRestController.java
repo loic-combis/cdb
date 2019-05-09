@@ -2,7 +2,6 @@ package com.excilys.cdb.webapp.controller.rest;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -60,7 +59,7 @@ public class UserRestController {
         binder.setValidator(validator);
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping
     public Feedback createUser(@Validated @ModelAttribute("createUserFormData") CreateUserFormData userFormData,
             BindingResult result) {
         String message = "";

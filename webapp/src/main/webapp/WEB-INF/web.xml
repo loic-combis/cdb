@@ -5,7 +5,7 @@
     	version="3.1">
     	
 	<display-name>CDB Application</display-name>
-	<!--  <error-page>
+	<error-page>
 		<location>/error</location>
-	</error-page> -->
+	</error-page>
 </web-app>

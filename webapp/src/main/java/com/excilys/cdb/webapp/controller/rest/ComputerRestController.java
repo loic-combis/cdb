@@ -1,5 +1,7 @@
 package com.excilys.cdb.webapp.controller.rest;
 
+import static com.excilys.cdb.core.User.ROLE_MANAGER;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -7,7 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.http.MediaType;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -79,6 +82,7 @@ public class ComputerRestController {
      * @return ComputerDTO
      */
     @GetMapping(value = "/{id}")
+    @PreAuthorize("isAuthenticated()")
     protected ComputerDTO get(@PathVariable(value = "id") Long id) {
         return mapper.toDTO(computerService.get(id).orElse(null));
     }
@@ -95,7 +99,8 @@ public class ComputerRestController {
      * @param map         Model
      * @return List<ComputerDTO>
      */
-    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping
+    @PreAuthorize("isAuthenticated()")
     protected List<ComputerDTO> list(@RequestParam Optional<String> status, @RequestParam Optional<String> message,
             @RequestParam Optional<Integer> page, @RequestParam Optional<Integer> itemPerPage,
             @RequestParam Optional<String> search, @RequestParam("orderby") Optional<String> orderBy, Model map) {
@@ -115,6 +120,7 @@ public class ComputerRestController {
      * @return Feedback
      */
     @PostMapping
+    @Secured(ROLE_MANAGER)
     protected Feedback create(@Validated @RequestBody ComputerDTO computerDTO, BindingResult result) {
 
         String status = "danger";
@@ -142,7 +148,8 @@ public class ComputerRestController {
      * @param result      BindingResult
      * @return Feedback
      */
-    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id}")
+    @Secured(ROLE_MANAGER)
     protected Feedback edit(@Validated @RequestBody ComputerDTO computerDTO, @PathVariable(value = "id") Long id,
             BindingResult result) {
         String status = "danger";
@@ -169,6 +176,7 @@ public class ComputerRestController {
      * @return Feedback
      */
     @DeleteMapping(value = "/{id}")
+    @Secured(ROLE_MANAGER)
     protected Feedback deleteMany(@PathVariable("id") Long id) {
 
         boolean success = computerService.delete(id);
