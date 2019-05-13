@@ -10,11 +10,11 @@ import java.util.List;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import com.excilys.cdb.binding.dto.ComputerDTO;
+import com.excilys.cdb.binding.dto.ComputerDTOBuilder;
 import com.excilys.cdb.core.company.Company;
 import com.excilys.cdb.core.company.CompanyFactory;
 import com.excilys.cdb.core.computer.Computer;
-import com.excilys.cdb.core.computer.ComputerDTO;
-import com.excilys.cdb.core.computer.ComputerDTOBuilder;
 import com.excilys.cdb.core.computer.ComputerFactory;
 
 @Lazy

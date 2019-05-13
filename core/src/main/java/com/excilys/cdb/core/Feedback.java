@@ -7,6 +7,10 @@ public class Feedback {
     private String status;
     private String message;
 
+    public Feedback() {
+
+    }
+
     /**
      * Constructor.
      *

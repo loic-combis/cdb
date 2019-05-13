@@ -2,9 +2,9 @@ package com.excilys.cdb.console.cli;
 
 import java.util.List;
 
+import com.excilys.cdb.binding.dto.ComputerDTO;
 import com.excilys.cdb.console.Presenter;
 import com.excilys.cdb.core.company.Company;
-import com.excilys.cdb.core.computer.ComputerDTO;
 
 public class CLIPresenter extends Presenter {
 

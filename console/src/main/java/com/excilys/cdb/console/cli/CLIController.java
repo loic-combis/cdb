@@ -13,17 +13,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.excilys.cdb.binding.mapper.ComputerDTOMapper;
+import com.excilys.cdb.binding.dto.ComputerDTO;
 import com.excilys.cdb.console.Page;
 import com.excilys.cdb.console.PageProvider;
 import com.excilys.cdb.console.Presenter;
 import com.excilys.cdb.console.UIController;
 import com.excilys.cdb.core.company.Company;
 import com.excilys.cdb.core.company.CompanyFactory;
-import com.excilys.cdb.core.computer.Computer;
-import com.excilys.cdb.core.computer.ComputerDTO;
-import com.excilys.cdb.service.service.CompanyService;
-import com.excilys.cdb.service.service.ComputerService;
 
 /**
  * Enumeration Defines the commands accepted by the client.
@@ -123,18 +119,6 @@ public class CLIController implements UIController, PageProvider {
     private final int itemPerPage = 10;
 
     /**
-     * computerService ComputerService - Fetches computer data from persistence.
-     */
-    private ComputerService computerService;
-
-    /**
-     * companyService CompanyService - Fetches company data from persistence.
-     */
-    private CompanyService companyService;
-
-    private ComputerDTOMapper mapper;
-
-    /**
      * presenter CLIPresenter - Presents data to the client.
      */
     private CLIPresenter presenter;
@@ -155,6 +139,8 @@ public class CLIController implements UIController, PageProvider {
      */
     boolean shouldShowMenu = false;
 
+    private PersistenceService persistenceService;
+
     /**
      * logger Logger.
      */
@@ -162,23 +148,22 @@ public class CLIController implements UIController, PageProvider {
 
     /**
      * Constructor.
-     *
-     * @param computerService ComputerService
-     * @param companyService  CompanyService
-     * @param mapper          ComputerDTOMapper
      */
-    public CLIController(ComputerService computerService, CompanyService companyService, ComputerDTOMapper mapper) {
-        this.computerService = computerService;
-        this.companyService = companyService;
-        this.mapper = mapper;
+    public CLIController(PersistenceService ps) {
         presenter = new CLIPresenter();
         scanner = new Scanner(System.in);
+        persistenceService = ps;
     }
 
     @Override
     public void start() {
         // TODO Auto-generated method stub
         logger.debug("Starting the application.");
+        if (!persistenceService.login("lolo", "coucou")) {
+            presenter.notify("Couldn't login... Stopping the application.");
+            stop();
+            return;
+        }
         presenter.notify("Welcome to the application !");
         showMenu();
         do {
@@ -207,18 +192,7 @@ public class CLIController implements UIController, PageProvider {
     @Override
     public List<?> fetchDataFor(Class<?> c, int page) {
         // TODO Auto-generated method stub
-        if (c == ComputerDTO.class) {
-            List<Computer> computers = null;
-            computers = computerService.list(page, itemPerPage, null, null);
-            return computers;
-        }
-
-        if (c == Company.class) {
-            List<Company> companies = companyService.list(page, itemPerPage);
-            return companies;
-        }
-
-        return null;
+        return persistenceService.list(c, page, itemPerPage);
     }
 
     /**
@@ -340,10 +314,10 @@ public class CLIController implements UIController, PageProvider {
             return;
         }
 
-        Optional<Computer> computer;
-        computer = computerService.get(id.get());
-        if (computer.isPresent()) {
-            presenter.present(mapper.toDTO(computer.get()));
+        ComputerDTO computer = persistenceService.get(id.get());
+
+        if (computer != null) {
+            presenter.present(computer);
 
         } else {
             presenter.notify(Presenter.COMPUTER_NOT_FOUND);
@@ -389,7 +363,8 @@ public class CLIController implements UIController, PageProvider {
         }
         boolean isSuccess = false;
         try {
-            isSuccess = computerService.create(mapper.toComputer(c));
+            isSuccess = persistenceService.create(c);
+
         } catch (NumberFormatException e) {
             // TODO Auto-generated catch block
             logger.error(e.getMessage());
@@ -414,27 +389,26 @@ public class CLIController implements UIController, PageProvider {
         if (!id.isPresent()) {
             return;
         }
-        Optional<Computer> opt;
 
-        opt = computerService.get(id.get());
+        ComputerDTO computer = persistenceService.get(id.get());
 
-        if (!opt.isPresent()) {
+        if (computer == null) {
             presenter.notify(Presenter.COMPUTER_NOT_FOUND);
             return;
         }
-        ComputerDTO c = mapper.toDTO(opt.get());
+
         Optional<String> name = requestValidName();
         if (!name.isPresent()) {
             return;
         }
-        c.setName(name.get());
+        computer.setName(name.get());
 
         Optional<String> intro = requestValidDate("Introduction");
         if (!intro.isPresent() && (shouldStop || shouldShowMenu)) {
             return;
         }
         if (intro.isPresent()) {
-            c.setIntroduced(intro.get());
+            computer.setIntroduced(intro.get());
         }
 
         Optional<String> disco = requestValidDate("Discontinuation");
@@ -442,7 +416,7 @@ public class CLIController implements UIController, PageProvider {
             return;
         }
         if (disco.isPresent()) {
-            c.setDiscontinued(disco.get());
+            computer.setDiscontinued(disco.get());
         }
 
         Optional<Company> comp = requestValidCompany();
@@ -450,13 +424,13 @@ public class CLIController implements UIController, PageProvider {
             return;
         }
         if (comp.isPresent()) {
-            c.setCompanyName(comp.get().getName());
-            c.setCompanyId(comp.get().getId());
+            computer.setCompanyId(comp.get().getId());
         }
 
-        boolean success = false;
+        boolean isSuccess = false;
         try {
-            success = computerService.update(mapper.toComputer(c));
+            isSuccess = persistenceService.update(computer);
+
         } catch (NumberFormatException e) {
             // TODO Auto-generated catch block
             logger.error(e.getMessage());
@@ -466,7 +440,7 @@ public class CLIController implements UIController, PageProvider {
             logger.error(e.getMessage());
 
         } finally {
-            presenter.notify(success ? Presenter.UPDATE_SUCCESS : Presenter.UPDATE_FAIL);
+            presenter.notify(isSuccess ? Presenter.UPDATE_SUCCESS : Presenter.UPDATE_FAIL);
         }
 
     }
@@ -479,8 +453,8 @@ public class CLIController implements UIController, PageProvider {
         if (!id.isPresent()) {
             return;
         }
-
-        presenter.notify(computerService.delete(id.get()) ? Presenter.DELETE_SUCCESS : Presenter.UPDATE_FAIL);
+        presenter.notify(persistenceService.delete(ComputerDTO.class, id.get()) ? Presenter.DELETE_SUCCESS
+                : Presenter.UPDATE_FAIL);
     }
 
     /**
@@ -491,9 +465,8 @@ public class CLIController implements UIController, PageProvider {
         if (!id.isPresent()) {
             return;
         }
-
-        presenter.notify(
-                companyService.delete(id.get()) ? Presenter.DELETE_COMPANY_SUCCESS : Presenter.DELETE_COMPANY_FAIL);
+        presenter.notify(persistenceService.delete(Company.class, id.get()) ? Presenter.DELETE_COMPANY_SUCCESS
+                : Presenter.DELETE_COMPANY_FAIL);
     }
 
     /**

@@ -2,8 +2,8 @@ package com.excilys.cdb.console;
 
 import java.util.List;
 
+import com.excilys.cdb.binding.dto.ComputerDTO;
 import com.excilys.cdb.core.company.Company;
-import com.excilys.cdb.core.computer.ComputerDTO;
 
 /**
  * Abstract Responsible for defining the contract a Presenter must respect

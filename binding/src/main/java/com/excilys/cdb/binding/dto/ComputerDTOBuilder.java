@@ -1,4 +1,4 @@
-package com.excilys.cdb.core.computer;
+package com.excilys.cdb.binding.dto;
 
 /**
  * Build ComputerDTO by chaining.

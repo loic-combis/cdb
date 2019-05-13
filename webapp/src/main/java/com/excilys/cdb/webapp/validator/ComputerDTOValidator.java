@@ -12,7 +12,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import com.excilys.cdb.core.computer.ComputerDTO;
+import com.excilys.cdb.binding.dto.ComputerDTO;
 
 @Component
 public class ComputerDTOValidator implements Validator {

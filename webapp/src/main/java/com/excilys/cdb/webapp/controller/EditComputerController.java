@@ -22,9 +22,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.excilys.cdb.binding.dto.ComputerDTO;
 import com.excilys.cdb.binding.mapper.ComputerDTOMapper;
 import com.excilys.cdb.core.computer.Computer;
-import com.excilys.cdb.core.computer.ComputerDTO;
 import com.excilys.cdb.service.service.CompanyService;
 import com.excilys.cdb.service.service.ComputerService;
 import com.excilys.cdb.webapp.validator.ComputerDTOValidator;

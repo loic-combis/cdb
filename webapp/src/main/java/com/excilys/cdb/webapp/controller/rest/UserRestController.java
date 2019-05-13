@@ -2,6 +2,7 @@ package com.excilys.cdb.webapp.controller.rest;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -21,7 +22,7 @@ import com.excilys.cdb.webapp.validator.UserValidator;
 
 @RestController
 @RequestMapping("/api/users")
-public class UserRestController {
+public class UserRestController extends AbstractRestController {
 
     private UserService userService;
 
@@ -60,8 +61,8 @@ public class UserRestController {
     }
 
     @PostMapping
-    public Feedback createUser(@Validated @ModelAttribute("createUserFormData") CreateUserFormData userFormData,
-            BindingResult result) {
+    public ResponseEntity<Feedback> createUser(
+            @Validated @ModelAttribute("createUserFormData") CreateUserFormData userFormData, BindingResult result) {
         String message = "";
         String status = "danger";
 
@@ -82,6 +83,6 @@ public class UserRestController {
                 message = source.getMessage(UserService.USER_ALREADY_EXISTS, null, LocaleContextHolder.getLocale());
             }
         }
-        return new Feedback(status, message);
+        return ResponseEntity.ok(new Feedback(status, message));
     }
 }

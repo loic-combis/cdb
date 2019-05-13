@@ -20,6 +20,8 @@
     <jstl.version>1.2</jstl.version>
     <javax.servlet.api.version>4.0.1</javax.servlet.api.version>
     <selenium.version>3.141.59</selenium.version>
+    <json.version>20180813</json.version>
+    <jwt.version>3.8.0</jwt.version>
   </properties>
 
   <dependencies>
@@ -65,9 +67,14 @@
 	<dependency>
 	    <groupId>org.json</groupId>
 	    <artifactId>json</artifactId>
-	    <version>20180813</version>
+	    <version>${json.version}</version>
 	</dependency>
 	
+	<dependency>
+	    <groupId>com.auth0</groupId>
+	    <artifactId>java-jwt</artifactId>
+	    <version>${jwt.version}</version>
+	</dependency>
 	 
   </dependencies>
 

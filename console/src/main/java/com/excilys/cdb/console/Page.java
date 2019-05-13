@@ -88,7 +88,7 @@ public class Page<T> {
         if (data.isEmpty()) {
             currentPage--;
         } else {
-            setData(filter(pageItemClass, data));
+            setData((List<T>) data);
         }
         return getData();
     }

@@ -64,7 +64,7 @@ public class Config {
      */
     @Bean
     public DataSource getDataSource() {
-        PropertyReader reader = new PropertyReader();
+        PropertyReader reader = new PropertyReader("application");
         return DataSourceBuilder.create().driverClassName(reader.get("app.datasource.driver-class-name"))
                 .password(reader.get("app.datasource.password")).username(reader.get("app.datasource.username"))
                 .url(reader.get("app.datasource.url")).build();

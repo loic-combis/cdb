@@ -1,16 +1,16 @@
 package com.excilys.cdb.webapp.controller.rest;
 
-import static com.excilys.cdb.core.User.ROLE_MANAGER;
-
 import java.util.List;
 import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -26,17 +26,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.excilys.cdb.binding.dto.ComputerDTO;
 import com.excilys.cdb.binding.mapper.ComputerDTOMapper;
 import com.excilys.cdb.core.Feedback;
+import com.excilys.cdb.core.User;
 import com.excilys.cdb.core.computer.Computer;
-import com.excilys.cdb.core.computer.ComputerDTO;
 import com.excilys.cdb.service.service.ComputerService;
 import com.excilys.cdb.webapp.controller.AddComputerController;
 import com.excilys.cdb.webapp.validator.ComputerDTOValidator;
 
 @RestController
 @RequestMapping("/api/computers")
-public class ComputerRestController {
+public class ComputerRestController extends AbstractRestController {
 
     private ComputerService computerService;
 
@@ -82,9 +83,12 @@ public class ComputerRestController {
      * @return ComputerDTO
      */
     @GetMapping(value = "/{id}")
-    @PreAuthorize("isAuthenticated()")
-    protected ComputerDTO get(@PathVariable(value = "id") Long id) {
-        return mapper.toDTO(computerService.get(id).orElse(null));
+    public ResponseEntity<ComputerDTO> get(HttpServletRequest request, @PathVariable(value = "id") Long id) {
+
+        if (!this.hasRole(request, User.ROLE_MANAGER, User.ROLE_USER)) {
+            return new ResponseEntity<ComputerDTO>(HttpStatus.UNAUTHORIZED);
+        }
+        return ResponseEntity.ok(mapper.toDTO(computerService.get(id).orElse(null)));
     }
 
     /**
@@ -100,15 +104,19 @@ public class ComputerRestController {
      * @return List<ComputerDTO>
      */
     @GetMapping
-    @PreAuthorize("isAuthenticated()")
-    protected List<ComputerDTO> list(@RequestParam Optional<String> status, @RequestParam Optional<String> message,
-            @RequestParam Optional<Integer> page, @RequestParam Optional<Integer> itemPerPage,
-            @RequestParam Optional<String> search, @RequestParam("orderby") Optional<String> orderBy, Model map) {
+    public ResponseEntity<List<ComputerDTO>> list(HttpServletRequest request, @RequestParam Optional<String> status,
+            @RequestParam Optional<String> message, @RequestParam Optional<Integer> page,
+            @RequestParam Optional<Integer> itemPerPage, @RequestParam Optional<String> search,
+            @RequestParam("orderby") Optional<String> orderBy, Model map) {
+
+        if (!this.hasRole(request, User.ROLE_MANAGER, User.ROLE_USER)) {
+            return new ResponseEntity<List<ComputerDTO>>(HttpStatus.UNAUTHORIZED);
+        }
 
         List<Computer> computers = computerService.list(page.orElse(1), itemPerPage.orElse(10), search.orElse(""),
                 orderBy.orElse(""));
-
-        return mapper.mapList(computers);
+        logger.error(computers.toString());
+        return ResponseEntity.ok(mapper.mapList(computers));
 
     }
 
@@ -120,8 +128,12 @@ public class ComputerRestController {
      * @return Feedback
      */
     @PostMapping
-    @Secured(ROLE_MANAGER)
-    protected Feedback create(@Validated @RequestBody ComputerDTO computerDTO, BindingResult result) {
+    public ResponseEntity<Feedback> create(HttpServletRequest request, @Validated @RequestBody ComputerDTO computerDTO,
+            BindingResult result) {
+        logger.error(computerDTO.toString());
+        if (!this.hasRole(request, User.ROLE_MANAGER)) {
+            return new ResponseEntity<Feedback>(HttpStatus.UNAUTHORIZED);
+        }
 
         String status = "danger";
         String message = "";
@@ -137,7 +149,7 @@ public class ComputerRestController {
         } else {
             message = source.getMessage(ComputerService.ADD_COMPUTER_FAILURE, null, LocaleContextHolder.getLocale());
         }
-        return new Feedback(status, message);
+        return ResponseEntity.ok(new Feedback(status, message));
     }
 
     /**
@@ -149,12 +161,17 @@ public class ComputerRestController {
      * @return Feedback
      */
     @PutMapping(value = "/{id}")
-    @Secured(ROLE_MANAGER)
-    protected Feedback edit(@Validated @RequestBody ComputerDTO computerDTO, @PathVariable(value = "id") Long id,
-            BindingResult result) {
+    public ResponseEntity<Feedback> edit(HttpServletRequest request, @Validated @RequestBody ComputerDTO computerDTO,
+            @PathVariable(value = "id") Long id, BindingResult result) {
+
+        if (!this.hasRole(request, User.ROLE_MANAGER)) {
+            return new ResponseEntity<Feedback>(HttpStatus.UNAUTHORIZED);
+        }
+
         String status = "danger";
         String message = "";
 
+        logger.error(computerDTO.toString());
         if (result.hasErrors()) {
             message = result.getAllErrors().get(0).getCode();
 
@@ -166,7 +183,7 @@ public class ComputerRestController {
             message = source.getMessage(ComputerService.EDIT_COMPUTER_FAILURE, null, LocaleContextHolder.getLocale());
         }
 
-        return new Feedback(status, message);
+        return ResponseEntity.ok(new Feedback(status, message));
     }
 
     /**
@@ -176,8 +193,11 @@ public class ComputerRestController {
      * @return Feedback
      */
     @DeleteMapping(value = "/{id}")
-    @Secured(ROLE_MANAGER)
-    protected Feedback deleteMany(@PathVariable("id") Long id) {
+    public ResponseEntity<Feedback> deleteMany(HttpServletRequest request, @PathVariable("id") Long id) {
+
+        if (!this.hasRole(request, User.ROLE_MANAGER)) {
+            return new ResponseEntity<Feedback>(HttpStatus.UNAUTHORIZED);
+        }
 
         boolean success = computerService.delete(id);
 
@@ -189,7 +209,7 @@ public class ComputerRestController {
             status = "danger";
             message = source.getMessage(ComputerService.DELETE_MANY_FAILURE, null, LocaleContextHolder.getLocale());
         }
-        return new Feedback(status, message);
+        return ResponseEntity.ok(new Feedback(status, message));
     }
 
 }

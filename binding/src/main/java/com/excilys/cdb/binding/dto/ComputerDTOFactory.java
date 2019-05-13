@@ -1,4 +1,4 @@
-package com.excilys.cdb.core.computer;
+package com.excilys.cdb.binding.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

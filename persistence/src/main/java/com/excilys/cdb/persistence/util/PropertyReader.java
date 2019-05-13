@@ -22,11 +22,11 @@ public class PropertyReader {
     /**
      * Constructor.
      */
-    public PropertyReader() {
+    public PropertyReader(String fileName) {
         prop = new Properties();
 
         try {
-            InputStream inputStream = PropertyReader.class.getResourceAsStream("/application.properties");
+            InputStream inputStream = PropertyReader.class.getResourceAsStream("/" + fileName + ".properties");
             prop.load(inputStream);
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
