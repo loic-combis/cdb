@@ -159,7 +159,7 @@ public class CLIController implements UIController, PageProvider {
     public void start() {
         // TODO Auto-generated method stub
         logger.debug("Starting the application.");
-        if (!persistenceService.login("lolo", "coucou")) {
+        if (!persistenceService.login("loic.combis", "coucou")) {
             presenter.notify("Couldn't login... Stopping the application.");
             stop();
             return;
