@@ -1,6 +1,7 @@
 package com.excilys.cdb.service.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,10 @@ public class CompanyService {
      * companyDAO CompanyDAO.
      */
     CompanyDAO companyDAO;
+
+    public static final String CREATE_COMPANY_SUCCESS = "company.create.success";
+
+    public static final String CREATE_COMPANY_FAILURE = "company.create.failure";
 
     public static final String DELETE_COMPANY_SUCCESS = "company.delete.success";
 
@@ -46,6 +51,24 @@ public class CompanyService {
      */
     public List<Company> list(int page, int itemPerPage) {
         return companyDAO.list(page, itemPerPage);
+    }
+
+    /**
+     * Fetch a specific company according to its id.
+     *
+     * @param id
+     * @return
+     */
+    public Optional<Company> get(Long id) {
+        return companyDAO.get(id);
+    }
+
+    public Long count(String search) {
+        return companyDAO.count(search);
+    }
+
+    public boolean create(Company company) {
+        return companyDAO.create(company);
     }
 
     /**

@@ -44,6 +44,9 @@ public class CompanyDAO {
     private static final String DELETE = "delete Company where id = :id";
     private static final String DELETE_RELATED_COMPUTERS = "delete Computer where company_id = :id";
 
+    private static final String COUNT_ALL = "select count(c) from Company c %s";
+    private static final String SEARCH_WHERE_CLAUSE = "where name like '%%%s%%' or name like '%%%s%%'";
+
     /**
      * Constructor.
      *
@@ -103,6 +106,31 @@ public class CompanyDAO {
         }
     }
 
+    @Transactional
+    public Long count(String search) {
+        try (Session session = factory.openSession()) {
+            String whereClause = search != null && !search.equals("")
+                    ? String.format(SEARCH_WHERE_CLAUSE, search, search)
+                    : "";
+            Query<?> query = session.createQuery(String.format(COUNT_ALL, whereClause));
+            return (Long) query.list().get(0);
+        }
+    }
+
+    @Transactional
+    public boolean create(Company company) {
+        try (Session session = factory.openSession()) {
+            session.beginTransaction();
+            Long id = (Long) session.save(company);
+            session.getTransaction().commit();
+            return true;
+
+        } catch (NoResultException nre) {
+
+            return false;
+        }
+    }
+
     /**
      * Delete the specified company and all the related computers.
      *
@@ -123,7 +151,7 @@ public class CompanyDAO {
             int affectedRowsCount = deleteCompanyQuery.executeUpdate();
 
             tx.commit();
-            LOGGER.info("Company deleted : " + id);
+            LOGGER.info("Company deleted : " + id + " affected rows : " + affectedRowsCount);
 
             return affectedRowsCount > 0;
         }

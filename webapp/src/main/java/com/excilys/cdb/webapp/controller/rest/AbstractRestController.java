@@ -20,7 +20,11 @@ public class AbstractRestController {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     protected boolean hasRole(HttpServletRequest request, String... roles) {
-        String token = request.getHeader("Authorization").split(" ")[1];
+        String auth = request.getHeader("Authorization");
+        if (auth == null) {
+            return false;
+        }
+        String token = auth.split(" ")[1];
         if (token == null) {
             return false;
         }

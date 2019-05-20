@@ -7,9 +7,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,6 +22,7 @@ import com.excilys.cdb.service.service.UserService;
 import com.excilys.cdb.webapp.validator.UserValidator;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/api/users")
 public class UserRestController extends AbstractRestController {
 
@@ -41,16 +43,6 @@ public class UserRestController extends AbstractRestController {
     }
 
     /**
-     * Init the model attribute user.
-     *
-     * @return CreateUserFormData
-     */
-    @ModelAttribute
-    public CreateUserFormData createUserFormData() {
-        return new CreateUserFormData();
-    }
-
-    /**
      * Init the createUserFormValidator.
      *
      * @param binder WebDataBinder
@@ -61,8 +53,8 @@ public class UserRestController extends AbstractRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Feedback> createUser(
-            @Validated @ModelAttribute("createUserFormData") CreateUserFormData userFormData, BindingResult result) {
+    public ResponseEntity<Feedback> createUser(@Validated @RequestBody CreateUserFormData userFormData,
+            BindingResult result) {
         String message = "";
         String status = "danger";
 
