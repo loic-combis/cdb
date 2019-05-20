@@ -51,12 +51,12 @@ public class CompanyRestController extends AbstractRestController {
      */
     @GetMapping
     public ResponseEntity<List<Company>> list(HttpServletRequest request, @RequestParam Optional<Integer> page,
-            @RequestParam Optional<Integer> itemPerPage) {
+            @RequestParam Optional<Integer> itemPerPage, @RequestParam Optional<String> search) {
 
         if (!this.hasRole(request, User.ROLE_MANAGER, User.ROLE_USER)) {
             return new ResponseEntity<List<Company>>(HttpStatus.UNAUTHORIZED);
         }
-        return ResponseEntity.ok(companyService.list(page.orElse(1), itemPerPage.orElse(10)));
+        return ResponseEntity.ok(companyService.list(page.orElse(1), itemPerPage.orElse(10), search.orElse("")));
     }
 
     @GetMapping("/count")
@@ -112,7 +112,6 @@ public class CompanyRestController extends AbstractRestController {
                 LocaleContextHolder.getLocale());
 
         if (!companyService.delete(id)) {
-            logger.error("coucou");
             status = "danger";
             message = source.getMessage(CompanyService.DELETE_COMPANY_FAILURE, null, LocaleContextHolder.getLocale());
         }

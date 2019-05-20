@@ -39,7 +39,7 @@ public class CompanyDAO {
     /**
      * String base SQL request.
      */
-    private static final String LIST_REQUEST = "from Company";
+    private static final String LIST_REQUEST = "from Company %s";
     public static final String FIND_BY_ID = "from Company where id = :id";
     private static final String DELETE = "delete Company where id = :id";
     private static final String DELETE_RELATED_COMPUTERS = "delete Computer where company_id = :id";
@@ -91,11 +91,15 @@ public class CompanyDAO {
      * @return List<Company>
      */
     @Transactional
-    public List<Company> list(int page, int itemPerPage) {
+    public List<Company> list(int page, int itemPerPage, String search) {
         // TODO Auto-generated method stub
         try (Session session = factory.openSession()) {
 
-            Query<Company> query = session.createQuery(LIST_REQUEST, Company.class);
+            String whereClause = search != null && !search.equals("")
+                    ? String.format(SEARCH_WHERE_CLAUSE, search, search)
+                    : "";
+
+            Query<Company> query = session.createQuery(String.format(LIST_REQUEST, whereClause), Company.class);
             if (page > 1 && itemPerPage > 0) {
                 query.setFirstResult((page - 1) * itemPerPage);
             }
