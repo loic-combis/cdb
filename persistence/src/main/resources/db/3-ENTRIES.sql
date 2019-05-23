@@ -103,7 +103,6 @@ insert into computer (id,name,introduced,discontinued,company_id) values ( 59,'I
 insert into computer (id,name,introduced,discontinued,company_id) values ( 60,'VAX','1977-10-25',null,10);
 insert into computer (id,name,introduced,discontinued,company_id) values ( 61,'VAX 11/780','1977-10-25',null,10);
 insert into computer (id,name,introduced,discontinued,company_id) values ( 62,'VAX 11/750','1980-10-01',null,10);
-insert into computer (id,name,introduced,discontinued,company_id) values ( 63,'TX-2','1958-01-01',null,11);
 insert into computer (id,name,introduced,discontinued,company_id) values ( 64,'TX-0','1956-01-01',null,11);
 insert into computer (id,name,introduced,discontinued,company_id) values ( 65,'Whirlwind','1951-04-20',null,11);
 insert into computer (id,name,introduced,discontinued,company_id) values ( 66,'ENIAC','1946-02-15','1955-10-02',12);

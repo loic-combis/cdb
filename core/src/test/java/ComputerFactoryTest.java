@@ -9,9 +9,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.excilys.cdb.core.company.CompanyFactory;
-import com.excilys.cdb.core.computer.Computer;
-import com.excilys.cdb.core.computer.ComputerFactory;
+import com.excilys.core.company.CompanyFactory;
+import com.excilys.core.computer.Computer;
+import com.excilys.core.computer.ComputerFactory;
 
 @RunWith(SpringRunner.class)
 public class ComputerFactoryTest {

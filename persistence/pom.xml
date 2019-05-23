@@ -8,11 +8,9 @@
   </parent>
 
   <artifactId>persistence</artifactId>
-
+  <packaging>jar</packaging>
   <name>persistence</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
-
+  
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <mysql.connector.version>8.0.15</mysql.connector.version>
@@ -52,7 +50,7 @@
 	</dependency>
 	
 	<dependency>
-	    <groupId>${project.groupId}</groupId>
+	    <groupId>com.excilys</groupId>
 	    <artifactId>core</artifactId>
 	    <version>${project.version}</version>
 	</dependency>

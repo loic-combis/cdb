@@ -13,9 +13,9 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.excilys.cdb.core.company.Company;
-import com.excilys.cdb.persistence.config.Config;
-import com.excilys.cdb.persistence.dao.CompanyDAO;
+import com.excilys.core.company.Company;
+import com.excilys.persistence.config.Config;
+import com.excilys.persistence.dao.CompanyDAO;
 
 @RunWith(SpringRunner.class)
 public class JdbcCompanyDAOTest {
@@ -39,7 +39,7 @@ public class JdbcCompanyDAOTest {
 
     @Test
     public void listCompaniesTest() {
-        List<Company> companies = companyDAO.list(0, 10);
+        List<Company> companies = companyDAO.list(0, 10, "");
         assertTrue(companies.size() <= 10);
     }
 

@@ -12,8 +12,8 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.excilys.cdb.core.computer.Computer;
-import com.excilys.cdb.persistence.dao.ComputerDAO;
+import com.excilys.core.computer.Computer;
+import com.excilys.persistence.dao.ComputerDAO;
 
 @RunWith(SpringRunner.class)
 public class JdbcComputerDAOTest {

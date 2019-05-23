@@ -16,8 +16,12 @@
       <pattern>%date{ISO8601} %-5level %-4relative [%thread] %logger{35} - %msg%n</pattern>
     </encoder>
   </appender>
+  
+  <appender name="stdout">
+  	<target>System.out</target>
+  </appender>
 
   <root level="INFO">
-    <appender-ref ref="FILE" />
+    <appender-ref ref="stdout" />
   </root>
 </configuration>

@@ -7,8 +7,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.excilys.cdb.core.company.Company;
-import com.excilys.cdb.core.company.CompanyFactory;
+import com.excilys.core.company.Company;
+import com.excilys.core.company.CompanyFactory;
 
 @RunWith(SpringRunner.class)
 public class CompanyTest {
