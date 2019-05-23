@@ -59,6 +59,14 @@ public class CompanyRestController extends AbstractRestController {
         return ResponseEntity.ok(companyService.list(page.orElse(1), itemPerPage.orElse(10), search.orElse("")));
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<Company>> getAll(HttpServletRequest request) {
+        if (!this.hasRole(request, User.ROLE_MANAGER, User.ROLE_USER)) {
+            return new ResponseEntity<List<Company>>(HttpStatus.UNAUTHORIZED);
+        }
+        return ResponseEntity.ok(companyService.list(0, 0, ""));
+    }
+
     @GetMapping("/count")
     public ResponseEntity<Long> count(HttpServletRequest request, @RequestParam Optional<String> search) {
         return ResponseEntity.ok(companyService.count(search.orElse("")));

@@ -1,5 +1,7 @@
 package com.excilys.persistence.dao;
 
+import static com.excilys.core.User.ROLE_MANAGER;
+
 import java.util.Optional;
 
 import javax.persistence.NoResultException;
@@ -40,6 +42,7 @@ public class UserDAO {
         try (Session session = factory.openSession()) {
             session.beginTransaction();
 
+            user.setRole(ROLE_MANAGER);
             Long id = (Long) session.save(user);
 
             session.getTransaction().commit();
