@@ -47,3 +47,6 @@ buildNumber.properties
 
 #Selenium
 test-output
+
+#Server authorizations
+*.pem
