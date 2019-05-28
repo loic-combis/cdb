@@ -83,7 +83,7 @@ public class HomeController {
         } else {
             try {
                 userFormData.setPassword(encoder.encode(userFormData.getPassword()));
-                if (userService.create(User.ofCreateForm(userFormData))) {
+                if (userService.create(User.ofCreateForm(userFormData), User.ROLE_MANAGER)) {
                     message = source.getMessage(UserService.CREATE_USER_SUCCESS, null, LocaleContextHolder.getLocale());
                     status = "success";
                 } else {
