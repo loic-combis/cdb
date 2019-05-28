@@ -44,7 +44,7 @@ public class ComputerDAO {
     private static final String DELETE_MANY = "delete Computer where id in (:ids)";
 
     private static final String SEARCH_WHERE_CLAUSE = "where name like '%%%s%%' or name like '%%%s%%'";
-    private static final String ORDER_BY_CLAUSE = "order by %s";
+    private static final String ORDER_BY_CLAUSE = "order by %s %s";
 
     /**
      * Constructor.
@@ -177,7 +177,7 @@ public class ComputerDAO {
      * @throws UnconsistentDatesException ude
      */
     @Transactional(readOnly = true)
-    public List<Computer> list(int page, int itemPerPage, String search, String orderBy) {
+    public List<Computer> list(int page, int itemPerPage, String search, String orderBy, Boolean reverse) {
         // TODO Auto-generated method stub
         try (Session session = factory.openSession()) {
             // Add where clause
@@ -188,18 +188,19 @@ public class ComputerDAO {
             // OrderBy clause.
             String orderByClause = "";
             if (orderBy != null && !orderBy.equals("")) {
+                String reverseOrder = reverse ? "DESC" : "ASC";
                 switch (orderBy) {
                 case "name":
-                    orderByClause = String.format(ORDER_BY_CLAUSE, "name");
+                    orderByClause = String.format(ORDER_BY_CLAUSE, "name", reverseOrder);
                     break;
                 case "introduced":
-                    orderByClause = String.format(ORDER_BY_CLAUSE, "introduced");
+                    orderByClause = String.format(ORDER_BY_CLAUSE, "introduced", reverseOrder);
                     break;
                 case "discontinued":
-                    orderByClause = String.format(ORDER_BY_CLAUSE, "discontinued");
+                    orderByClause = String.format(ORDER_BY_CLAUSE, "discontinued", reverseOrder);
                     break;
                 case "company":
-                    orderByClause = String.format(ORDER_BY_CLAUSE, "company");
+                    orderByClause = String.format(ORDER_BY_CLAUSE, "company", reverseOrder);
                     break;
                 }
             }

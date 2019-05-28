@@ -92,7 +92,7 @@ public class AddComputerController {
     @Secured(ROLE_MANAGER)
     protected String show(@RequestParam Optional<String> feedback, @RequestParam Optional<String> message, Model map) {
         map.addAttribute("feedback", new Feedback(feedback.orElse(""), message.orElse("")));
-        map.addAttribute("companies", companyService.list(0, 0, ""));
+        map.addAttribute("companies", companyService.list(0, 0, "", "", false));
         return "add-computer";
     }
 

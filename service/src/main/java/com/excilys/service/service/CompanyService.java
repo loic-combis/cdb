@@ -49,8 +49,8 @@ public class CompanyService {
      * @param itemPerPage int
      * @return List<Company>
      */
-    public List<Company> list(int page, int itemPerPage, String search) {
-        return companyDAO.list(page, itemPerPage, search);
+    public List<Company> list(int page, int itemPerPage, String search, String orderBy, Boolean reverse) {
+        return companyDAO.list(page, itemPerPage, search, orderBy, reverse);
     }
 
     /**

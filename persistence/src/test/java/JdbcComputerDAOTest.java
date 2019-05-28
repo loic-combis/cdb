@@ -38,7 +38,7 @@ public class JdbcComputerDAOTest {
     @Test
     public void listComputersTest() {
         List<Computer> computers;
-        computers = dao.list(0, 10, null, null);
+        computers = dao.list(0, 10, null, null, false);
         assertTrue(computers.size() <= 10);
     }
 

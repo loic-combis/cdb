@@ -92,7 +92,7 @@ public class EditComputerController {
         Optional<Computer> computer = computerService.get(id);
         if (computer.isPresent()) {
             map.addAttribute("computerDTO", mapper.toDTO(computer.get()));
-            map.addAttribute("companies", companyService.list(0, 0, ""));
+            map.addAttribute("companies", companyService.list(0, 0, "", "", false));
 
             return "edit-computer";
         } else {

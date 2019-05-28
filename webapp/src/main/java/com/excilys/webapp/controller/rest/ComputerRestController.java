@@ -114,14 +114,15 @@ public class ComputerRestController extends AbstractRestController {
     public ResponseEntity<List<ComputerDTO>> list(HttpServletRequest request, @RequestParam Optional<String> status,
             @RequestParam Optional<String> message, @RequestParam Optional<Integer> page,
             @RequestParam Optional<Integer> itemPerPage, @RequestParam Optional<String> search,
-            @RequestParam("orderby") Optional<String> orderBy, Model map) {
+            @RequestParam("orderby") Optional<String> orderBy, @RequestParam("reverse") Optional<Boolean> reverse,
+            Model map) {
 
         if (!this.hasRole(request, User.ROLE_MANAGER, User.ROLE_USER)) {
             return new ResponseEntity<List<ComputerDTO>>(HttpStatus.UNAUTHORIZED);
         }
 
         List<Computer> computers = computerService.list(page.orElse(1), itemPerPage.orElse(10), search.orElse(""),
-                orderBy.orElse(""));
+                orderBy.orElse(""), reverse.orElse(false));
         logger.error(computers.toString());
         return ResponseEntity.ok(mapper.mapList(computers));
 

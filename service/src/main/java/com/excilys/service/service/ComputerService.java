@@ -53,8 +53,8 @@ public class ComputerService {
      * @param orderBy     String
      * @return List<Computer>
      */
-    public List<Computer> list(int page, int itemPerPage, String search, String orderBy) {
-        return computerDAO.list(page, itemPerPage, search, orderBy);
+    public List<Computer> list(int page, int itemPerPage, String search, String orderBy, Boolean reverse) {
+        return computerDAO.list(page, itemPerPage, search, orderBy, reverse);
     }
 
     /**

@@ -58,7 +58,7 @@ public class ListComputerController {
         map.addAttribute("search", search.orElse(""));
 
         List<Computer> computers = computerService.list(page.orElse(1), itemPerPage.orElse(10), search.orElse(""),
-                orderBy.orElse(""));
+                orderBy.orElse(""), false);
 
         map.addAttribute("pagination",
                 new Pagination(page.orElse(1), itemPerPage.orElse(10), computerService.count(search.orElse(""))));

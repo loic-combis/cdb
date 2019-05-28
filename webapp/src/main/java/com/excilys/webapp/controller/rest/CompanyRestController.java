@@ -51,12 +51,14 @@ public class CompanyRestController extends AbstractRestController {
      */
     @GetMapping
     public ResponseEntity<List<Company>> list(HttpServletRequest request, @RequestParam Optional<Integer> page,
-            @RequestParam Optional<Integer> itemPerPage, @RequestParam Optional<String> search) {
+            @RequestParam Optional<Integer> itemPerPage, @RequestParam Optional<String> search,
+            @RequestParam Optional<String> orderby, @RequestParam Optional<Boolean> reverse) {
 
         if (!this.hasRole(request, User.ROLE_MANAGER, User.ROLE_USER)) {
             return new ResponseEntity<List<Company>>(HttpStatus.UNAUTHORIZED);
         }
-        return ResponseEntity.ok(companyService.list(page.orElse(1), itemPerPage.orElse(10), search.orElse("")));
+        return ResponseEntity.ok(companyService.list(page.orElse(1), itemPerPage.orElse(10), search.orElse(""),
+                orderby.orElse(""), reverse.orElse(false)));
     }
 
     @GetMapping("/all")
@@ -64,7 +66,7 @@ public class CompanyRestController extends AbstractRestController {
         if (!this.hasRole(request, User.ROLE_MANAGER, User.ROLE_USER)) {
             return new ResponseEntity<List<Company>>(HttpStatus.UNAUTHORIZED);
         }
-        return ResponseEntity.ok(companyService.list(0, 0, ""));
+        return ResponseEntity.ok(companyService.list(0, 0, "", "", false));
     }
 
     @GetMapping("/count")

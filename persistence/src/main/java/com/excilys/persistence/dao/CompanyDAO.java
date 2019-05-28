@@ -39,13 +39,14 @@ public class CompanyDAO {
     /**
      * String base SQL request.
      */
-    private static final String LIST_REQUEST = "from Company %s";
+    private static final String LIST_REQUEST = "from Company %s %s";
     public static final String FIND_BY_ID = "from Company where id = :id";
     private static final String DELETE = "delete Company where id = :id";
     private static final String DELETE_RELATED_COMPUTERS = "delete Computer where company_id = :id";
 
     private static final String COUNT_ALL = "select count(c) from Company c %s";
     private static final String SEARCH_WHERE_CLAUSE = "where name like '%%%s%%'";
+    private static final String ORDER_BY_CLAUSE = "order by %s %s";
 
     /**
      * Constructor.
@@ -91,7 +92,7 @@ public class CompanyDAO {
      * @return List<Company>
      */
     @Transactional
-    public List<Company> list(int page, int itemPerPage, String search) {
+    public List<Company> list(int page, int itemPerPage, String search, String orderBy, Boolean reverse) {
         // TODO Auto-generated method stub
         try (Session session = factory.openSession()) {
 
@@ -99,7 +100,22 @@ public class CompanyDAO {
                     ? String.format(SEARCH_WHERE_CLAUSE, search, search)
                     : "";
 
-            Query<Company> query = session.createQuery(String.format(LIST_REQUEST, whereClause), Company.class);
+            // OrderBy clause.
+            String orderByClause = "";
+            if (orderBy != null && !orderBy.equals("")) {
+                String reverseOrder = reverse ? "DESC" : "ASC";
+                switch (orderBy) {
+                case "name":
+                    orderByClause = String.format(ORDER_BY_CLAUSE, "name", reverseOrder);
+                    break;
+                case "company":
+                    orderByClause = String.format(ORDER_BY_CLAUSE, "id", reverseOrder);
+                    break;
+                }
+            }
+
+            Query<Company> query = session.createQuery(String.format(LIST_REQUEST, whereClause, orderByClause),
+                    Company.class);
             if (page > 1 && itemPerPage > 0) {
                 query.setFirstResult((page - 1) * itemPerPage);
             }

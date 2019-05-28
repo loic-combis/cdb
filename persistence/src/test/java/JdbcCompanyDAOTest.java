@@ -39,7 +39,7 @@ public class JdbcCompanyDAOTest {
 
     @Test
     public void listCompaniesTest() {
-        List<Company> companies = companyDAO.list(0, 10, "");
+        List<Company> companies = companyDAO.list(0, 10, "", "name", false);
         assertTrue(companies.size() <= 10);
     }
 
