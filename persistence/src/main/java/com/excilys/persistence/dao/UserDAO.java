@@ -1,7 +1,5 @@
 package com.excilys.persistence.dao;
 
-import static com.excilys.core.User.ROLE_MANAGER;
-
 import java.util.Optional;
 
 import javax.persistence.NoResultException;
@@ -38,11 +36,11 @@ public class UserDAO {
         factory = sessionFactory.getObject();
     }
 
-    public boolean create(User user) throws UserAlreadyExistsException {
+    public boolean create(User user, String role) throws UserAlreadyExistsException {
         try (Session session = factory.openSession()) {
             session.beginTransaction();
 
-            user.setRole(ROLE_MANAGER);
+            user.setRole(role);
             Long id = (Long) session.save(user);
 
             session.getTransaction().commit();

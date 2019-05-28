@@ -23,8 +23,8 @@ public class UserService {
         userDAO = dao;
     }
 
-    public boolean create(User user) throws UserAlreadyExistsException {
-        return userDAO.create(user);
+    public boolean create(User user, String role) throws UserAlreadyExistsException {
+        return userDAO.create(user, role);
     }
 
     public Optional<User> find(String login) {

@@ -1,7 +1,10 @@
 package com.excilys.webapp.controller.rest;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
@@ -52,8 +55,39 @@ public class UserRestController extends AbstractRestController {
         binder.setValidator(validator);
     }
 
+    @PostMapping("/admin")
+    public ResponseEntity<Feedback> createAdmin(HttpServletRequest request,
+            @Validated @RequestBody CreateUserFormData userFormData, BindingResult result) {
+
+        if (!this.hasRole(request, User.ROLE_MANAGER)) {
+            return new ResponseEntity<Feedback>(HttpStatus.UNAUTHORIZED);
+        }
+
+        String message = "";
+        String status = "danger";
+
+        if (result.hasErrors()) {
+            message = source.getMessage(result.getAllErrors().get(0).getCode(), null, LocaleContextHolder.getLocale());
+
+        } else {
+            try {
+                userFormData.setPassword(encoder.encode(userFormData.getPassword()));
+                if (userService.create(User.ofCreateForm(userFormData), User.ROLE_MANAGER)) {
+                    message = source.getMessage(UserService.CREATE_USER_SUCCESS, null, LocaleContextHolder.getLocale());
+                    status = "success";
+                } else {
+                    message = source.getMessage(UserService.CREATE_USER_FAILURE, null, LocaleContextHolder.getLocale());
+                }
+            } catch (UserAlreadyExistsException e) {
+                // TODO Auto-generated catch block
+                message = source.getMessage(UserService.USER_ALREADY_EXISTS, null, LocaleContextHolder.getLocale());
+            }
+        }
+        return ResponseEntity.ok(new Feedback(status, message));
+    }
+
     @PostMapping
-    public ResponseEntity<Feedback> createUser(@Validated @RequestBody CreateUserFormData userFormData,
+    public ResponseEntity<Feedback> create(@Validated @RequestBody CreateUserFormData userFormData,
             BindingResult result) {
         String message = "";
         String status = "danger";
@@ -64,7 +98,7 @@ public class UserRestController extends AbstractRestController {
         } else {
             try {
                 userFormData.setPassword(encoder.encode(userFormData.getPassword()));
-                if (userService.create(User.ofCreateForm(userFormData))) {
+                if (userService.create(User.ofCreateForm(userFormData), User.ROLE_USER)) {
                     message = source.getMessage(UserService.CREATE_USER_SUCCESS, null, LocaleContextHolder.getLocale());
                     status = "success";
                 } else {
