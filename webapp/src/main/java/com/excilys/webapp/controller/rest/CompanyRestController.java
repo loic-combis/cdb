@@ -11,11 +11,13 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,6 +38,9 @@ public class CompanyRestController extends AbstractRestController {
     private MessageSource source;
 
     private Logger logger = LoggerFactory.getLogger(CompanyRestController.class);
+
+    private static final String INVALID_COMPANY = "invalid.company";
+    private static final String NON_MATCHING_ID = "non.matching.id";
 
     public CompanyRestController(CompanyService companyS, MessageSource messageSource) {
         companyService = companyS;
@@ -124,6 +129,34 @@ public class CompanyRestController extends AbstractRestController {
         if (!companyService.delete(id)) {
             status = "danger";
             message = source.getMessage(CompanyService.DELETE_COMPANY_FAILURE, null, LocaleContextHolder.getLocale());
+        }
+
+        return ResponseEntity.ok(new Feedback(status, message));
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Feedback> edit(HttpServletRequest request, @RequestBody Company company,
+            @PathVariable(value = "id") Long id, BindingResult result) {
+
+        if (!this.hasRole(request, User.ROLE_MANAGER)) {
+            return new ResponseEntity<Feedback>(HttpStatus.UNAUTHORIZED);
+        }
+
+        String status = "danger";
+        String message = "";
+
+        if (company.getName() == null || company.getName().trim().equals("")) {
+            message = INVALID_COMPANY;
+
+        } else if (company.getId() == null || company.getId() != id) {
+            message = NON_MATCHING_ID;
+
+        } else if (companyService.edit(company)) {
+            status = "success";
+            message = source.getMessage(CompanyService.EDIT_COMPANY_SUCCESS, null, LocaleContextHolder.getLocale());
+
+        } else {
+            message = source.getMessage(CompanyService.EDIT_COMPANY_FAILURE, null, LocaleContextHolder.getLocale());
         }
 
         return ResponseEntity.ok(new Feedback(status, message));

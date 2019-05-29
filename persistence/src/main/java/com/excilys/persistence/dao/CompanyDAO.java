@@ -43,10 +43,11 @@ public class CompanyDAO {
     public static final String FIND_BY_ID = "from Company where id = :id";
     private static final String DELETE = "delete Company where id = :id";
     private static final String DELETE_RELATED_COMPUTERS = "delete Computer where company_id = :id";
+    private static final String UPDATE_ONE = "update Company set name = :name where id = :id";
 
     private static final String COUNT_ALL = "select count(c) from Company c %s";
     private static final String SEARCH_WHERE_CLAUSE = "where name like '%%%s%%'";
-    private static final String ORDER_BY_CLAUSE = "order by %s %s";
+    private static final String ORDER_BY_CLAUSE = "order by %s %s NULLS LAST";
 
     /**
      * Constructor.
@@ -141,7 +142,7 @@ public class CompanyDAO {
     public boolean create(Company company) {
         try (Session session = factory.openSession()) {
             session.beginTransaction();
-            Long id = (Long) session.save(company);
+            session.save(company);
             session.getTransaction().commit();
             return true;
 
@@ -176,5 +177,25 @@ public class CompanyDAO {
             return affectedRowsCount > 0;
         }
 
+    }
+
+    @Transactional(readOnly = false)
+    public boolean update(Company company) {
+        // TODO Auto-generated method stub
+        try (Session session = factory.openSession()) {
+            session.beginTransaction();
+
+            Query<?> query = session.createQuery(UPDATE_ONE);
+            query.setParameter("name", company.getName());
+            query.setParameter("id", company.getId());
+
+            int affectedRowsCount = query.executeUpdate();
+
+            session.getTransaction().commit();
+
+            LOGGER.info("Computer updated with id : " + company.getId());
+
+            return affectedRowsCount > 0;
+        }
     }
 }

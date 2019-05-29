@@ -32,6 +32,10 @@ public class CompanyService {
 
     public static final String DELETE_COMPANY_FAILURE = "company.delete.failure";
 
+    public static final String EDIT_COMPANY_SUCCESS = "company.edit.success";
+
+    public static final String EDIT_COMPANY_FAILURE = "company.edit.failure";
+
     /**
      * Constructor.
      *
@@ -69,6 +73,10 @@ public class CompanyService {
 
     public boolean create(Company company) {
         return companyDAO.create(company);
+    }
+
+    public boolean edit(Company company) {
+        return companyDAO.update(company);
     }
 
     /**

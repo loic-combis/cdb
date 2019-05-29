@@ -44,7 +44,7 @@ public class ComputerDAO {
     private static final String DELETE_MANY = "delete Computer where id in (:ids)";
 
     private static final String SEARCH_WHERE_CLAUSE = "where name like '%%%s%%' or name like '%%%s%%'";
-    private static final String ORDER_BY_CLAUSE = "order by %s %s";
+    private static final String ORDER_BY_CLAUSE = "order by %s %s NULLS LAST";
 
     /**
      * Constructor.
