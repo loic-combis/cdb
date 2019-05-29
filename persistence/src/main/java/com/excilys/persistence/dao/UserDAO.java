@@ -25,7 +25,7 @@ public class UserDAO {
 
     private Logger logger = LoggerFactory.getLogger(UserDAO.class);
 
-    public static final String FIND_BY_LOGIN = "from User where login = :login";
+    public static final String FIND_BY_LOGIN = "from User where BINARY(login) = BINARY(:login)";
 
     /**
      * Constructor.
